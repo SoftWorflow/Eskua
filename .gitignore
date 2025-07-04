@@ -1,2 +1,5 @@
+# Dependencias instaladas
+**/node_modules/
+
 # VSCode
 .vscode/
