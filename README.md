@@ -1,1 +1,10 @@
 # ESKUA
+
+## Pasos para cuando se clona
+
+    1- Abrir la consola de visual studio code e ir a la carpeta services/auth_jwt.
+    2- Escribir en la consola "npm install".
+    3- Cuando termine ir a la carpeta infra y escribir en la consola "docker-compose build".
+    4- Cuando termine ese comando escribir este en la consola "docker-compose up -d".
+
+    (nota: cuando termines de trabajar, para bajar los servicios, escribí "docker-compose down" y si queres borrar todos los datos guardadoes en la base de datos es este "docker-compose down -v")
