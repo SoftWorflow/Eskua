@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - Eskua</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <!-- Google Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Google Register -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    
+    <div class="main-container">
+        <div class="data-container">
+            <h6>Eskua</h6>
+            <h3>Crear Una <br> Cuenta</h3>
+
+            <form id="register-form" method="post">
+                <div class="input-container">
+                    <div id="username-error-message" class="error-message"></div>
+                    <input type="text" name="username" id="username" required>
+                    <label class="input-label" for="username">Nombre Usuario</label>
+                </div>
+
+                <div class="input-container">
+                    <div id="email-error-message" class="error-message"></div>
+                    <input type="email" name="email" id="user-email" required>
+                    <label class="input-label" for="user-email">Email</label>
+                </div>
+
+                <div class="input-container">
+                    <div id="password-error-message" class="error-message"></div>
+                    <input class="input-password" type="password" name="password" id="user-password" required>
+                    <label class="input-label" for="user-password">Contraseña</label>
+                    <img src="imgs/Hide.png" id="eye-icon" onclick="HandleShowingAndHidingPassword()">
+                </div>
+
+                <div class="input-container">
+                    <div id="verify-password-error-message" class="error-message"></div>
+                    <input class="input-password" type="password" name="verify-password" id="verify-user-password" required>
+                    <label class="input-label" for="verify-user-password">Confirmar Contraseña</label>
+                    <img src="imgs/Hide.png" id="eye-icon-verify" onclick="HandleShowingAndHidingVerifyPassword()">
+                </div>
+
+                <button type="submit" class="btn-submit">Registrarse</button>
+            </form>
+
+            <div class="content-separator">
+                <p>O registrarse con</p>
+            </div>
+
+            <div class="btns-container">
+                <button class="google-btn" id="google-btn" type="button">Google</button>
+            </div>
+
+            <div class="login-link">
+                <p>Ya tienes una cuenta?</p>
+                <a href="">Iniciar Sesión</a>
+            </div>
+        </div>
+
+        <div class="image-container"></div>
+    </div>
+
+</body>
+</html>

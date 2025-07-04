@@ -1,0 +1,54 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: eskua-db
+    env_file: ../.env
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./infra/db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin","ping","-h","localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    networks:
+      - eskua-net
+
+  php:
+    image: php:8.0-apache
+    container_name: eskua-php
+    build:
+      context: ../apps/front_php
+      dockerfile: Dockerfile
+    volumes:
+      - ../apps/front_php/src:/var/www/html/
+      - ../apps/backoffice_php/src:/var/www/html/admin/
+      - ../infra/apache/httpd.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+    env_file: ../.env
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - eskua-net
+
+  auth_jwt:
+    build:
+      context: ../services/auth_jwt
+      dockerfile: Dockerfile
+    container_name: eskua-auth
+    env_file: ../.env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    networks:
+      - eskua-net
+
+networks:
+  eskua-net:
+    driver: bridge
+
+volumes:
+  db_data:
