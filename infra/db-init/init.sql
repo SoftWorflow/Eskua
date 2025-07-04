@@ -1,89 +1,159 @@
+drop database if exists eskua_db;
+create database if not exists eskua_db;
 use eskua_db;
 
-insert into users(username,email,display_name,profile_picture,password) values
-('alice','alice@example.com','Alice','alice.png','passHash1'),
-('bob','bob@example.com','Bob','bob.jpg','passHash2'),
-('charlie','charlie@example.com','Charlie','charlie.png','passHash3'),
-('diana','diana@example.com','Diana','diana.jpg','passHash4'),
-('edward','edward@example.com','Edward','edward.png','passHash5');
+create table users (
+    user_id int auto_increment primary key,
+    username varchar(30) unique not null,
+    email varchar(320) unique not null,
+    display_name varchar(30) not null,
+    profile_picture varchar(255) not null,
+    password varchar(255) not null,
+    google_id varchar(255) unique
+);
 
-insert into user_roles(user_id,role_type) values
-(1,'admin'),
-(2,'teacher'),
-(3,'student'),
-(4,'guest'),
-(5,'teacher');
+create table user_roles(
+	user_id int not null primary key,
+    role_type varchar(20) not null,
+    foreign key (user_id) references users(user_id)
+);
 
-insert into guests(user_id) values
-(4);
+create table guests (
+    guest_id int auto_increment primary key,
+    user_id int not null,
+    foreign key (user_id) references users(user_id)
+);
 
-insert into teachers(user_id) values
-(2),
-(5);
+create table students (
+    student_id int auto_increment primary key,
+    user_id int not null,
+    group_id int not null,
+    foreign key (user_id) references users(user_id)
+);
 
-insert into admins(user_id) values
-(1);
+create table teachers (
+    teacher_id int auto_increment primary key,
+    user_id int not null,
+    foreign key (user_id) references users(user_id)
+);
 
-insert into users_groups(teacher_id,group_name,code) values
-(1,'Grupo A','GRUPOA'),
-(2,'Grupo B','GRUPOB');
+create table admins (
+    admin_id int primary key auto_increment,
+    user_id int not null,
+    foreign key (user_id) references users(user_id)
+);
 
-insert into students(user_id,group_id) values
-(3,1);
+create table users_groups (
+    group_id int auto_increment primary key,
+    teacher_id int not null,
+    group_name varchar(45) not null,
+    code varchar(6) not null check (char_length(code) = 6),
+    foreign key (teacher_id) references teachers(teacher_id)
+);
 
-insert into messages(group_id,message_id,user_id,sent_text) values
-(1,1,2,'Chicos, como se hace hola en el lenguaje de señas este?'),
-(1,2,3,'No funciona nada che'),
-(2,1,5,'Me pidió que mande un mensaje');
+alter table students add foreign key (group_id) references users_groups(group_id);
 
-insert into notifications(user_id,notification_message,notification_type,was_read) values
-(3,'Tienes una nueva tarea asignada','new_assignment',false),
-(2,'Tarea corregida','new_assignment',true),
-(5,'Nueva asignación disponible','new_assignment',false),
-(1,'Asignación actualizada','new_assignment',true);
+create table messages (
+    group_id int,
+    message_id int,
+    user_id int not null,
+    sent_text text not null,
+    delivery_time datetime not null default current_timestamp,
+    primary key (group_id,message_id),
+    foreign key (group_id) references users_groups(group_id),
+    foreign key (user_id) references users(user_id)
+);
 
-insert into assignments(teacher_id,name,description,max_score) values
-(1,'Álgebra I','Ejercicios de álgebra básica',100),
-(2,'Historia','Ensayo sobre la Revolución Francesa',100);
+create table notifications (
+    notification_id int auto_increment primary key,
+    user_id int not null,
+    notification_message text not null,
+    delivery_time datetime not null default current_timestamp,
+    notification_type enum('new_assignment') not null,
+    was_read bool not null,
+    foreign key (user_id) references users(user_id)
+);
 
-insert into assignments_questions(assignment_id,question_id,question_text,question_order) values
-(1,1,'¿Cuál es la resolución de 2+2?',1),
-(1,2,'Factoriza x^2 - 5x + 6',2),
-(2,1,'¿En qué año empezó la Revolución Francesa?',1),
-(2,2,'Menciona tres causas de la Revolución.',2);
+create table assignments (
+    assignment_id int auto_increment primary key,
+    teacher_id int not null,
+    name varchar(50) not null,
+    description text not null,
+    max_score int not null,
+    foreign key (teacher_id) references teachers(teacher_id)
+);
 
-insert into questions_options(assignment_id,question_id,option_id,option_text,is_correct,option_order) values
-(1,1,1,'4',true,1),
-(1,2,1,'(x-2)(x-3)',true,1),
-(2,1,1,'1789',true,1),
-(2,2,1,'Desigualdad social',true,1);
+create table assignments_questions (
+    assignment_id int,
+    question_id int,
+    question_text text not null,
+    question_order int not null,
+    primary key (assignment_id,question_id),
+    foreign key (assignment_id) references assignments(assignment_id)
+);
 
-insert into assigned_assignments(teacher_id,assignment_id,group_id,from_date,to_date) values
-(1,1,1,'2025-06-01 08:00:00','2025-06-15 23:59:59'),
-(2,2,2,'2025-06-05 09:00:00','2025-06-20 23:59:59');
+create table questions_options (
+    assignment_id int,
+    question_id int,
+    option_id int,
+    option_text text not null,
+    is_correct bool not null,
+    option_order int not null,
+    primary key (assignment_id,question_id,option_id),
+    foreign key (assignment_id,question_id)
+        references assignments_questions(assignment_id,question_id)
+);
 
-insert into turned_in_assignments(assigned_assignment_id,student_id,calification,submitted_date) values
-(1,1,95.0,'2025-06-14 14:30:00');
+create table assigned_assignments (
+    assigned_assignment_id int auto_increment primary key,
+    teacher_id int not null,
+    assignment_id int,
+    group_id int not null,
+    from_date datetime not null,
+    to_date datetime not null,
+    foreign key (teacher_id) references teachers(teacher_id),
+    foreign key (assignment_id) references assignments(assignment_id),
+    foreign key (group_id) references users_groups(group_id),
+    check (to_date > from_date)
+);
 
-insert into students_answers(assigned_assignment_id,assignment_id,question_id,student_id,chosen_option) values
-(1,1,1,1,1),
-(1,1,2,1,1);
+create table turned_in_assignments (
+    assigned_assignment_id int,
+    student_id int,
+    calification decimal(4,1) not null,
+    submitted_date datetime not null,
+    primary key (assigned_assignment_id,student_id),
+    foreign key (assigned_assignment_id)
+        references assigned_assignments(assigned_assignment_id),
+    foreign key (student_id) references students(student_id)
+);
 
-insert into games(name,description) values
-('Space Invaders','Clásico juego de disparos en 2D'),
-('Pac-Man','Recoge todas las píldoras evitando fantasmas');
+create table students_answers(
+    assigned_assignment_id int,
+    assignment_id int,
+    question_id int,
+    student_id int,
+    chosen_option int not null,
+    primary key (assigned_assignment_id, question_id, student_id),
+    foreign key (assigned_assignment_id) references assigned_assignments(assigned_assignment_id),
+    foreign key (assignment_id, question_id) references assignments_questions(assignment_id, question_id),
+    foreign key (assignment_id, question_id, chosen_option) references questions_options(assignment_id, question_id, option_id),
+    foreign key (student_id) references students(student_id)
+);
 
-insert into game_scores(game_id,user_id,played_difficulty,best_score,made_date) values
-(1,3,'easy',5000,'2025-06-30'),
-(2,2,'medium',12000,'2025-06-29');
+create table games (
+    game_id int auto_increment primary key,
+    name varchar(100) not null,
+    description text not null
+);
 
--- consulta mensajes
-select m.group_id as GroupId, m.message_id as MessageId, u.display_name as User, m.sent_text as Message, m.delivery_time as SentTime
-from messages as m
-join users   as u on m.user_id = u.user_id;
-
--- consulta de mejores puntuaciones
-select g.name as Game, u.display_name as User, gs.played_difficulty as Difficulty, gs.best_score as BestScore
-from game_scores as gs
-join games as g on gs.game_id = g.game_id
-join users as u on gs.user_id = u.user_id;
+create table game_scores (
+    game_id int,
+    user_id int,
+    played_difficulty enum('easy','medium','hard'),
+    best_score int not null,
+    made_date date not null,
+    primary key (game_id,user_id,played_difficulty),
+    foreign key (game_id) references games(game_id),
+    foreign key (user_id) references users(user_id)
+);
