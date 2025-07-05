@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', StartEvents);
 
 function StartEvents() {
     AddListeners();
-    // Google();
+    Google();
 }
 
 function Google() {
