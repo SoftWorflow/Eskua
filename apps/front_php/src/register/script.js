@@ -189,6 +189,7 @@ function VerifySecondTimePassword() {
 function ToggleValidationState(valid, field) {
     if (!valid) {
         field.classList.add('invalid');
+        field.classList.remove('valid');
     } else {
         if (field.classList.contains('invalid')) {
             field.classList.remove('invalid');
