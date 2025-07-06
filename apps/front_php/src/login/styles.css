@@ -6,46 +6,6 @@
     line-height: 1;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    background-color: #BDBDBD;
-    padding: 25px;
-}
-
-.main-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    width: 100%;
-    height: 100%;
-    border-radius: 30px;
-    padding: 30px;
-    gap: 5rem;
-}
-
-.data-container {
-    max-width: 30rem;
-    overflow: hidden;
-    flex: 1;
-}
-
-.data-container, .data-container form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-}
-
-.data-container form {
-    gap: 2.188rem;
-}
-
 h1, .fs-h1 {
     font-size: clamp(3rem, 2.5459rem + 1.8164vw, 3.999rem);
     font-weight: 400;
@@ -81,8 +41,55 @@ p, .fs-p {
     font-weight: 400;
 }
 
+a {
+    color: #1b3b50;
+    font-size: clamp(0.7502rem, 0.6366rem + 0.4542vw, 1rem);
+}
+
 .title {
     margin: 1rem 0 3rem 0;
+    /* text-align: left; Mueve el title para la izquierda, pero no me termina de convencer */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: #BDBDBD;
+    padding: 25px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    padding: 30px;
+    gap: 5rem;
+}
+
+.data-container, .data-container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.data-container {
+    max-width: 30rem;
+    flex: 1;
+    gap: 1.5rem;
+    overflow: hidden;
+}
+
+.data-container form {
+    gap: 2.188rem;
 }
 
 .input-container {
@@ -165,17 +172,17 @@ p, .fs-p {
     border-color: #28C98E;
 }
 
-.content-separator {
+.bottom-form-content, .remeber-me-container {
     display: flex;
     flex-direction: row;
-    gap: 1.25rem;
-    width: 100%;
-    justify-content: center;
-    margin: 28px 0;
 }
 
-.content-separator::after, .content-separator::before {
-    content: '───────────';
+.bottom-form-content {
+    justify-content: space-between;
+}
+
+.remeber-me-container {
+    gap: 0.5rem;
 }
 
 .btn-submit, .google-btn {
@@ -201,18 +208,12 @@ p, .fs-p {
     gap: 1.188rem;
 }
 
-.login-link {
+.register-link {
     display: flex;
     justify-content: center;
-    flex-direction: row;
     align-items: flex-end;
-    margin-top: 20px;
+    flex-direction: row;
     gap: 0.313rem;
-}
-
-.login-link a {
-    color: #1b3b50;
-    font-size: clamp(0.7502rem, 0.6366rem + 0.4542vw, 1rem);
 }
 
 .image-container {
@@ -223,14 +224,16 @@ p, .fs-p {
     border-radius: 30px;
 }
 
-.error-message {
-    position: absolute;
-    color: #CC4033;
-    font-size: 15px;
-    transform: translateY(-45px);
-    z-index: 50;
-    white-space: nowrap;
-    user-select: none;
+.content-separator {
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.content-separator::after, .content-separator::before {
+    content: '───────────';
 }
 
 /* RESPONSIVE */
