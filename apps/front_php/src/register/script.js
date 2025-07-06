@@ -193,5 +193,6 @@ function ToggleValidationState(valid, field) {
         if (field.classList.contains('invalid')) {
             field.classList.remove('invalid');
         }
+        field.classList.add('valid');
     }
 }
