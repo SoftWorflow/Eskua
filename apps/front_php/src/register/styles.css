@@ -1,3 +1,38 @@
+h1, .fs-h1 {
+    font-size: clamp(3rem, 2.5459rem + 1.8164vw, 3.999rem);
+    font-weight: 400;
+}
+
+h2, .fs-h2 {
+    font-size: clamp(2.25rem, 1.9094rem + 1.3623vw, 2.9993rem);
+    font-weight: 400;
+}
+
+h3, .fs-h3 {
+    font-size: clamp(1.875rem, 1.5912rem + 1.1352vw, 2.4994rem);
+    font-weight: 400;
+}
+
+h4, .fs-h4 {
+    font-size: clamp(1.5rem, 1.273rem + 0.9082vw, 1.9995rem);
+    font-weight: 400;
+}
+
+h5, .fs-h5 {
+    font-size: clamp(1.25rem, 1.0608rem + 0.7568vw, 1.6663rem);
+    font-weight: 400;
+}
+
+h6, .fs-h6 {
+    font-size: clamp(1.125rem, 0.9547rem + 0.6811vw, 1.4996rem);
+    font-weight: 400;
+}
+
+p, .fs-p {
+    font-size: clamp(0.7502rem, 0.6366rem + 0.4542vw, 1rem);
+    font-weight: 400;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -46,40 +81,7 @@ body {
     gap: 2.188rem;
 }
 
-h1, .fs-h1 {
-    font-size: clamp(3rem, 2.5459rem + 1.8164vw, 3.999rem);
-    font-weight: 400;
-}
 
-h2, .fs-h2 {
-    font-size: clamp(2.25rem, 1.9094rem + 1.3623vw, 2.9993rem);
-    font-weight: 400;
-}
-
-h3, .fs-h3 {
-    font-size: clamp(1.875rem, 1.5912rem + 1.1352vw, 2.4994rem);
-    font-weight: 400;
-}
-
-h4, .fs-h4 {
-    font-size: clamp(1.5rem, 1.273rem + 0.9082vw, 1.9995rem);
-    font-weight: 400;
-}
-
-h5, .fs-h5 {
-    font-size: clamp(1.25rem, 1.0608rem + 0.7568vw, 1.6663rem);
-    font-weight: 400;
-}
-
-h6, .fs-h6 {
-    font-size: clamp(1.125rem, 0.9547rem + 0.6811vw, 1.4996rem);
-    font-weight: 400;
-}
-
-p, .fs-p {
-    font-size: clamp(0.7502rem, 0.6366rem + 0.4542vw, 1rem);
-    font-weight: 400;
-}
 
 .title {
     margin: 1rem 0 3rem 0;
