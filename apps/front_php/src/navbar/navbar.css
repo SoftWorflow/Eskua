@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: 'Lexend', sans-serif;
+	color: black;
+	scroll-behavior: smooth;
+	list-style: none;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* Navbar */
+nav {
+	padding: 1.5rem 6.25rem;
+	display: flex;
+	justify-content: space-between;
+	position: fixed;
+	align-items: center;
+	background-color: white;
+	transition: box-shadow 0.2s ease;
+	z-index: 100;
+	width: 100%;
+}
+
+.navbar-container {
+	display: flex;
+	width: 100%;
+	justify-content: space-between
+}
+
+nav.scrolled {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+	width: calc(25% - 100px);
+  display: flex;
+  justify-content: start;
+	align-items: center;
+	font-size: 28px;
+	font-weight: 500;
+}
+
+.navbar-options {
+	height: 4rem;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+	gap: 70px;
+	list-style: none;
+	padding: 15px 35px;
+	border-radius: 25px;
+	border: 1px solid #00000005;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-options a {
+	color: black;
+	transition: color 0.1s ease;
+}
+
+.navbar-options a:hover {
+	color: #00000075;
+}
+
+.navbar a {
+	text-decoration: none;
+	font-family: 'Lexend', sans-serif;
+}
+
+.navbar-buttons {
+	width: calc(25% - 100px);
+  display: flex;
+	align-items: center;
+	gap: 1.25rem;
+	width: fit-content;
+}
+
+.navbar-btn-login {
+	color: #E1A05B;
+	border: 2px solid #E1A05B;
+	background-color: #e1a05b05;
+	padding: 1.125rem;
+	border-radius: 15px;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.navbar-btn-login:hover {
+	background-color: #E1A05B;
+	color: white;
+}
+
+.navbar-btn-login:active {
+	transform: scale(0.97);
+}
+
+.navbar-btn-register {
+	color: #1B3B50;
+	border: 2px solid #1B3B50;
+	background-color: #1B3B5005;
+	padding: 1.125rem;
+	border-radius: 15px;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.navbar-btn-register:hover {
+	background-color: #1B3B50;
+	color: white;
+}
+
+.navbar-btn-register:active {
+	transform: scale(0.97);
+}
