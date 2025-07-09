@@ -65,10 +65,10 @@ function HandleShowingAndHidingVerifyPassword() {
 function HidingAndShowingHandler(password, eyeIcon) {
     if (password.type === 'password') {
         password.type = 'text';
-        eyeIcon.src = 'imgs/Show.png';
+        eyeIcon.src = '../images/hide.png';
     } else {
         password.type = 'password';
-        eyeIcon.src = 'imgs/Hide.png';
+        eyeIcon.src = '../images/show.png';
     }
 }
 

@@ -22,6 +22,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../apps/front_php/src:/var/www/html/
+      - ../apps/images:/var/www/html/images
       - ../apps/backoffice_php/src:/var/www/html/admin/
       - ../infra/apache/httpd.conf:/etc/apache2/sites-enabled/000-default.conf:ro
     env_file: ../.env
