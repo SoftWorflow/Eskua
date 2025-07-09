@@ -37,7 +37,7 @@ function UserIsRegistered() {
 }
 
 async function ChangeNavbar(registered) {
-    // if (!registered) return;
+    if (!registered) return;
 
     // Waits until the Promise returns something
     const rightSideContent = await new Promise(resolve =>
@@ -47,10 +47,11 @@ async function ChangeNavbar(registered) {
     if (rightSideContent) {
       // Only works when is in running in docker
       const notificationIcon = '../images/bell.png';
+      const profilePicture = '';
 
       rightSideContent.innerHTML = `
         <img src="${notificationIcon}" alt="notification-logo" id="notification-logo">
-        <div class="profile-picutre-container"><img class="profile-picture" src="" alt="profile-picture" id="profile-picture"></div>
+        <div class="profile-picutre-container"><img class="profile-picture" src="${profilePicture}" alt="profile-picture" id="profile-picture"></div>
       `;
     }
 
