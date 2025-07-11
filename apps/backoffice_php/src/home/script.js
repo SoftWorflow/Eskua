@@ -21,7 +21,7 @@ function ChangeScreen(screen) {
             .catch(err => console.error(err));
             break;
         case 2:
-            fetch('../users/usuarios.html')
+            fetch('../users/users.html')
             .then(res => {
                 if (!res.ok) throw new Error("Users can't load");
                 return res.text();
