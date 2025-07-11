@@ -4,7 +4,7 @@
 
     1- Abrir la consola de visual studio code e ir a la carpeta services/auth_jwt.
     2- Escribir en la consola "npm install".
-    3- Cuando termine ir a la carpeta infra y escribir en la consola "docker-compose build".
+    3- Cuando termine ir a la carpeta infra y escribir en la consola "docker-compose build --no-cache".
     4- Cuando termine ese comando escribir este en la consola "docker-compose up -d".
     5- Para probar el sistema vas a tu navegador de confianza y escribis "http:127.0.0.1:8080/(la carpeta de la pantalla a la que quieras ir)/".
 
