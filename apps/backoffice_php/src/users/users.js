@@ -7,7 +7,7 @@ function StartEvents() {
 function OnClickedUser(userType) {
   const rightContent = document.getElementById('right-content');
   rightContent.innerHTML = '';
-  fetch('../profile/profile.html')
+  fetch('profile/profile.html')
   .then(res => {
     if (!res.ok) throw new Error("User can't load");
     return res.text();
@@ -16,7 +16,7 @@ function OnClickedUser(userType) {
     rightContent.insertAdjacentHTML('afterbegin', html);
 
     // Adds the style for the profile things
-    const href = '../profile/profile.css';
+    const href = 'profile/profile.css';
     AddStyles(href);
 
     //Puts the respective fields for each user type

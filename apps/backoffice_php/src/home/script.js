@@ -10,7 +10,7 @@ function ChangeScreen(screen) {
     RemoveAllStyles();
     switch (screen) {
         case 1:
-            fetch('main.html')
+            fetch('home/main.html')
             .then(res => {
                 if (!res.ok) throw new Error("Main can't load");
                 return res.text();
@@ -21,7 +21,7 @@ function ChangeScreen(screen) {
             .catch(err => console.error(err));
             break;
         case 2:
-            fetch('../users/users.html')
+            fetch('users/users.html')
             .then(res => {
                 if (!res.ok) throw new Error("Users can't load");
                 return res.text();
@@ -31,10 +31,10 @@ function ChangeScreen(screen) {
             })
             .catch(err => console.error(err));
 
-            const href = '../users/user-styles.css';
+            const href = 'users/user-styles.css';
             AddStyles(href);
 
-            const src = '../users/users.js';
+            const src = 'users/users.js';
             AddScript(src);
             break;
         case 3:
@@ -62,7 +62,7 @@ function RemoveScript(src) {
 }
 
 function RemoveAllScript() {
-    RemoveScript('../users/users.js');
+    RemoveScript('backoffice/users/users.js');
 }
 
 function AddStyles(href) {
@@ -82,6 +82,6 @@ function RemoveStyles(href) {
 }
 
 function RemoveAllStyles() {
-    RemoveStyles('../users/styles-usuarios.css');
-    RemoveStyles('../profile/profile.css');
+    RemoveStyles('backoffice/users/styles-usuarios.css');
+    RemoveStyles('backoffice/profile/profile.css');
 }
