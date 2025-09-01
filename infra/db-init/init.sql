@@ -1,5 +1,5 @@
-drop database if exists eskua_db;
-create database if not exists eskua_db;
+drop database eskua_db;
+create database eskua_db;
 use eskua_db;
 
 create table users (
