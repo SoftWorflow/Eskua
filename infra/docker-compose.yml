@@ -5,7 +5,7 @@ services:
     env_file: ../.env
     volumes:
       - db_data:/var/lib/mysql
-      - ./infra/db-init:/docker-entrypoint-initdb.d:ro
+      - ../infra/db-init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin","ping","-h","localhost"]
       interval: 10s
