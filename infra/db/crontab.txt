@@ -1,0 +1,2 @@
+# Ejecutar backup todos los días a las 02:30
+30 2 * * * /opt/eskua/scripts/eskua_db_backup.sh >> /var/log/database/backup.log 2>&1
