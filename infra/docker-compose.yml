@@ -1,16 +1,11 @@
 services:
-
   db:
-    build:
-      context: ../infra/db
-      dockerfile: Dockerfile
+    image: mysql:8.0
     container_name: eskua-db
     env_file: ../.env
     volumes:
       - db_data:/var/lib/mysql
       - ../infra/db-init:/docker-entrypoint-initdb.d:ro
-      - db_backups:/var/backups/database
-      - db_logs:/var/log/database
     healthcheck:
       test: ["CMD", "mysqladmin","ping","-h","localhost"]
       interval: 10s
