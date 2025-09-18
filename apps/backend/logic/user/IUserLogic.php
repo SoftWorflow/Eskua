@@ -11,6 +11,7 @@ interface IUserLogic {
     public function getUserByEmail(string $email) : ?array;
 
     public function generateToken(User $user) : ?array;
+    public function refreshToken() : ?array;
 }
 
 ?>

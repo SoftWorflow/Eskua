@@ -188,7 +188,7 @@ class UserPersistence implements IUserPersistence {
     }
 
     // TOKENS
-    public function storeRefreshToken(int $userId, string $refreshToken, string $refreshExpire) : bool {
+    public function createRefreshToken(int $userId, string $refreshToken, string $refreshExpire) : bool {
         if ($this->conn === null || empty($userId) || empty($refreshToken) || empty($refreshExpire)) return false;
         
         // Hacer procedimiento almacendado
@@ -205,6 +205,31 @@ class UserPersistence implements IUserPersistence {
         }
     }
 
+    public function getRefreshToken(string $refreshToken) : ?array {
+        if (empty($refreshToken)) return null;
+        
+        $sql = "select user_id, refresh_token, expires_at from tokens where refresh_token = ? and is_revoked = 0;";
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$refreshToken]);
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Does not exist or it was revoked
+            if (!$result) return null;
+
+            return [
+                'user_id' => (int)$result['user_id'],
+                'refresh_token' => $result['refresh_token'],
+                'expires_at' => $result['expires_at']
+            ];
+
+        } catch (PDOException $e) {
+            error_log("Error getting refresh token: " . $e->getMessage());
+            return null;
+        }
+    }
 }
 
 ?>

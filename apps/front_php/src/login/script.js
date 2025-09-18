@@ -65,12 +65,20 @@ function SendLogindata(e) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-    }).then(res => res.json()).then(res => {
-        // Server response
+    }).then(res => res.json())
+    .then(res => {
+        if (res.ok) {
+            // Saves the access token things is the sessionStorage
+            sessionStorage.setItem("access_token", res.access_token);
+            sessionStorage.setItem("access_expires_at", res.access_expires_at);
 
-        if (res.access_token) {
-            const host = window.location.hostname;
+            // Saves user data (display name & profile pic) in the session storage
+            sessionStorage.setItem('user', JSON.stringify(res.user));
+
+            // Redirects the user to the home page
             window.location.replace(window.location.origin + '/');
+        } else {
+            alert(res.error);
         }
     })
     .catch(err => console.error(err));

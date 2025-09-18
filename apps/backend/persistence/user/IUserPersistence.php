@@ -9,7 +9,8 @@ interface IUserPersistence {
     public function getUserByUsername(string $username) : ?array;
     public function getUserByEmail(string $email) : ?array;
 
-    public function storeRefreshToken(int $id, string $refreshToken, string $refreshExpire) : bool;
+    public function createRefreshToken(int $id, string $refreshToken, string $refreshExpire) : bool;
+    public function getRefreshToken(string $refreshToken) : ?array;
 }
 
 ?>

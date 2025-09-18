@@ -10,6 +10,8 @@ use Firebase\JWT\Key;
 
 class UserLogic implements IUserLogic {
 
+    private int $ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES = 15;
+
     // CREATE USER
     public function createUser(User $user) : bool {
         $res = false;
@@ -128,15 +130,15 @@ class UserLogic implements IUserLogic {
         
         $secretKey = getenv('CLIENT_TOKEN_SECRET');
         $issuedAt = time();
-        $accessExpire = $issuedAt + 3600;
+        $accessExpire = $issuedAt + ($this->ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES * 60);
 
         $username = $user->getUsername();
         $dbUser = $this->getUserByUsername($username);
 
         if (!$dbUser) return null;
-
         $userId = $dbUser[0];
 
+        // Payload of the access token
         $payload = [
             'user_id' => $userId,
             'username' => $user->getUsername(),
@@ -147,18 +149,85 @@ class UserLogic implements IUserLogic {
 
         $accessToken = JWT::encode($payload, $secretKey, 'HS256');
 
+        // Random refresh token
         $refreshToken = bin2hex(random_bytes(32));
         $refreshExpire = date('Y-m-d H:i:s', $issuedAt + 60*60*24*30);
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
-        if (!$userPersistence->storeRefreshToken($userId, $refreshToken, $refreshExpire)) return null;
+        if (!$userPersistence->createRefreshToken($userId, $refreshToken, $refreshExpire)) return null;
+
+        setcookie(
+            "refresh_token",
+            $refreshToken,
+            [
+                'expires' => $refreshExpire,
+                'path' => '/',
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]
+        );
+
+        // Sent to the frontend
+        $result = [
+            'access_token' => $accessToken,
+            'access_expires_at' => date('Y-m-d H:i:s', $accessExpire)
+        ];
+
+        $userData = [
+            'display_name' => $user->getDisplayName(),
+            'profile_picture_url' => $user->getProfilePictureUrl()
+        ];
+
+        $result['user'] = $userData;
+
+        return $result;
+    }
+
+    public function refreshToken() : ?array {
+        if (!isset($_COOKIE['refresh_token'])) return null;
+
+        $refreshToken = $_COOKIE['refresh_token'];
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $dbRefresh = $userPersistence->getRefreshToken($refreshToken);
+        // Invalid token
+        if (!$dbRefresh) return null;
+
+        $expiresAt = strtotime($dbRefresh['expires_at']);
+        // The token has expired
+        if ($expiresAt < time()) return null;
+
+        $dbUser = $this->getUserById($dbRefresh['user_id']);
+        if (!$dbUser) return null;
+        $user = $dbUser[1];
+
+        $secretKey = getenv('CLIENT_TOKEN_SECRET');
+        $issuedAt = time();
+        $accessExpire = $issuedAt + ($this->ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES * 60);
+
+        // Random refresh token
+        $payload = [
+            'user_id' => $dbRefresh['user_id'],
+            'username' => $user->getUsername(),
+            'role' => $user->getUserRole(),
+            'iat' => $issuedAt,
+            'exp' => $accessExpire
+        ];
+
+        $accessToken = JWT::encode($payload, $secretKey, 'HS256');
 
         $result = [
             'access_token' => $accessToken,
-            'access_expires_at' => date('Y-m-d H:i:s', $accessExpire),
-            'refresh_token' => $refreshToken,
-            'refresh_expires_at' => $refreshExpire
+            'access_expires_at' => $accessExpire
         ];
+
+        $userData = [
+            'display_name' => $user->getDisplayName(),
+            'profile_picture_url' => $user->getProfilePictureUrl()
+        ];
+
+        $result['user'] = $userData;
 
         return $result;
     }
