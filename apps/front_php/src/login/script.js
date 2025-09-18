@@ -51,15 +51,15 @@ function HidingAndShowingHandler(password, eyeIcon) {
 function SendLogindata(e) {
     e.preventDefault();
     
-    const loginForm = document.getElementById('login-form');
-    const formData = new FormData(loginForm);
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('user-password');
 
-    const data = {
-        username: loginForm.username.value,
-        password: loginForm.password.value,
-    };
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
-    fetch('register.php', {
+    const data = { username, password };
+
+    fetch('/api/user/login.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -67,6 +67,11 @@ function SendLogindata(e) {
         body: JSON.stringify(data)
     }).then(res => res.json()).then(res => {
         // Server response
+
+        if (res.access_token) {
+            const host = window.location.hostname;
+            window.location.replace(window.location.origin + '/');
+        }
     })
     .catch(err => console.error(err));
 }
