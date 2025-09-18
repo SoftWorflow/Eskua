@@ -62,7 +62,8 @@ function SendLogindata(e) {
     fetch('/api/user/login.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify(data)
     }).then(res => res.json())
