@@ -26,6 +26,18 @@ class UserLogic implements IUserLogic {
             return $res;
         }
         
+        $userPassword = $user->getPassword();
+
+        $options = [
+            'memory_cost' => 131072, // 128 MB
+            'time_cost' => 4,
+            'threads' => 2,
+        ];
+
+        $hashedPassword = password_hash($password, PASSWORD_ARGON2ID, $options);
+
+        $user->setPassword($hashedPassword);
+
         $res = $userPersistence->createUser($user);
         return $res;
     }
