@@ -10,7 +10,7 @@ class db_connect {
 
     public function __construct() {
         $this->host = getenv("DATABASE_HOST");
-        $this->db   = getenv("DATABASE_NAME");
+        $this->db = getenv("DATABASE_NAME");
         $this->user = getenv("DATABASE_USER");
         $this->pass = getenv("DATABASE_PASSWORD");
     }
@@ -37,4 +37,5 @@ class db_connect {
         }
         return $this->conn;
     }
+    
 }
