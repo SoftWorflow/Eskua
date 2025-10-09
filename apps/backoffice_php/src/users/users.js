@@ -1,7 +1,6 @@
 window.addEventListener('DOMContentLoaded', StartEvents);
 
 function StartEvents() {
-
 }
 
 function OnClickedUser(userType) {
@@ -18,11 +17,11 @@ function OnClickedUser(userType) {
     // Adds the style for the profile things
     const href = 'profile/profile.css';
     AddStyles(href);
-
+    
     //Puts the respective fields for each user type
     PutFields(userType);
   })
-    .catch(err => console.error(err));
+  .catch(err => console.error(err));
 }
 
 function AddStyles(href) {
@@ -32,6 +31,21 @@ function AddStyles(href) {
     link.href = href;
     document.head.appendChild(link);
   }
+}
+
+function loadUsers() {
+  const userAccessToken = sessionStorage.getItem('access_token');
+  fetch('/api/admin/getAllUsers.php', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${userAccessToken}`,
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }).then(res => res.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => console.error(err));
 }
 
 function PutFields(userType) {
@@ -46,44 +60,46 @@ function PutFields(userType) {
       break;
     case 'teacher':
       newFields = `
-        <div class="user-atribute-container">
-          <div class="atribute-name-container">
-            <img src="" alt="" class="atribute-icon">
-            <p class="atribute-title">Grupo</p>
-          </div>
-          <div class="atribute-value-container">
-            <p class="atribute-value" id="display-name">Nombre Grupo</p>
-          </div>
+      <div class="user-atribute-container">
+      <div class="atribute-name-container">
+      <img src="" alt="" class="atribute-icon">
+      <p class="atribute-title">Grupo</p>
+      </div>
+      <div class="atribute-value-container">
+      <p class="atribute-value" id="display-name">Nombre Grupo</p>
+      </div>
+      </div>
+      <div class="user-atribute-container">
+      <div class="atribute-name-container">
+      <img src="" alt="" class="atribute-icon">
+      <p class="atribute-title">Actividades Creadas</p>
         </div>
-        <div class="user-atribute-container">
-          <div class="atribute-name-container">
-            <img src="" alt="" class="atribute-icon">
-            <p class="atribute-title">Actividades Creadas</p>
-          </div>
-          <div class="atribute-value-container">
-            <p class="atribute-value" id="display-name">Cantidad de actividades</p>
-          </div>
+        <div class="atribute-value-container">
+        <p class="atribute-value" id="display-name">Cantidad de actividades</p>
         </div>
-      `;
-      break;
-    case 'student':
-      newFields = `
-        <div class="user-atribute-container">
-          <div class="atribute-name-container">
-            <img src="" alt="" class="atribute-icon">
-            <p class="atribute-title">Grupo</p>
-          </div>
-          <div class="atribute-value-container">
-            <p class="atribute-value" id="display-name">Nombre Grupo</p>
-          </div>
         </div>
-      `;
-      break;
-    default:
-      console.error('Error while trying to get user type!');
+        `;
+        break;
+      case 'student':
+        newFields = `
+        <div class="user-atribute-container">
+        <div class="atribute-name-container">
+        <img src="" alt="" class="atribute-icon">
+        <p class="atribute-title">Grupo</p>
+        </div>
+        <div class="atribute-value-container">
+        <p class="atribute-value" id="display-name">Nombre Grupo</p>
+        </div>
+        </div>
+        `;
+        break;
+      default:
+          console.error('Error while trying to get user type!');
       break;
   }
   if (newFields != null) {
     userFields.insertAdjacentHTML('beforeend', newFields);
   }
 }
+        
+loadUsers();

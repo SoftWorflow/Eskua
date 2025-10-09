@@ -51,22 +51,36 @@ function HidingAndShowingHandler(password, eyeIcon) {
 function SendLogindata(e) {
     e.preventDefault();
     
-    const loginForm = document.getElementById('login-form');
-    const formData = new FormData(loginForm);
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('user-password');
 
-    const data = {
-        username: loginForm.username.value,
-        password: loginForm.password.value,
-    };
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
-    fetch('register.php', {
+    const data = { username, password };
+
+    fetch('/api/user/login.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
         },
         body: JSON.stringify(data)
-    }).then(res => res.json()).then(res => {
-        // Server response
+    }).then(res => res.json())
+    .then(res => {
+        if (res.ok) {
+            // Saves the access token things is the sessionStorage
+            sessionStorage.setItem("access_token", res.access_token);
+            sessionStorage.setItem("access_expires_at", res.access_expires_at);
+
+            // Saves user data (display name & profile pic) in the session storage
+            sessionStorage.setItem('user', JSON.stringify(res.user));
+
+            // Redirects the user to the home page
+            window.location.replace(window.location.origin + '/');
+        } else {
+            alert(res.error);
+        }
     })
     .catch(err => console.error(err));
 }
