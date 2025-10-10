@@ -3,3 +3,6 @@
 
 # VSCode
 .vscode/
+
+# Variables de entorno
+.env
