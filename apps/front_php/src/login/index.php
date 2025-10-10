@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Eskua</title>
     <link rel="stylesheet" href="../../output.css">
+    <script src="script.js" defer></script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
     <!-- Google Login -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="script.js" defer></script>
+    <style>
+        .invalid {
+            color: #CC4033;
+        }
+    </style>
 </head>
-<body class="flex justify-center items-center w-full min-h-screen bg-neutral-400 p-6">
+<body class="flex justify-center items-center w-full h-screen bg-neutral-400 md:p-6">
     
-    <div class="flex flex-row justify-center items-center bg-white w-full h-full min-h-[calc(100vh-48px)] rounded-3xl p-8 gap-20 max-w-[1920px]">
+    <div class="flex flex-row justify-center items-center bg-white w-full h-full min-h-[calc(100vh-48px)] md:rounded-3xl p-8 gap-20">
         
         <!-- Contenedor de datos -->
         <div class="max-w-[30rem] flex-1 flex flex-col justify-center text-center gap-6 overflow-hidden">
@@ -25,10 +30,16 @@
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-normal">Hola, Bienvenido Devuelta!</h2>
             </div>
 
-            <div class="flex flex-col gap-9">
+            <form id="login-form" class="flex flex-col gap-9">
                 <!-- Username -->
-                <div class="flex items-center relative w-full min-h-[50px] max-h-20 leading-[50px]">
-                    <div id="username-error-message" class="absolute text-red-500 text-sm -translate-y-11 z-50 whitespace-nowrap select-none"></div>
+                <div id="input-container" class="flex items-center relative w-full min-h-[50px] max-h-20 leading-[50px]">
+                    <div id="error-message" class="absolute text-red-500 text-sm -translate-y-11 z-50 whitespace-nowrap select-none"></div>
+                    <label 
+                        for="username" 
+                        class="text-xl md:text-2xl px-3.5 mx-5 transition-all duration-200 bg-white select-none pointer-events-none"
+                    >
+                        Nombre Usuario
+                    </label>
                     <input
                         type="text"
                         name="username"
@@ -36,17 +47,11 @@
                         required
                         class="absolute w-full outline-none text-xl md:text-2xl px-3.5 leading-[50px] h-[50px] rounded-xl bg-transparent border-2 border-gray-200 transition-all duration-100 z-10"
                     />
-                    <label 
-                        for="username" 
-                        class="absolute text-xl md:text-2xl px-3.5 mx-5 transition-all duration-200 bg-white select-none pointer-events-none"
-                    >
-                        Nombre Usuario
-                    </label>
                 </div>
 
                 <!-- Password -->
-                <div class="flex items-center relative w-full min-h-[50px] max-h-20 leading-[50px]">
-                    <div id="password-error-message" class="absolute text-red-500 text-sm -translate-y-11 z-50 whitespace-nowrap select-none"></div>
+                <div id="input-container" class="flex items-center relative w-full min-h-[50px] max-h-20 leading-[50px]">
+                    <div id="error-message" class="absolute text-red-500 text-sm -translate-y-11 z-50 whitespace-nowrap select-none"></div>
                     <input
                         type="password"
                         name="password"
@@ -73,13 +78,13 @@
                 </div>
 
                 <button 
-                    type="button"
+                    type="submit"
                     id="login-btn"
                     class="h-12 text-lg md:text-xl leading-6 w-full border-none rounded-xl bg-gray-200 cursor-pointer hover:bg-gray-300 transition-colors"
                 >
                     Login
                 </button>
-            </div>
+            </form>
 
             <div class="flex flex-row gap-5 w-full justify-center items-center">
                 <span class="text-gray-400">───────────</span>
@@ -105,7 +110,6 @@
             </div>
         </div>
 
-        <!-- Contenedor de imagen - Solo visible en pantallas grandes -->
         <div class="hidden xl:block w-1/2 min-w-[50rem] h-full bg-gray-300 rounded-3xl"></div>
     </div>
 

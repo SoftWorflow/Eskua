@@ -78,10 +78,20 @@ function SendLogindata(e) {
 
             // Redirects the user to the home page
             window.location.replace(window.location.origin + '/');
+            console.log("test");
         } else {
-            console.log(res.error);
-            ToggleValidationState(false, usernameInput);
-            ToggleValidationState(false, passwordInput);
+            console.error(res.error);
+            const inputs = document.querySelectorAll('[id="input-container"]');
+
+            inputs.forEach((element, i) => {
+                ToggleValidationState(false, element);
+            });
+
+            const errorMsg = document.querySelectorAll('[id="error-message"]');
+
+            errorMsg.forEach((element, i) => {
+                element.innerHTML = res.error;
+            });
         }
     })
     .catch(err => console.error(err));
