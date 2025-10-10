@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrarse - Eskua</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Login - Eskua</title>
+    <link rel="stylesheet" href="../../output.css">
     <script src="script.js" defer></script>
-    <!-- Google Fonts -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-    <!-- Google Register -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Lexend", sans-serif;
+            line-height: 1;
+        }
+
         h1, .fs-h1 {
             font-size: clamp(3rem, 2.5459rem + 1.8164vw, 3.999rem);
             font-weight: 400;
@@ -48,12 +50,14 @@
             font-weight: 400;
         }
 
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            font-family: "Lexend", sans-serif;
-            line-height: 1;
+        a {
+            color: #1b3b50;
+            font-size: clamp(0.7502rem, 0.6366rem + 0.4542vw, 1rem);
+        }
+
+        .title {
+            margin: 1rem 0 3rem 0;
+            /* text-align: left; Mueve el title para la izquierda, pero no me termina de convencer */
         }
 
         body {
@@ -79,12 +83,6 @@
             gap: 5rem;
         }
 
-        .data-container {
-            max-width: 30rem;
-            overflow: hidden;
-            flex: 1;
-        }
-
         .data-container, .data-container form {
             display: flex;
             flex-direction: column;
@@ -92,14 +90,15 @@
             text-align: center;
         }
 
-        .data-container form {
-            gap: 2.188rem;
+        .data-container {
+            max-width: 30rem;
+            flex: 1;
+            gap: 1.5rem;
+            overflow: hidden;
         }
 
-
-
-        .title {
-            margin: 1rem 0 3rem 0;
+        .data-container form {
+            gap: 2.188rem;
         }
 
         .input-container {
@@ -182,17 +181,17 @@
             border-color: #28C98E;
         }
 
-        .content-separator {
+        .bottom-form-content, .remeber-me-container {
             display: flex;
             flex-direction: row;
-            gap: 1.25rem;
-            width: 100%;
-            justify-content: center;
-            margin: 28px 0;
         }
 
-        .content-separator::after, .content-separator::before {
-            content: '───────────';
+        .bottom-form-content {
+            justify-content: space-between;
+        }
+
+        .remeber-me-container {
+            gap: 0.5rem;
         }
 
         .btn-submit, .google-btn {
@@ -218,18 +217,12 @@
             gap: 1.188rem;
         }
 
-        .login-link {
+        .register-link {
             display: flex;
             justify-content: center;
-            flex-direction: row;
             align-items: flex-end;
-            margin-top: 20px;
+            flex-direction: row;
             gap: 0.313rem;
-        }
-
-        .login-link a {
-            color: #1b3b50;
-            font-size: clamp(0.7502rem, 0.6366rem + 0.4542vw, 1rem);
         }
 
         .image-container {
@@ -240,14 +233,16 @@
             border-radius: 30px;
         }
 
-        .error-message {
-            position: absolute;
-            color: #CC4033;
-            font-size: 15px;
-            transform: translateY(-45px);
-            z-index: 50;
-            white-space: nowrap;
-            user-select: none;
+        .content-separator {
+            display: flex;
+            flex-direction: row;
+            gap: 1.25rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .content-separator::after, .content-separator::before {
+            content: '───────────';
         }
 
         /* RESPONSIVE */
@@ -323,17 +318,16 @@
                 transform: none;
             }
         }
-    </style>
+  </style>
 </head>
 <body>
-    
     <div class="main-container">
         <div class="data-container">
             <h6>Eskua</h6>
 
-            <div class="title"><h2>Crear Una Cuenta</h2></div>
+            <div class="title"><h2>Hola, Bienvenido Devuelta!</h2></div>
 
-            <form id="register-form" method="post">
+            <form id="login-form">
                 <div class="input-container">
                     <div id="username-error-message" class="error-message"></div>
                     <input type="text" name="username" id="username" required>
@@ -341,44 +335,38 @@
                 </div>
 
                 <div class="input-container">
-                    <div id="email-error-message" class="error-message"></div>
-                    <input type="email" name="email" id="user-email" required>
-                    <label class="input-label" for="user-email">Email</label>
-                </div>
-
-                <div class="input-container">
                     <div id="password-error-message" class="error-message"></div>
                     <input class="input-password" type="password" name="password" id="user-password" required>
                     <label class="input-label" for="user-password">Contraseña</label>
-                    <img src="../images/show.png" id="eye-icon" onclick="HandleShowingAndHidingPassword()">
+                    <img src="../images/hide.png" id="eye-icon" onclick="HandleShowingAndHidingPassword()">
                 </div>
 
-                <div class="input-container">
-                    <div id="verify-password-error-message" class="error-message"></div>
-                    <input class="input-password" type="password" name="verify-password" id="verify-user-password" required>
-                    <label class="input-label" for="verify-user-password">Confirmar Contraseña</label>
-                    <img src="../images/show.png" id="eye-icon-verify" onclick="HandleShowingAndHidingVerifyPassword()">
+                <div class="bottom-form-content">
+                    <div class="remeber-me-container">
+                        <input type="checkbox" name="remeber-me" id="remeber-me-checkbox">
+                        <p>Recuerdame</p>
+                    </div>
+                    <a href="">Olvidaste tu contraseña?</a>
                 </div>
 
-                <button type="submit" class="btn-submit">Registrarse</button>
+                <button type="submit" class="btn-submit">Login</button>
             </form>
-
+        
             <div class="content-separator">
-                <p>O registrarse con</p>
+                <p>O Iniciar Sesión con</p>
             </div>
 
             <div class="btns-container">
                 <button class="google-btn" id="google-btn" type="button">Google</button>
             </div>
 
-            <div class="login-link">
-                <p>Ya tienes una cuenta?</p>
-                <a href="../login/">Iniciar Sesión</a>
+            <div class="register-link">
+                <p>No estas registrado?</p>
+                <a href="../register/">Crear cuenta</a>
             </div>
         </div>
 
         <div class="image-container"></div>
     </div>
-
 </body>
 </html>
