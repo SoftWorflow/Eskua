@@ -9,8 +9,8 @@
 <body>
 
     <?php include 'components/navbar.html'; ?>
-    <?php include 'components/hero.php'; ?>
-    <?php include 'components/footer.php'; ?>
+    <?php include 'components/hero.html'; ?>
+    <?php include 'components/footer.html'; ?>
 
 </body>
 </html>
