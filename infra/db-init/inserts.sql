@@ -14,29 +14,29 @@ insert into users (username, email, display_name, profile_picture_url, `password
 ('martin_dev', 'martin@example.com', 'Martín Díaz', 'https://picsum.photos/200?10', '$argon2id$v=19$m=65536,t=4,p=1$SEtSdWttR2YzS1c0UlQwNw$hC1r+izswC7p0sKmQYway5V9XjGm90d57B2kIKr3R/g', 'Admin', false); -- password: martin123
 
 -- GROUPS
-insert into `groups` (fk_teacher, `name`, `code`) values
+insert into `groups` (teacher, `name`, `code`) values
 (2, 'Group A', '335678'),
 (5, 'Group B', '146997'),
 (8, 'Group C', '698874');
 
 -- ADMINS
-insert into admins (fk_user) values
+insert into admins (user) values
 (1), -- admin_master
 (10); -- martin_dev
 
 -- TEACHERS
-insert into teachers (fk_user) values
+insert into teachers (user) values
 (2), -- juan123
 (5), -- carlos_t
 (8); -- pedro_g
 
 -- STUDENTS
-insert into students (fk_user, fk_group) values
+insert into students (user, `group`) values
 (3, 1), -- María López, Group A
 (4, 1), -- Sofía Ramírez, Group A
 (7, 2), -- Lucía Méndez, Group B
 (9, 3); -- Ana Suárez, Group C
 
 -- GUESTS
-insert into guests (fk_user) values
+insert into guests (user) values
 (6); -- guest_01
