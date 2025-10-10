@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #1b3b50;
+  --color-secondary: #85d2e2;
+  --color-accent: #e1a05b;
+  --color-background: #ffffff;
+  --color-text: #050a0d;
+}
+
+@font-face {
+  font-family: 'Lexend';
+  src: url('./fonts/Lexend/Lexend-VariableFont_wght.ttf') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    font-family: 'Lexend', sans-serif;
+  }
+}   
