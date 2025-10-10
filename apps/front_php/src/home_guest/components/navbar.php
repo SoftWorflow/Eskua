@@ -1,9 +1,0 @@
-<nav class="w-2/6 mx-auto rounded-3xl bg-white-800 border-black shadow-xl text-black p-4">
-    <div class="flex justify-center">
-        <ul class="text-xl flex space-x-9">
-            <li><a href="#" class="hover:text-orange-800">Actividades</a></li>
-            <li><a href="#" class="hover:text-orange-800">Niveles</a></li>
-            <li><a href="#" class="hover:text-orange-800">Sobre Nosotros</a></li>
-        </ul>
-    </div>
-</nav>
