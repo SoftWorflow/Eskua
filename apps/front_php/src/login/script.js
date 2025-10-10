@@ -79,7 +79,9 @@ function SendLogindata(e) {
             // Redirects the user to the home page
             window.location.replace(window.location.origin + '/');
         } else {
-            alert(res.error);
+            console.log(res.error);
+            ToggleValidationState(false, usernameInput);
+            ToggleValidationState(false, passwordInput);
         }
     })
     .catch(err => console.error(err));
