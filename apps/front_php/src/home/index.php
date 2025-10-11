@@ -8,9 +8,8 @@
 </head>
 <body>
 
-    <?php include 'components/navbar.html'; ?>
-    <?php include 'guestComponents/hero.html'; ?>
-    <?php include 'guestComponents/footer.html'; ?>
+    <?php include 'components/navbarNormalUser.html'; ?>
+    <?php include 'normalUserComponents/index.html'; ?>
 
 </body>
 </html>
