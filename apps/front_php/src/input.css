@@ -26,6 +26,10 @@
     @apply text-[#0C739F] underline hover:cursor-pointer;
   }
 
+  nav a {
+    @apply text-inherit no-underline hover:cursor-auto;
+  }
+
   /* Default style for all labels */
   label {
     @apply text-base transition-transform duration-150;
