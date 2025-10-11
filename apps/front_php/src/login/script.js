@@ -23,10 +23,10 @@ function HandleShowingAndHidingPassword() {
 function HidingAndShowingHandler(password, eyeIcon) {
     if (password.type === 'password') {
         password.type = 'text';
-        eyeIcon.src = '../images/OpenEyeIcon.svg';
+        eyeIcon.src = '../images/CloseEyeIcon.svg';
     } else {
         password.type = 'password';
-        eyeIcon.src = '../images/CloseEyeIcon.svg';
+        eyeIcon.src = '../images/OpenEyeIcon.svg';
     }
 }
 

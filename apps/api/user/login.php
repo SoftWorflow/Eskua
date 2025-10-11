@@ -26,7 +26,7 @@ $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
 $dbUser = $userLogic->getUserByUsername($username);
 if (!$dbUser) {
     http_response_code(401);
-    echo json_encode(['error' => 'Username or password are incorrect', 'ok' => false]);
+    echo json_encode(['error' => 'Usuario o contraseña incorrectos', 'ok' => false]);
     exit;
 }
 
@@ -34,7 +34,7 @@ $user = $dbUser[1];
 
 if (!password_verify($password, $user->getPassword())) {
     http_response_code(401);
-    echo json_encode(['error' => 'Username or password are incorrect', 'ok' => false]);
+    echo json_encode(['error' => 'Usuario o contraseña incorrectos', 'ok' => false]);
     exit;
 }
 
