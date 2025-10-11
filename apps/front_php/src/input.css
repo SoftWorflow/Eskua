@@ -16,7 +16,123 @@
 }
 
 @layer base {
+  /* Default font */
   html {
     font-family: 'Lexend', sans-serif;
   }
-}   
+
+  /* Default style for all <a> */
+  a {
+    @apply text-[#0C739F] underline hover:cursor-pointer;
+  }
+
+  /* Default style for all labels */
+  label {
+    @apply text-base transition-transform duration-150;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
+  /* Default style for any input of type text, password and email */
+  input[type="text"], input[type="password"], input[type="email"] {
+    @apply border border-[#1B3B50] rounded-lg px-3 py-2 w-full focus:outline-none drop-shadow-md/25 bg-white pr-14 h-14;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 300;
+  }
+
+  /* Default style of any checkbox */
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: 18px;
+    height: 18px;
+    background-color: #EEE7E7;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    vertical-align: middle;
+  }
+
+  /* The inner cube that is invisible (when is not checked) */
+  input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    background-color: #3F8CAD;
+    border-radius: 2px;
+    transform: scale(0);
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  /* Animation taht makes the inner cube appear and scale :) */
+  input[type="checkbox"]:checked::after {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  input[type="checkbox"]:hover {
+    background-color: #e2dada;
+  }
+}
+
+@layer utilities {
+  .text-thin {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 200;
+  }
+
+  .text-light {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 300;
+  }
+
+  .text-regular {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
+  .text-medium {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 500;
+  }
+
+  .text-bold {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 700;
+  }
+
+  .orange-button {
+    @apply border-2 border-[#E1A05B] text-[#E1A05B] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#E1A05B] hover:text-white transition-colors duration-150 hover:cursor-pointer;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
+  .input-pack {
+    @apply flex items-center relative;
+  }
+
+  .label-image {
+    @apply absolute right-0 mr-4 aspect-square w-8 h-8;
+    z-index: 2;
+  }
+
+  .interactive {
+    @apply hover:cursor-pointer;
+  }
+
+  .text-error {
+    @apply text-[#CC4033];
+  }
+
+  .invalid-input {
+    @apply border-[#CC4033] text-[#CC4033];
+  }
+}

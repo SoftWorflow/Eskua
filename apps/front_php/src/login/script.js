@@ -2,24 +2,6 @@ window.addEventListener('DOMContentLoaded', StartEvents);
 
 function StartEvents() {
     AddListeners();
-    Google();
-}
-
-function Google() {
-    
-    google.accounts.id.initialize({
-      client_id: "761002639560-vejkjfodd513khe9ifmrsjq46o0c619s.apps.googleusercontent.com",
-      callback: handleCredentialResponse,
-    });
-
-    google.accounts.id.prompt();
-
-    const button = document.getElementById('google-btn');
-
-    button.addEventListener('click', () => {
-        google.accounts.id.prompt();
-    });
-
 }
 
 function handleCredentialResponse(response) {
@@ -33,26 +15,26 @@ function AddListeners() {
 
 
 function HandleShowingAndHidingPassword() {
-    const password = document.getElementById('user-password');
-    const eyeIcon = document.getElementById('eye-icon');
+    const password = document.getElementById('password-input');
+    const eyeIcon = document.getElementById('password-icon');
     HidingAndShowingHandler(password, eyeIcon);
 }
 
 function HidingAndShowingHandler(password, eyeIcon) {
     if (password.type === 'password') {
         password.type = 'text';
-        eyeIcon.src = '../images/show.png';
+        eyeIcon.src = '../images/OpenEyeIcon.svg';
     } else {
         password.type = 'password';
-        eyeIcon.src = '../images/hide.png';
+        eyeIcon.src = '../images/CloseEyeIcon.svg';
     }
 }
 
 function SendLogindata(e) {
     e.preventDefault();
     
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('user-password');
+    const usernameInput = document.getElementById('username-input');
+    const passwordInput = document.getElementById('password-input');
 
     const username = usernameInput.value;
     const password = passwordInput.value;
@@ -81,17 +63,35 @@ function SendLogindata(e) {
             console.log("test");
         } else {
             console.error(res.error);
-            const inputs = document.querySelectorAll('[id="input-container"]');
-
-            inputs.forEach((element, i) => {
-                ToggleValidationState(false, element);
+            
+            const labels = document.querySelectorAll('label');
+            labels.forEach((element, i) => {
+                if (!element.classList.contains("-translate-y-6") && !element.classList.contains('absolute')) {
+                    element.classList.add('absolute');
+                    element.classList.add('-translate-y-6');
+                }
             });
 
-            const errorMsg = document.querySelectorAll('[id="error-message"]');
+            if (!usernameInput.classList.contains('invalid-input')) {
+                usernameInput.classList.add('invalid-input');
+            }
+            
+            if (!passwordInput.classList.contains('invalid-input')) {
+                passwordInput.classList.add('invalid-input');
+            }
 
-            errorMsg.forEach((element, i) => {
+            const errorMsgs = document.querySelectorAll('#error-message');
+            errorMsgs.forEach((element, i) => {
                 element.innerHTML = res.error;
             });
+
+            const notyf = new Notyf ({
+                duration: 2000,
+                position: { x: 'right', y: 'top' },
+                dismissible: true
+            });
+
+            notyf.error(res.error);
         }
     })
     .catch(err => console.error(err));
