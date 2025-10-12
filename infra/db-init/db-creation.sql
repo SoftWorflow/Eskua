@@ -19,13 +19,13 @@ create table users(
 -- TOKENS
 CREATE TABLE tokens (
     id int primary key auto_increment,
-    `user` int not null,
+    `user_id` int not null,
     refresh_token varchar(512) not null,
     expires_at datetime not null,
-    revoked boolean not null default false,
+    is_revoked boolean not null default false,
     created_at datetime not null default current_timestamp,
     updated_at datetime not null default current_timestamp on update current_timestamp,
-    foreign key (`user`) references users(id) on delete cascade
+    foreign key (`user_id`) references users(id) on delete cascade
 );
 
 -- GUESTS

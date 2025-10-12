@@ -11,6 +11,7 @@ interface IUserPersistence {
 
     public function createRefreshToken(int $id, string $refreshToken, string $refreshExpire) : bool;
     public function getRefreshToken(string $refreshToken) : ?array;
+    public function revokeRefreshToken($refreshToken) : bool;
 }
 
 ?>

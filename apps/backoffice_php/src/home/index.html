@@ -6,8 +6,15 @@
   <title>Backoffice - Eskua</title>
   <link rel="stylesheet" href="home/styles-inicio.css"/>
   <script src="home/script.js" defer></script>
+  <script src="../../auth.js"></script>
 </head>
 <body>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      const hasAccess = await requireRole(['admin']);
+    });
+  </script>
 
   <div class="backoffice-content-container">
     <div class="side-menu-container">

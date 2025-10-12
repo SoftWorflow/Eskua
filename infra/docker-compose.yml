@@ -28,6 +28,7 @@ services:
       context: ../apps
       dockerfile: Dockerfile
     volumes:
+      - ../infra/php/php.ini:/usr/local/etc/php/php.ini
       # Sacar del docker-compose en produccion y dejarlo todo en el Dockerfile (menos las imagenes)
       - ../apps/front_php/src:/var/www/html/
       - ../apps/backoffice_php/src:/var/www/html/backoffice/

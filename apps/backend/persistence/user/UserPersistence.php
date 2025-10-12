@@ -211,7 +211,7 @@ class UserPersistence implements IUserPersistence {
         $sql = "select user_id, refresh_token, expires_at from tokens where refresh_token = ? and is_revoked = 0;";
         
         try {
-            $stmt = $this->db->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->execute([$refreshToken]);
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -228,6 +228,21 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             error_log("Error getting refresh token: " . $e->getMessage());
             return null;
+        }
+    }
+
+    public function revokeRefreshToken($refreshToken) : bool {
+        if (empty($refreshToken)) return false;
+
+        $sql = "update tokens set is_revoked = 1 where refresh_token = ?";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$refreshToken]);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error revoking token: " . $e->getMessage());
+            return false;
         }
     }
 }

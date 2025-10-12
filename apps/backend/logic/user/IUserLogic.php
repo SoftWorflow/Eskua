@@ -12,6 +12,7 @@ interface IUserLogic {
 
     public function generateToken(User $user) : ?array;
     public function refreshToken() : ?array;
+    public function revokeRefreshToken($refreshToken) : bool;
 }
 
 ?>

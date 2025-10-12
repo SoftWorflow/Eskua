@@ -138,7 +138,7 @@ class UserLogic implements IUserLogic {
 
     // TOKENS
     public function generateToken(User $user) : ?array {
-        if ($user === null) return null;
+        if ($user === null) return ["error" => "Usuario no recibido"];
         
         $secretKey = getenv('CLIENT_TOKEN_SECRET');
         $issuedAt = time();
@@ -163,16 +163,18 @@ class UserLogic implements IUserLogic {
 
         // Random refresh token
         $refreshToken = bin2hex(random_bytes(32));
-        $refreshExpire = date('Y-m-d H:i:s', $issuedAt + 60*60*24*30);
+        $refreshExpireTimestamp = $issuedAt + (60*60*24*30);
+        $refreshExpireDate = date('Y-m-d H:i:s', $refreshExpireTimestamp);
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
-        if (!$userPersistence->createRefreshToken($userId, $refreshToken, $refreshExpire)) return null;
+        if (!$userPersistence->createRefreshToken($userId, $refreshToken, $refreshExpireDate)) return ["error" => "Error generando el refresh token"];
+
 
         setcookie(
             "refresh_token",
             $refreshToken,
             [
-                'expires' => $refreshExpire,
+                'expires' => $refreshExpireTimestamp,
                 'path' => '/',
                 'secure' => false,
                 'httponly' => true,
@@ -231,7 +233,7 @@ class UserLogic implements IUserLogic {
 
         $result = [
             'access_token' => $accessToken,
-            'access_expires_at' => $accessExpire
+            'access_expires_at' => date('Y-m-d H:i:s', $accessExpire)
         ];
 
         $userData = [
@@ -242,6 +244,14 @@ class UserLogic implements IUserLogic {
         $result['user'] = $userData;
 
         return $result;
+    }
+
+    public function revokeRefreshToken($refreshToken) : bool {
+        if (empty($refreshToken)) return false;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->revokeRefreshToken($refreshToken);
     }
 
 }
