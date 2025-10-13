@@ -1,43 +1,46 @@
-<div class="min-h-screen w-full flex flex-col items-center justify-center space-y-10 bg-[url(../images/Background1.png)]">
+<div class="min-h-screen w-full flex flex-col items-center justify-center space-y-10 bg-[url(../images/Background1.png)] bg-fixed">
     
     <!-- Titulo -->
-    <div class="space-y-2 text-center mt-10">
-        <h2 class="sm:text-5xl lg:text-6xl">Actividades</h4>
-        <h4 class="sm:text-lg lg:text-2xl text-regular">De que forma aprenderas hoy?</h4>
+    <div class="space-y-2 text-center mt-30 xl:mt-20">
+        <h2 class="text-5xl">Actividades</h4>
+        <h4 class="text-lg">De que forma aprenderas hoy?</h4>
     </div>
 
     <!-- Cartas -->
-    <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-15">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-16 mx-5 mb-10 xl:mt-0">
 
         <!-- Carta Material -->
-        <div class="w-[528px] h-[620px] flex flex-col drop-shadow-lg interactive hover:drop-shadow-lg/60">
-            <div class="p-2 flex items-center justify-center h-5/6 bg-[#1B3B50] rounded-t-3xl">
-                <img class="w-1/2 h-1/2 rounded-t-3xl" src="../images/MaterialIcon.svg" alt="">
+        <div class="card-responsive interactive">
+            <div class="h-4/6 p-2 flex items-center justify-center bg-[#1B3B50] rounded-t-lg">
+                <img class="w-3/4 h-1/2" src="../images/MaterialIcon.svg" alt="">
             </div>
-            <div class="h-1/6 flex items-center justify-center bg-[#173345] rounded-b-3xl">
+            <div class="h-2/6 flex items-center justify-center bg-[#173345] rounded-b-lg">
+                <h2 class="text-3xl text-white">Material</h2>
+            </div>
+        </div>
+
+        <div class="card-responsive interactive">
+            <div class="h-4/6 p-2 flex items-center justify-center bg-[#1B3B50] rounded-t-lg">
+                <img class="w-3/4 h-1/2" src="../images/MaterialIcon.svg" alt="">
+            </div>
+            <div class="h-2/6 flex items-center justify-center bg-[#173345] rounded-b-lg">
+                <h2 class="text-3xl text-white">Material</h2>
+            </div>
+        </div>
+
+        <div class="card-responsive interactive">
+            <div class="h-4/6 p-2 flex items-center justify-center bg-[#1B3B50] rounded-t-lg">
+                <img class="w-3/4 h-1/2" src="../images/MaterialIcon.svg" alt="">
+            </div>
+            <div class="h-2/6 flex items-center justify-center bg-[#173345] rounded-b-lg">
                 <h2 class="text-3xl text-white">Material</h2>
             </div>
         </div>
 
         <!-- Carta Juegos -->
-        <div class="w-[528px] h-[620px] flex flex-col drop-shadow-lg interactive hover:drop-shadow-lg/60">
-            <div class="p-2 flex items-center justify-center h-5/6 bg-[#1B3B50] rounded-t-3xl">
-                <img class="w-1/2 h-1/2 rounded-t-3xl" src="../images/IAIcon.svg" alt="">
-            </div>
-            <div class="h-1/6 flex items-center justify-center bg-[#173345] rounded-b-3xl">
-                <h2 class="text-3xl text-white">Reconocimiento con IA</h2>
-            </div>
-        </div>
 
         <!-- Carta IA -->
-        <div class="w-[528px] h-[620px] flex flex-col drop-shadow-lg interactive hover:drop-shadow-lg/60">
-            <div class="p-2 flex items-center justify-center h-5/6 bg-[#1B3B50] rounded-t-3xl">
-                <img class="w-1/2 h-1/2 rounded-t-3xl" src="../images/JuegosIcon.svg" alt="">
-            </div>
-            <div class="h-1/6 flex items-center justify-center bg-[#173345] rounded-b-3xl">
-                <h2 class="text-3xl text-white">Juegos</h2>
-            </div>
-        </div>
+
 
     </div>
     
