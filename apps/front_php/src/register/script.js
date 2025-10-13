@@ -62,6 +62,13 @@ function SendRegisterData(e) {
 
                 const usernameLabel = document.getElementById('username-label');
                 AddErrorLabelStyle(usernameLabel);
+                AddInvalidInputStyle(usernameInput);
+            } else {
+                const usernameLabel = document.getElementById('username-label');
+                const usernameErrorElement = document.getElementById('username-error-message');
+                usernameErrorElement.innerHTML = '';
+                RemoveErrorLabelStyle(usernameLabel);
+                RemoveInvalidInputStyle(usernameInput);
             }
 
             if (res.email){
@@ -71,11 +78,14 @@ function SendRegisterData(e) {
 
                 const emailLabel = document.getElementById('email-label');
                 AddErrorLabelStyle(emailLabel);
+                AddInvalidInputStyle(emailInput);
             } else {
                 const emailLabel = document.getElementById('email-label');
                 const emailErrorElement = document.getElementById('email-error-message');
                 emailErrorElement.innerHTML = '';
+
                 RemoveErrorLabelStyle(emailLabel);
+                RemoveInvalidInputStyle(emailInput);
             }
 
             if (res.password) {
@@ -85,6 +95,14 @@ function SendRegisterData(e) {
 
                 const passwordLabel = document.getElementById('password-label');
                 AddErrorLabelStyle(passwordLabel);
+                AddInvalidInputStyle(passwordInput);
+            } else {
+                const passwordLabel = document.getElementById('password-label');
+                const passwordErrorElement = document.getElementById('password-error-message');
+                passwordErrorElement.innerHTML = '';
+
+                RemoveErrorLabelStyle(passwordLabel);
+                RemoveInvalidInputStyle(passwordInput);
             }
 
             if (res.confirmPassword) {
@@ -94,6 +112,14 @@ function SendRegisterData(e) {
 
                 const confirmPasswordLabel = document.getElementById('confirm-password-label');
                 AddErrorLabelStyle(confirmPasswordLabel);
+                AddInvalidInputStyle(confirmPasswordInput);
+            } else {
+                const confirmPasswordLabel = document.getElementById('confirm-password-label');
+                const confirmPasswordErrorElement = document.getElementById('confirm-password-error-message');
+                confirmPasswordErrorElement.innerHTML = '';
+
+                RemoveErrorLabelStyle(confirmPasswordLabel);
+                RemoveInvalidInputStyle(confirmPasswordInput);
             }
         }
     })
@@ -108,4 +134,12 @@ function AddErrorLabelStyle(element) {
 function RemoveErrorLabelStyle(element) {
     element.classList.remove('absolute');
     element.classList.remove('-translate-y-6');
+}
+
+function AddInvalidInputStyle(element) {
+    element.classList.add('invalid-input');
+}
+
+function RemoveInvalidInputStyle(element) {
+    element.classList.remove('invalid-input');
 }
