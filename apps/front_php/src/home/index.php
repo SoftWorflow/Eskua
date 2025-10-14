@@ -27,8 +27,8 @@
         });
     </script>
 
-    <?php include 'components/navbarNormalUser.html'; ?>
-    <?php include 'normalUserComponents/index.html'; ?>
+    <?php include 'navbars/navbarNormalUser.html'; ?>
+    <?php include 'normal_user_home/index.html'; ?>
 
 </body>
 </html>
