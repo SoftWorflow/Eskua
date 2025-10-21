@@ -6,29 +6,31 @@
     <title>Home - Eskua</title>
     <link rel="stylesheet" href="../output.css">
     <script src="../auth.js"></script>
+    <script src="../navbar-loader.js"></script>
+    <script src="content-loader.js"></script>
+    <script>
+        document.documentElement.style.display = 'none';
+
+        (async () => {
+            // Allow access even if not logged in
+            await authManager.ensureValidToken();
+            
+            if (authManager.getAccessToken()) {
+                authManager.startTokenMonitoring();
+            }
+            
+            await initializeNavbar('#navbar-container');
+            await initializeContent('#content-container');
+            
+            document.documentElement.style.display = '';
+        })();
+    </script>
 </head>
 <body>
 
-    <script>
-        window.addEventListener('DOMContentLoaded', async () => {
-            // Verifys that the user is authenticated
-            const isAuthenticated = await requireAuth();
-            
-            if (isAuthenticated) {
-                // Gets the user data
-                const user = authManager.getUser();
-                console.log("Logged User:", user.display_name);
-                console.log("Profiel Picture: ", user.profile_picture_url);
+    <div id="navbar-container"></div>
 
-                console.log("Access expires at: ", localStorage.getItem('access_expires_at'));
-                
-                // Actualizar la UI con los datos del usuario
-            }
-        });
-    </script>
-
-    <?php include 'navbars/navbarNormalUser.html'; ?>
-    <?php include 'normal_user_home/index.html'; ?>
+    <div id="content-container"></div>
 
 </body>
 </html>

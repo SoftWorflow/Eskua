@@ -84,22 +84,28 @@ class AuthManager {
 
     // Close the session
     async logout() {
-        // Llamar a un endpoint para revocar el refresh token
-        fetch('/api/user/logout.php', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'include'
-        }).then(data => data.json())
-        .then(data => {
+        try {
+            const res = await fetch('/api/user/logout.php', {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include'
+            });
+
+            if (!res.ok) {
+                throw new Error(`Error HTTP ${res.status}`);
+            }
+
+            const data = await res.json();
             console.log(data);
-        }).catch(err => console.error(err));
-
-
+        } catch (err) {
+            console.error('Error en logout:', err);
+        }
 
         this.clearAuth();
-        window.location.href = '/login';
+        window.location.href = '/home/index.php';
     }
+
 
     // Starts the automatic token monitoring
     startTokenMonitoring() {
