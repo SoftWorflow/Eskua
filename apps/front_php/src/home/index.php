@@ -27,7 +27,7 @@
     </script>
 </head>
 <body>
-
+ 
     <div id="navbar-container"></div>
 
     <div id="content-container"></div>

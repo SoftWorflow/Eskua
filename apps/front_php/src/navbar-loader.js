@@ -6,7 +6,7 @@ class NavbarLoader {
             'student': 'navbars/navbarStudent.html',
             'guest': 'navbars/navbarGuest.html'
         };
-        
+
         this.defaultNavbar = 'navbars/navbarNotLoged.html';
     }
 
@@ -18,14 +18,14 @@ class NavbarLoader {
     // Load navbar HTML content
     async loadNavbar(role) {
         const navbarPath = this.getNavbarPath(role);
-        
+
         try {
             const response = await fetch(navbarPath);
-            
+
             if (!response.ok) {
                 throw new Error(`Failed to load navbar: ${response.status}`);
             }
-            
+
             const navbarHTML = await response.text();
             return navbarHTML;
         } catch (error) {
@@ -44,19 +44,19 @@ class NavbarLoader {
     // Inject navbar into the page
     async injectNavbar(targetSelector = '#navbar-container') {
         const userRole = getUserRole();
-        
+
         if (!userRole) {
             console.warn('No user role found, loading default navbar');
         }
-        
+
         const navbarHTML = await this.loadNavbar(userRole);
         const container = document.querySelector(targetSelector);
-        
+
         if (container) {
             container.innerHTML = navbarHTML;
             // Dispatch event for other scripts that might need to know navbar is loaded
-            document.dispatchEvent(new CustomEvent('navbarLoaded', { 
-                detail: { role: userRole } 
+            document.dispatchEvent(new CustomEvent('navbarLoaded', {
+                detail: { role: userRole }
             }));
         } else {
             console.error(`Navbar container "${targetSelector}" not found`);
