@@ -55,12 +55,25 @@
                     </div>
                 </div>
 
-                <div class="md:mb-8">
+                <div>
                     <label id="confirm-password-label" for="confirm-password">Confirmar contraseña</label>
                     <p class="text-error text-sm" id="confirm-password-error-message"></p>
                     <div class="input-pack">
                         <img id="password-icon" class="label-image interactive" src="../images/OpenEyeIcon.svg" alt="Password icon">
                         <input type="password" name="confirm-password" id="confirm-password-input" required>
+                    </div>
+                </div>
+
+                <div class="md:mb-8">
+                    <label id="user-type-label" for="user-type">Tipo de usuario</label>
+                    <p class="text-error text-sm" id="user-type-error-message"></p>
+                    <div class="input-pack">
+                        <img id="dropdown-arrow" class="label-image pointer-events-none" src="../images/DropdownArrow.svg" alt="Dropdown arrow">
+                        <select class="appearance-none interactive" name="user-type" id="user-type-dropdown">
+                            <option value="guest">Invitado</option>
+                            <option value="teacher">Profesor</option>
+                            <option value="student">Estudiante</option>
+                        </select>
                     </div>
                 </div>
 

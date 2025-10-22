@@ -38,7 +38,7 @@
   }
 
   /* Default style for any input of type text, password and email */
-  input[type="text"], input[type="password"], input[type="email"] {
+  input[type="text"], input[type="password"], input[type="email"], select {
     @apply border border-[#1B3B50] rounded-lg px-3 py-2 w-full focus:outline-none drop-shadow-md/25 bg-white pr-14 h-14;
     font-family: 'Lexend', sans-serif;
     font-weight: 300;
