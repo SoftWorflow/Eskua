@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . "/../../../backend/DTO/Users/User.php");
 require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
+require_once(__DIR__ . "/../../../backend/DTO/Users/UserRole.php");
 require_once('token.php');
 
 require(__DIR__ . '/../../../backend/vendor/autoload.php');
@@ -16,6 +17,8 @@ $username = $input['username'] ?? '';
 $email = $input['email'] ?? '';
 $password = $input['password'] ?? '';
 $confirmPassword = $input['confirmPassword'] ?? '';
+$userRole = $input['userType'] ?? '';
+$groupCode = $input['groupCode'] ?? '';
 
 $errorResponse = null;
 
@@ -41,6 +44,26 @@ if (empty($confirmPassword)) {
     http_response_code(400);
     $errorResponse['ok'] = false;
     $errorResponse['confirmPassword'] = ['error' => 'Este campo es obligatorio'];
+}
+
+if (empty($userRole)) {
+    http_response_code(400);
+    $errorResponse['ok'] = false;
+    $errorResponse['userRole'] = ['error' => 'Hay un error con el tipo de usuario'];
+}
+
+if (empty($groupCode)) {
+    if ($userRole === "student") {
+        http_response_code(400);
+        $errorResponse['ok'] = false;
+        $errorResponse['groupCode'] = ['error' => 'Tienes que ingresar el codigo del grupo'];
+    }
+}
+
+if (!UserRole::isValid($userRole)) {
+    http_response_code(400);
+    $errorResponse['ok'] = false;
+    $errorResponse['userType'] = ['error' => 'El tipo de usuario no es válido'];
 }
 
 $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
@@ -72,10 +95,13 @@ if ($errorResponse !== null) {
     exit;
 }
 
-$defaultUserProfilePicture = "192.168.1.146:8080/images/DefaultUserProfilePicture.jpg";
-$defaultRole = "Guest";
+$defaultUserProfilePicture = "192.168.1.44:8080/images/DefaultUserProfilePicture.jpg";
 
-$user = new User($username, $email, $username, $defaultUserProfilePicture, $password, $defaultRole);
+if ($userRole !== "student") {
+    $user = new User($username, $email, $username, $defaultUserProfilePicture, $password, $userRole);
+} else {
+    // Se deberia de fijar si existe el grupo y si existe y todo está bien crea el usuario
+}
 
 if (!$userLogic->createUser($user)) {
     http_response_code(500);

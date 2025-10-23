@@ -15,6 +15,130 @@ function AddListeners() {
             HidingAndShowingHandler(input, element);
         });
     });
+
+    const popupForm = document.getElementById('code-form');
+    popupForm.addEventListener('submit', SendCode);
+}
+
+function SendCode(e) {
+    e.preventDefault();
+
+    const usernameInput = document.getElementById('username-input');
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const confirmPasswordInput = document.getElementById('confirm-password-input');
+    const userTypeInput = document.getElementById('user-type-dropdown');
+    const groupCodeInput = document.getElementById('code-input');
+
+    const username = usernameInput.value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    const userType = userTypeInput.value;
+    const groupCode = groupCodeInput.value;
+
+    const userData = { username, email, password, confirmPassword, userType, groupCode };
+
+    fetch('/api/user/register.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        credentials: 'include',
+        body: JSON.stringify(userData)
+    }).then(res => res.json())
+    .then(res => {
+        if (res.ok) {
+            console.log('Se creó todo exitosamente!');
+        } else {
+            if (res.username) {
+                const usernameError = res.username['error'];
+                const usernameErrorElement = document.getElementById('username-error-message');
+                usernameErrorElement.innerHTML = usernameError;
+
+                const usernameLabel = document.getElementById('username-label');
+                AddErrorLabelStyle(usernameLabel);
+                AddInvalidInputStyle(usernameInput);
+            } else {
+                const usernameLabel = document.getElementById('username-label');
+                const usernameErrorElement = document.getElementById('username-error-message');
+                usernameErrorElement.innerHTML = '';
+                RemoveErrorLabelStyle(usernameLabel);
+                RemoveInvalidInputStyle(usernameInput);
+            }
+
+            if (res.email){
+                const emailError = res.email['error'];
+                const emailErrorElement = document.getElementById('email-error-message');
+                emailErrorElement.innerHTML = emailError;
+
+                const emailLabel = document.getElementById('email-label');
+                AddErrorLabelStyle(emailLabel);
+                AddInvalidInputStyle(emailInput);
+            } else {
+                const emailLabel = document.getElementById('email-label');
+                const emailErrorElement = document.getElementById('email-error-message');
+                emailErrorElement.innerHTML = '';
+
+                RemoveErrorLabelStyle(emailLabel);
+                RemoveInvalidInputStyle(emailInput);
+            }
+
+            if (res.password) {
+                const passwordError = res.password['error'];
+                const passwordErrorElement = document.getElementById('password-error-message');
+                passwordErrorElement.innerHTML = passwordError;
+
+                const passwordLabel = document.getElementById('password-label');
+                AddErrorLabelStyle(passwordLabel);
+                AddInvalidInputStyle(passwordInput);
+            } else {
+                const passwordLabel = document.getElementById('password-label');
+                const passwordErrorElement = document.getElementById('password-error-message');
+                passwordErrorElement.innerHTML = '';
+
+                RemoveErrorLabelStyle(passwordLabel);
+                RemoveInvalidInputStyle(passwordInput);
+            }
+
+            if (res.confirmPassword) {
+                const confirmPasswordError = res.confirmPassword['error'];
+                const confirmPasswordErrorElement = document.getElementById('confirm-password-error-message');
+                confirmPasswordErrorElement.innerHTML = confirmPasswordError;
+
+                const confirmPasswordLabel = document.getElementById('confirm-password-label');
+                AddErrorLabelStyle(confirmPasswordLabel);
+                AddInvalidInputStyle(confirmPasswordInput);
+            } else {
+                const confirmPasswordLabel = document.getElementById('confirm-password-label');
+                const confirmPasswordErrorElement = document.getElementById('confirm-password-error-message');
+                confirmPasswordErrorElement.innerHTML = '';
+
+                RemoveErrorLabelStyle(confirmPasswordLabel);
+                RemoveInvalidInputStyle(confirmPasswordInput);
+            }
+
+            if (res.groupCode) {
+                const groupCodeLabel = document.getElementById('group-code-label');
+                const groupCodeErrorElement = document.getElementById('group-code-error-message');
+                groupCodeErrorElement.innerHTML = res.groupCode['error'];
+                
+                const groupCodeInput = document.getElementById('code-input');
+                AddErrorLabelStyle(groupCodeLabel);
+                AddInvalidInputStyle(groupCodeInput);
+            } else {
+                const groupCodeLabel = document.getElementById('group-code-label');
+                const groupCodeErrorElement = document.getElementById('group-code-error-message');
+                groupCodeErrorElement.innerHTML = '';
+                
+                const groupCodeInput = document.getElementById('code-input');
+                RemoveErrorLabelStyle(groupCodeLabel);
+                RemoveInvalidInputStyle(groupCodeInput);
+            }
+        }
+    })
+    .catch(err => console.error(err));
 }
 
 function HidingAndShowingHandler(password, eyeIcon) {
@@ -34,13 +158,22 @@ function SendRegisterData(e) {
     const emailInput = document.getElementById('email-input');
     const passwordInput = document.getElementById('password-input');
     const confirmPasswordInput = document.getElementById('confirm-password-input');
+    const userTypeInput = document.getElementById('user-type-dropdown');
 
     const username = usernameInput.value;
     const email = emailInput.value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
+    const userType = userTypeInput.value;
 
-    const userData = { username, email, password, confirmPassword };
+    if (userType === "student") {
+        // The user is a student
+        const popupContainer = document.getElementById('popup-container');
+        popupContainer.classList.remove('hidden');
+        return;
+    }
+
+    const userData = { username, email, password, confirmPassword, userType };
 
     fetch('/api/user/register.php', {
         method: 'POST',
