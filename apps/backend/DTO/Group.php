@@ -1,12 +1,10 @@
 <?php
 
-require('Teacher.php');
-
 class Group {
     
     private string $name;
     private string $code;
-    private Teacher $teacher;
+    private User $teacher;
 
     /*
      *  GETS Y SETS
@@ -31,18 +29,18 @@ class Group {
     }
 
     // Teacher
-    public function getTeacher() : Teacher {
+    public function getTeacher() : User {
         return $this->teacher;
     }
 
-    public function setTeacher(Teacher $teacher) : void {
+    public function setTeacher(User $teacher) : void {
         $this->teacher = $teacher;
     }
 
     /*
      *  CONSTRUCTOR
     */
-    public function __construct(string $name, string $code, Teacher $teacher) {
+    public function __construct(string $name, string $code, User $teacher) {
         $this->name = $name;
         $this->code = $code;
         $this->teacher = $teacher;

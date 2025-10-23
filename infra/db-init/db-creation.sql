@@ -9,7 +9,7 @@ create table users(
 	id int primary key auto_increment,
     username varchar(30) unique not null,
     email varchar(255) unique not null check (email like '%@%'),
-    display_name varchar(30) not null check (display_name regexp '^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$'),
+    display_name varchar(30) not null,
     profile_picture_url varchar(255) not null,
     `password` varchar(255) not null,
     `role` enum('admin', 'teacher', 'student', 'guest') not null,
@@ -63,7 +63,7 @@ create table `groups`(
 
 -- ADDED THE GROUP REFERENCE IN THE STUDENTS TABLE
 alter table students
-add column `group` int not null,
+add column `group` int,
 add constraint `students_group`
     foreign key (`group`) references `groups`(id) on delete cascade;
 

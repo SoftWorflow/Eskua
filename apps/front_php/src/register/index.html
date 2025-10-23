@@ -38,6 +38,15 @@
                 </div>
 
                 <div>
+                    <label id="display-name-label" for="display-name">Nombre Visible</label>
+                    <p class="text-error text-sm" id="display-name-error-message"></p>
+                    <div class="input-pack">
+                        <img class="label-image" src="../images/UserIcon.svg" alt="User icon">
+                        <input maxlength="30" type="text" name="display-name" id="display-name" required>
+                    </div>
+                </div>
+
+                <div>
                     <label id="email-label" for="email">Email</label>
                     <p class="text-error text-sm" id="email-error-message"></p>
                     <div class="input-pack">
@@ -103,13 +112,6 @@
 
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-gray-800">Ingresa el código de tu clase</h2>
-                <button 
-                    id="closePopup" 
-                    class="text-gray-400 hover:text-gray-600 transition duration-200 interactive">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
             </div>
 
             <form id="code-form">
@@ -128,12 +130,6 @@
                 </div>
 
                 <div class="flex gap-3">
-                    <button 
-                        type="button" 
-                        id="cancelBtn"
-                        class="flex-1 bg-[#CC4033] hover:bg-[#a83328] text-white interactive font-semibold py-3 rounded-lg transition duration-200">
-                        Cancelar
-                    </button>
                     <button 
                         type="submit"
                         class="flex-1 bg-[#28C98E] hover:bg-[#1a8860] text-white interactive font-semibold py-3 rounded-lg transition duration-200">

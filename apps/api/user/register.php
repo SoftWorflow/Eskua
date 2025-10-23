@@ -2,6 +2,8 @@
 require_once(__DIR__ . "/../../../backend/DTO/Users/User.php");
 require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
 require_once(__DIR__ . "/../../../backend/DTO/Users/UserRole.php");
+require_once(__DIR__ . "/../../../backend/DTO/Group.php");
+require_once(__DIR__ . "/../../../backend/logic/group/GroupLogicFacade.php");
 require_once('token.php');
 
 require(__DIR__ . '/../../../backend/vendor/autoload.php');
@@ -14,6 +16,7 @@ header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
 
 $username = $input['username'] ?? '';
+$displayName = $input['displayName'] ?? '';
 $email = $input['email'] ?? '';
 $password = $input['password'] ?? '';
 $confirmPassword = $input['confirmPassword'] ?? '';
@@ -28,9 +31,15 @@ if (empty($username)) {
     $errorResponse['username'] = ['error' => 'Este campo es olbigatorio'];
 }
 
+if (empty($displayName)) {
+    http_response_code(400);
+    $errorResponse['ok'] = false;
+    $errorResponse['displayName'] = ['error' => 'Este campo es olbigatorio'];
+}
+
 if (empty($email)) {
     http_response_code(400);
-    $errorResponsep['ok'] = false;
+    $errorResponse['ok'] = false;
     $errorResponse['email'] = ['error' => 'Este campo es obligatorio'];
 }
 
@@ -57,6 +66,14 @@ if (empty($groupCode)) {
         http_response_code(400);
         $errorResponse['ok'] = false;
         $errorResponse['groupCode'] = ['error' => 'Tienes que ingresar el codigo del grupo'];
+    }
+} else {
+    $groupLogic = GroupLogicFacade::getInstance()->getIGroupLogic();
+    $group = $groupLogic->getGroupByCode($groupCode);
+    if ($group === null) {
+        http_response_code(400);
+        $errorResponse['ok'] = false;
+        $errorResponse['groupCode'] = ['error' => 'El codigo ingresado no es válido'];
     }
 }
 
@@ -99,13 +116,30 @@ $defaultUserProfilePicture = "192.168.1.44:8080/images/DefaultUserProfilePicture
 
 if ($userRole !== "student") {
     $user = new User($username, $email, $username, $defaultUserProfilePicture, $password, $userRole);
-} else {
-    // Se deberia de fijar si existe el grupo y si existe y todo está bien crea el usuario
-}
 
-if (!$userLogic->createUser($user)) {
-    http_response_code(500);
-    echo json_encode(['error' => 'There was an error creating the user']);
+    if (!$userLogic->createUser($user)) {
+        http_response_code(500);
+        echo json_encode(['error' => 'There was an error creating the user']);
+        exit;
+    }
+
+    http_response_code(201);
+    echo json_encode(['ok' => true, 'message' => 'Student created successfully']);
+    exit;
+} else {
+    $groupLogic = GroupLogicFacade::getInstance()->getIGroupLogic();
+    $studentGroup = $groupLogic->getGroupByCode($groupCode);
+
+    $student = new User($username, $email, $displayName, $defaultUserProfilePicture, $password, $userRole);
+
+    if (!$userLogic->createStudent($student, $studentGroup[0])) {
+        http_response_code(500);
+        echo json_encode(['error' => 'There was an error creating the user']);
+        exit;
+    }
+
+    http_response_code(201);
+    echo json_encode(['ok' => true, 'message' => 'Student created successfully']);
     exit;
 }
 ?>

@@ -43,6 +43,31 @@ class UserPersistence implements IUserPersistence {
         return $res;
     }
 
+    public function addGroupToStudent($userId, $groupId) : bool {
+        if (empty($groupId)) return false;
+
+        $sql = "update students set `group` = ? where `user` = ?;";
+
+        try {
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId, $userId]);
+            $rowCount = $stmt->rowCount();
+            $stmt->closeCursor();
+
+            if ($rowCount === 0) {
+                error_log("No student found with user ID: " . $userId);
+                return false;
+            }
+
+            return true;
+
+        } catch (PDOException $e) {
+            print "Error while trying to assign a group to a student: " . $e->getMessage();
+            return false;
+        }
+    }
+
     public function deleteUser(int $id) : bool {
         if ($this->conn == null || $id == null) return false;
 

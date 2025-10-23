@@ -2,6 +2,7 @@
 
 interface IUserPersistence {
     public function createUser(User $user) : bool;
+    public function addGroupToStudent($userId, $groupId) : bool;
     public function deleteUser(int $id) : bool;
     public function modifyUser(int $id, User $user) : bool;
     

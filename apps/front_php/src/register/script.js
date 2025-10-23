@@ -24,6 +24,7 @@ function SendCode(e) {
     e.preventDefault();
 
     const usernameInput = document.getElementById('username-input');
+    const displayNameInput = document.getElementById('display-name');
     const emailInput = document.getElementById('email-input');
     const passwordInput = document.getElementById('password-input');
     const confirmPasswordInput = document.getElementById('confirm-password-input');
@@ -31,13 +32,14 @@ function SendCode(e) {
     const groupCodeInput = document.getElementById('code-input');
 
     const username = usernameInput.value;
+    const displayName = displayNameInput.value;
     const email = emailInput.value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
     const userType = userTypeInput.value;
     const groupCode = groupCodeInput.value;
 
-    const userData = { username, email, password, confirmPassword, userType, groupCode };
+    const userData = { username, displayName, email, password, confirmPassword, userType, groupCode };
 
     fetch('/api/user/register.php', {
         method: 'POST',
@@ -155,12 +157,14 @@ function SendRegisterData(e) {
     e.preventDefault();
     
     const usernameInput = document.getElementById('username-input');
+    const displayNameInput = document.getElementById('display-name');
     const emailInput = document.getElementById('email-input');
     const passwordInput = document.getElementById('password-input');
     const confirmPasswordInput = document.getElementById('confirm-password-input');
     const userTypeInput = document.getElementById('user-type-dropdown');
 
     const username = usernameInput.value;
+    const displayName = displayNameInput.value;
     const email = emailInput.value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
@@ -173,7 +177,7 @@ function SendRegisterData(e) {
         return;
     }
 
-    const userData = { username, email, password, confirmPassword, userType };
+    const userData = { username, displayName, email, password, confirmPassword, userType };
 
     fetch('/api/user/register.php', {
         method: 'POST',

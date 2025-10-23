@@ -15,7 +15,8 @@ BEGIN
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        
+        ROLLBACK;
+        RESIGNAL;
     END;
 
     START TRANSACTION;
@@ -25,14 +26,14 @@ BEGIN
     
     SET user_id = LAST_INSERT_ID();
 
-    IF create_role = 'Guest' THEN
-        INSERT INTO guests(fk_user) VALUES (user_id);
-    ELSEIF create_role = 'Student' THEN
-        INSERT INTO students(fk_user) VALUES (user_id);
-    ELSEIF create_role = 'Teacher' THEN
-        INSERT INTO teachers(fk_user) VALUES (user_id);
-    ELSEIF create_role = 'Admin' THEN
-        INSERT INTO admins(fk_user) VALUES (user_id);
+    IF LOWER(create_role) = 'guest' THEN
+        INSERT INTO guests(`user`) VALUES (user_id);
+    ELSEIF LOWER(create_role) = 'student' THEN
+        INSERT INTO students(`user`) VALUES (user_id);
+    ELSEIF LOWER(create_role) = 'teacher' THEN
+        INSERT INTO teachers(`user`) VALUES (user_id);
+    ELSEIF LOWER(create_role) = 'admin' THEN
+        INSERT INTO admins(`user`) VALUES (user_id);
     END IF;
 
     COMMIT;

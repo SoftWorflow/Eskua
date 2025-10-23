@@ -34,12 +34,39 @@ class UserLogic implements IUserLogic {
             'threads' => 2,
         ];
 
-        $hashedPassword = password_hash($password, PASSWORD_ARGON2ID, $options);
+        $hashedPassword = password_hash($userPassword, PASSWORD_ARGON2ID, $options);
 
         $user->setPassword($hashedPassword);
 
         $res = $userPersistence->createUser($user);
         return $res;
+    }
+
+    public function createStudent(User $user, $groupId) : bool {
+        if ($user === null || empty($groupId)) return false;
+        
+        if (!$this->createUser($user)) {
+            error_log("Failed to create user: " . $user->getUsername());
+            return false;
+        }
+        
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+        $dbUser = $userPersistence->getUserByUsername($user->getUsername());
+
+        if (!$dbUser) {
+            error_log("User was created but could not be retrieved: " . $user->getUsername());
+            return false;
+        }
+
+        $userId = $dbUser[0];
+
+        $result = $userPersistence->addGroupToStudent($userId, $groupId);
+        
+        if (!$result) {
+            error_log("Failed to assign group $groupId to student $userId");
+        }
+        
+        return $result;
     }
 
     /*
@@ -95,7 +122,7 @@ class UserLogic implements IUserLogic {
      *  GET USER
     */
     public function getUserById(int $id) : ?array {
-        if ($id == null) return null;
+        if ($id === null) return null;
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
         $result = $userPersistence->getUserById($id);
@@ -110,7 +137,7 @@ class UserLogic implements IUserLogic {
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
         $result = $userPersistence->getUserByUsername($username);
 
-        if ($result === null || !is_array($result) || count($result) < 2) {
+        if ($result === null) {
             return null;
         }
 
