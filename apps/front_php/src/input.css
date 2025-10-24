@@ -119,6 +119,24 @@
     font-weight: 400;
   }
 
+  .orange-button2 {
+    @apply text-white rounded-2xl text-xl drop-shadow-md/25 bg-[#E1A05B] hover:bg-white hover:text-[#E1A05B] hover:border-2 hover:border-[#E1A05B] transition-colors duration-150 hover:cursor-pointer;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
+  .red-button {
+    @apply border-2 border-[#CC4033] text-[#CC4033] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#CC4033] hover:text-white transition-colors duration-150 hover:cursor-pointer;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
+  .blue-button {
+    @apply border-2 border-[#1B3B50] text-[#1B3B50] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#1B3B50] hover:text-white transition-colors duration-150 hover:cursor-pointer;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
   .input-pack {
     @apply flex items-center relative;
   }

@@ -4,21 +4,21 @@
         <nav class="flex flex-col gap-10">
             <h1 class="text-2xl text-white">Menu</h1>
             <ul class="flex flex-col gap-10">
-                <li><a href="" class="text-xl interactive text-white">Inicio</a></li>
-                <li><a href="" class="text-xl interactive text-white">Usuarios</a></li>
-                <li><a href="" class="text-xl interactive text-white">Juegos</a></li>
-                <li><a href="" class="text-xl interactive text-white">Grupos</a></li>
-                <li><a href="" class="text-xl interactive text-white">Material</a></li>
+                <li><a href="" class="text-xl interactive text-black bg-[#E1A05B] py-2 px-8 rounded-md">Inicio</a></li>
+                <li><a href="../users.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Usuarios</a></li>
+                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
+                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
+                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Material</a></li>
             </ul>
         </nav>
 
-        <h2><a href="" class="interactive text-white no-underline hover:cursor-auto">Regresar</a></li></h2>
+        <h2><a href="" class="interactive text-white no-underline hover:cursor-auto hover:text-[#E1A05B]">Regresar</a></li></h2>
     </div>
     
     <div class="bg-[#1B3B50] rounded-t-2xl w-5/6 flex flex-col">
         <div class="flex flex-col items-center pt-12 space-y-1.5">
             <h1 class="text-white text-4xl">Backoffice</h1>
-            <p class="text-white">Bienvenido devuelta, Administrador.</p>
+            <p class="text-white">Bienvenido devuelta, "Nombre Admin"</p>
         </div>
 
         <!-- Main Content -->
@@ -27,9 +27,34 @@
             <div class="w-1/2 flex flex-col h-full gap-4">
                 <!-- User Info -->
                 <div class="bg-[#173345] h-1/2 w-full rounded-xl">
-                    <div class="flex flex-col h-full w-full border border-white">
-                        <div></div>
-                        <div class="grid grid-cols-4"></div>
+                    <div class="flex flex-col h-full w-full p-6 gap-4">
+                        <!-- Total Users Panel -->
+                        <div class="bg-white w-full h-7/12 rounded-xl flex flex-col justify-end p-8">
+                            <p class="font-light">Cantidad total de usuarios</p>
+                            <p class="text-3xl">2.321</p>
+                        </div>
+                        <div class="grid grid-cols-4 w-full h-5/12 gap-2">
+                            <!-- Guests -->
+                            <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
+                                <p class="font-light">Invitados</p>
+                                <p class="text-3xl">1.525</p>
+                            </div>
+                            <!-- Students -->
+                            <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
+                                <p class="font-light">Alumnos</p>
+                                <p class="text-3xl">653</p>
+                            </div>
+                             <!-- Teachers -->
+                            <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
+                                <p class="font-light">Alumnos</p>
+                                <p class="text-3xl">125</p>
+                            </div>
+                             <!-- Admins -->
+                            <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
+                                <p class="font-light">Admins</p>
+                                <p class="text-3xl">18</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- Game Info -->
