@@ -11,7 +11,11 @@ CREATE PROCEDURE createUser(
     IN create_role VARCHAR(10)
 )
 BEGIN
-    DECLARE user_id int;
+    DECLARE user_id INT;
+    DECLARE randomCodeBasic INT;
+    DECLARE randomCodeIntermediate INT;
+    DECLARE randomCodeAdvanced INT;
+    DECLARE code_exists INT;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -32,6 +36,27 @@ BEGIN
         INSERT INTO students(`user`) VALUES (user_id);
     ELSEIF LOWER(create_role) = 'teacher' THEN
         INSERT INTO teachers(`user`) VALUES (user_id);
+
+        -- Unique code for basic code group
+        REPEAT
+            SET randomCodeBasic = FLOOR(100000 + RAND() * 900000);
+            SELECT COUNT(*) INTO code_exists FROM `groups` WHERE code = randomCodeBasic;
+        UNTIL code_exists = 0 END REPEAT;
+        CALL `createGroup`('Básico', randomCodeBasic, user_id);
+        
+        -- Unique code for intermediate group
+        REPEAT
+            SET randomCodeIntermediate = FLOOR(100000 + RAND() * 900000);
+            SELECT COUNT(*) INTO code_exists FROM `groups` WHERE code = randomCodeIntermediate;
+        UNTIL code_exists = 0 END REPEAT;
+        CALL `createGroup`('Intermedio', randomCodeIntermediate, user_id);
+        
+        -- Unique code for advanced group
+        REPEAT
+            SET randomCodeAdvanced = FLOOR(100000 + RAND() * 900000);
+            SELECT COUNT(*) INTO code_exists FROM `groups` WHERE code = randomCodeAdvanced;
+        UNTIL code_exists = 0 END REPEAT;
+        CALL `createGroup`('Avanzado', randomCodeAdvanced, user_id);
     ELSEIF LOWER(create_role) = 'admin' THEN
         INSERT INTO admins(`user`) VALUES (user_id);
     END IF;
@@ -114,7 +139,8 @@ END //
 -- CREATE GROUP
 CREATE PROCEDURE createGroup(
     IN create_name varchar(45),
-    IN create_code varchar(6)
+    IN create_code varchar(6),
+    IN teacher_id int
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -123,8 +149,8 @@ BEGIN
     END;
 
     START TRANSACTION;
-        INSERT INTO `groups`(`name`, `code`)
-        VALUES (create_name, create_code);
+        INSERT INTO `groups`(`name`, `code`, `teacher`)
+        VALUES (create_name, create_code, teacher_id);
     COMMIT;
 END //
 
@@ -157,4 +183,67 @@ BEGIN
 	SELECT * FROM `groups`;
 END //
 
+CREATE PROCEDURE getAllMessagesForGroup(
+    IN group_id int
+)
+BEGIN
+	SELECT * FROM  `messages` where `group` = group_id;
+END //
+
+-- CREATE ASSIGNMENT
+CREATE PROCEDURE createAssignment(
+   IN create_name varchar(50),
+   IN create_description TEXT,
+   IN teacher_id int,
+   IN max_score int
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+ START TRANSACTION;
+    
+    INSERT INTO assignments (`name`,`description`,is_deleted)
+    VALUES (create_name, create_description ,FALSE);
+END //
+
+-- CREATE REFRESH TOKEN
+CREATE PROCEDURE createRefreshToken(
+
+ IN create_user_id INT,
+ IN create_refresh_token VARCHAR(255),
+ IN create_expires_at DATETIME
+)
+BEGIN
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+    
+    START TRANSACTION;
+    INSERT INTO tokens(user_id,refresh_token,expires_at)
+    VALUES (create_user_id, create_refresh_token, create_expires_at);
+    
+	COMMIT;
+ END //
+
+-- GET REFRESH TOKEN BY TOKEN
+DELIMITER //
+CREATE PROCEDURE getRefreshTokenByToken(
+    IN token_value VARCHAR(255)
+)
+BEGIN
+    SELECT user_id, refresh_token, expires_at 
+    FROM tokens 
+    WHERE refresh_token = token_value AND is_revoked = 0;
+END //
+
+DELIMITER //
+CREATE PROCEDURE revokeTokenByToken(
+    IN token_value VARCHAR(255)
+)
+BEGIN
+    UPDATE tokens SET is_revoked = 1 WHERE refresh_token = token_value;
+END //
 DELIMITER ;

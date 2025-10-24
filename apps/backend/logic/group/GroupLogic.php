@@ -8,6 +8,7 @@ class GroupLogic implements IGroupLogic {
 
     public function createGroup(Group $group) : bool {
         if ($group === null) return false;
+        return true;
     }
 
     public function getGroupByCode($code) : ?array {
@@ -16,7 +17,7 @@ class GroupLogic implements IGroupLogic {
         $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
         $dbGroup = $groupPersistence->getGroupByCode($code);
 
-        if ($dbGroup === null) echo "No hay grupo";
+        if ($dbGroup === null) return null;
 
         $id = $dbGroup[0];
         $group = $dbGroup[1];

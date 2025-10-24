@@ -231,7 +231,7 @@ class UserLogic implements IUserLogic {
         $refreshToken = $_COOKIE['refresh_token'];
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
-        $dbRefresh = $userPersistence->getRefreshToken($refreshToken);
+        $dbRefresh = $userPersistence->getRefreshTokenByToken($refreshToken);
         // Invalid token
         if (!$dbRefresh) return null;
 

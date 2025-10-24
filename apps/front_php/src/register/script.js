@@ -52,7 +52,7 @@ function SendCode(e) {
     }).then(res => res.json())
     .then(res => {
         if (res.ok) {
-            console.log('Se creó todo exitosamente!');
+            FinalLogin();
         } else {
             if (res.username) {
                 const usernameError = res.username['error'];
@@ -190,7 +190,7 @@ function SendRegisterData(e) {
     }).then(res => res.json())
     .then(res => {
         if (res.ok) {
-
+            FinalLogin();
         } else {
             if (res.username) {
                 const usernameError = res.username['error'];
@@ -261,6 +261,44 @@ function SendRegisterData(e) {
         }
     })
     .catch(err => console.error(err));
+}
+
+function FinalLogin() {
+    
+    const usernameInput = document.getElementById('username-input');
+    const passwordInput = document.getElementById('password-input');
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    
+    const data = { username, password };
+
+    fetch('/api/user/login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    }).then(res => res.json())
+    .then(res => {
+        if (res.ok) {
+            authManager.saveAuth(res);
+            
+            window.location.replace(window.location.origin + '/home/index.php');
+        } else {
+            console.error(res.error);
+            
+            const notyf = new Notyf({
+                duration: 2000,
+                position: { x: 'right', y: 'top' },
+                dismissible: true
+            });
+            notyf.error(res.error);
+        }
+    })
+    .catch(err => console.error(err));
+
 }
 
 function AddErrorLabelStyle(element) {

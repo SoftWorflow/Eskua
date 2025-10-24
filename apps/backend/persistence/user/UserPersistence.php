@@ -111,7 +111,7 @@ class UserPersistence implements IUserPersistence {
     }
 
     public function getUserById(int $id) : ?array {
-        if ($this->conn == null || $id == null) return false;
+        if ($this->conn == null || $id == null) return null;
 
         $sql = "call getUserById(?);";
 
@@ -140,8 +140,6 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             return null;
         }
-
-        return [$id, $user];
     }
 
     public function getUserByUsername(string $username) : ?array {
@@ -174,8 +172,6 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             return null;
         }
-
-        return [$id, $user];
     }
 
     public function getUserByEmail(string $email) : ?array {
@@ -208,8 +204,6 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             return null;
         }
-
-        return [$id, $user];
     }
 
     // TOKENS
@@ -217,7 +211,7 @@ class UserPersistence implements IUserPersistence {
         if ($this->conn === null || empty($userId) || empty($refreshToken) || empty($refreshExpire)) return false;
         
         // Hacer procedimiento almacendado
-        $sql = "insert into tokens (user_id, refresh_token, expires_at) values (?, ?, ?);";
+        $sql = "call createRefreshToken(?, ?, ?);";
     
         try {
             $stmt = $this->conn->prepare($sql);
@@ -230,10 +224,10 @@ class UserPersistence implements IUserPersistence {
         }
     }
 
-    public function getRefreshToken(string $refreshToken) : ?array {
+    public function getRefreshTokenByToken(string $refreshToken) : ?array {
         if (empty($refreshToken)) return null;
         
-        $sql = "select user_id, refresh_token, expires_at from tokens where refresh_token = ? and is_revoked = 0;";
+        $sql = "call getRefreshTokenByToken(?);";
         
         try {
             $stmt = $this->conn->prepare($sql);
@@ -259,7 +253,7 @@ class UserPersistence implements IUserPersistence {
     public function revokeRefreshToken($refreshToken) : bool {
         if (empty($refreshToken)) return false;
 
-        $sql = "update tokens set is_revoked = 1 where refresh_token = ?";
+        $sql = "revokeTokenByToken(?)";
 
         try {
             $stmt = $this->conn->prepare($sql);
