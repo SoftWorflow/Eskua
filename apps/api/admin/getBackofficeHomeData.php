@@ -1,7 +1,12 @@
 <?php
 
+require_once(__DIR__ . "/../middleware/auth.php");
 require_once(__DIR__ . "/../../../backend/db_connect.php");
 header('Content-Type: application/json');
+
+$auth = new AuthMiddleware();
+
+$auth->authorize(['admin']);
 
 $dbConnection = new db_connect();
 $conn = $dbConnection->connect();

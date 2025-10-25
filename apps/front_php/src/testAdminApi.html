@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>API Test - Eskua</title>
     <link rel="stylesheet" href="output.css">
     <script src="auth.js"></script>
     <script>
@@ -11,12 +11,8 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/admin/getBackofficeHomeData.php', {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            }).then(res => res.json())  
+            authenticatedFetch('/api/admin/getBackofficeHomeData.php')
+            .then(res => res.json())  
             .then(data => {
                 const cosasDiv = document.getElementById('cosas');
                 Object.entries(data).forEach(([key, value]) => {

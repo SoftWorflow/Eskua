@@ -26,6 +26,12 @@ class ContentLoader {
                 throw new Error(`Failed to load content: ${response.status}`);
             }
             
+            if (role === 'admin') {
+                const backofficeScript = document.createElement('script');
+                backofficeScript.src = '../backoffice/backofficeMainScript.js';
+                document.head.appendChild(backofficeScript);
+            }
+
             const contentHTML = await response.text();
             return contentHTML;
         } catch (error) {

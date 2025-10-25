@@ -1,10 +1,14 @@
 <?php
-require_once(__DIR__ . '/../../backend/vendor/autoload.php');
+require_once(__DIR__ . '/../../../backend/vendor/autoload.php');
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 class AuthMiddleware {
+
+    public function __construct() {
+        
+    }
 
     // Verifys that the user is authanticated
     public static function authenticate() : ?array {

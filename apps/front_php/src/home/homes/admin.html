@@ -4,11 +4,11 @@
         <nav class="flex flex-col gap-10">
             <h1 class="text-2xl text-white">Menu</h1>
             <ul class="flex flex-col gap-10">
-                <li><a href="" class="text-xl interactive text-black bg-[#E1A05B] py-2 px-8 rounded-md">Inicio</a></li>
-                <li><a href="../users.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Usuarios</a></li>
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Material</a></li>
+                <li><a href="#" class="text-xl interactive text-black bg-[#E1A05B] py-2 px-8 rounded-md">Inicio</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Usuarios</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Material</a></li>
             </ul>
         </nav>
 
@@ -18,7 +18,7 @@
     <div class="bg-[#1B3B50] rounded-t-2xl w-5/6 flex flex-col">
         <div class="flex flex-col items-center pt-12 space-y-1.5">
             <h1 class="text-white text-4xl">Backoffice</h1>
-            <p class="text-white">Bienvenido devuelta, "Nombre Admin"</p>
+            <p id="welcome-text" class="text-white"></p>
         </div>
 
         <!-- Main Content -->
@@ -31,28 +31,28 @@
                         <!-- Total Users Panel -->
                         <div class="bg-white w-full h-7/12 rounded-xl flex flex-col justify-end p-8">
                             <p class="font-light">Cantidad total de usuarios</p>
-                            <p class="text-3xl">2.321</p>
+                            <p id="total-users" class="text-3xl">2.321</p>
                         </div>
                         <div class="grid grid-cols-4 w-full h-5/12 gap-2">
                             <!-- Guests -->
                             <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
                                 <p class="font-light">Invitados</p>
-                                <p class="text-3xl">1.525</p>
+                                <p id="total-guests" class="text-3xl">1.525</p>
                             </div>
                             <!-- Students -->
                             <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
                                 <p class="font-light">Alumnos</p>
-                                <p class="text-3xl">653</p>
+                                <p id="total-students" class="text-3xl">653</p>
                             </div>
                              <!-- Teachers -->
                             <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
-                                <p class="font-light">Alumnos</p>
-                                <p class="text-3xl">125</p>
+                                <p class="font-light">Profesores</p>
+                                <p id="total-teachers" class="text-3xl">125</p>
                             </div>
                              <!-- Admins -->
                             <div class="bg-white rounded-xl flex flex-col items-center justify-end p-4">
                                 <p class="font-light">Admins</p>
-                                <p class="text-3xl">18</p>
+                                <p id="total-admins" class="text-3xl">18</p>
                             </div>
                         </div>
                     </div>

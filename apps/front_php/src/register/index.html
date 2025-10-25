@@ -16,6 +16,11 @@
             clip-path: polygon(0 0, 130px 0, 125px 2%, 120px 4%, 115px 6%, 110px 8%, 105px 10%, 100px 12%, 95px 14%, 90px 16%, 85px 18%, 80px 20%, 75px 22%, 70px 24%, 65px 26%, 60px 28%, 55px 30%, 52px 32%, 51px 34%, 52px 36%, 55px 38%, 60px 40%, 65px 42%, 72px 44%, 80px 46%, 88px 48%, 95px 50%, 100px 52%, 102px 54%, 100px 56%, 95px 58%, 88px 60%, 80px 62%, 70px 64%, 60px 66%, 50px 68%, 45px 70%, 42px 72%, 43px 74%, 47px 76%, 55px 78%, 65px 80%, 75px 82%, 85px 84%, 95px 86%, 105px 88%, 112px 90%, 115px 92%, 112px 94%, 105px 96%, 100px 98%, 100px 100%, 100% 100%, 100% 0);
         }
     </style>
+    <script>
+        if (authManager.getAccessToken() != null) {
+            window.location.href = '/home/index.php';
+        }
+    </script>
 </head>
 <body class="h-screen flex justify-between p-8 md:p-0 lg:bg-[url('../images/HomePageBlueThing.png')] bg-no-repeat bg-cover">
     <div class="flex flex-col justify-center md:justify-between md:flex-1">
