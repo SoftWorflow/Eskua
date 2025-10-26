@@ -157,5 +157,6 @@
   .invalid-input {
     @apply border-[#CC4033] text-[#CC4033];
   }
+
 }
 

@@ -1,35 +1,35 @@
-authenticatedFetch('/api/admin/getAllUsers.php', {method: 'GET'})
-.then(res => res.json())
-.then(data => {
-    const usersTableContent = document.getElementById('users-table-content');
-    data.forEach(user => {
-        const newLineDiv = document.createElement('div');
-        newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-        newLineDiv.onclick = () => {
-            showUserDetail(user.id);
-        }
+authenticatedFetch('/api/admin/getAllUsers.php', { method: 'GET' })
+    .then(res => res.json())
+    .then(data => {
+        const usersTableContent = document.getElementById('users-table-content');
+        data.forEach(user => {
+            const newLineDiv = document.createElement('div');
+            newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
+            newLineDiv.onclick = () => {
+                showUserDetail(user.id);
+            }
 
-        const idColumn = document.createElement('p');
-        idColumn.classList.add('text-lg');
-        idColumn.textContent = "#" + user.id;
+            const idColumn = document.createElement('p');
+            idColumn.classList.add('text-lg');
+            idColumn.textContent = "#" + user.id;
 
-        const usernameColumn = document.createElement('p');
-        usernameColumn.classList.add('text-lg');
-        usernameColumn.textContent = user.username;
+            const usernameColumn = document.createElement('p');
+            usernameColumn.classList.add('text-lg');
+            usernameColumn.textContent = user.username;
 
-        const roleColumn = document.createElement('p');
-        roleColumn.classList.add('text-lg');
-        roleColumn.textContent = user.role
+            const roleColumn = document.createElement('p');
+            roleColumn.classList.add('text-lg');
+            roleColumn.textContent = user.role
 
-        newLineDiv.append(idColumn, usernameColumn, roleColumn);
-        usersTableContent.appendChild(newLineDiv);
-    });    
+            newLineDiv.append(idColumn, usernameColumn, roleColumn);
+            usersTableContent.appendChild(newLineDiv);
+        });
 
-}).catch(err => console.error('Error:', err));;
-  
+    }).catch(err => console.error('Error:', err));;
+
 function renderUsersTable() {
     const rightContent = document.getElementById('right-content');
-        
+
     rightContent.innerHTML = `
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
             <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
@@ -70,41 +70,41 @@ function renderUsersTable() {
             </div>
         </div>
     `;
-    
+
     // Cargar los usuarios
     loadUsers();
 }
 
 function loadUsers() {
-    authenticatedFetch('/api/admin/getAllUsers.php', {method: 'GET'})
-    .then(res => res.json())
-    .then(data => {
-        const usersTableContent = document.getElementById('users-table-content');
-        usersTableContent.innerHTML = ''; // Limpiar contenido previo
-        
-        data.forEach(user => {
-            const newLineDiv = document.createElement('div');
-            newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-            newLineDiv.id = `user-${user.id}`;
-            
-            newLineDiv.onclick = () => showUserDetail(user.id);
-            
-            const idColumn = document.createElement('p');
-            idColumn.classList.add('text-lg');
-            idColumn.textContent = "#" + user.id;
-            
-            const usernameColumn = document.createElement('p');
-            usernameColumn.classList.add('text-lg');
-            usernameColumn.textContent = user.username;
-            
-            const roleColumn = document.createElement('p');
-            roleColumn.classList.add('text-lg');
-            roleColumn.textContent = user.role;
-            
-            newLineDiv.append(idColumn, usernameColumn, roleColumn);
-            usersTableContent.appendChild(newLineDiv);
-        });
-    }).catch(err => console.error('Error:', err));
+    authenticatedFetch('/api/admin/getAllUsers.php', { method: 'GET' })
+        .then(res => res.json())
+        .then(data => {
+            const usersTableContent = document.getElementById('users-table-content');
+            usersTableContent.innerHTML = ''; // Limpiar contenido previo
+
+            data.forEach(user => {
+                const newLineDiv = document.createElement('div');
+                newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
+                newLineDiv.id = `user-${user.id}`;
+
+                newLineDiv.onclick = () => showUserDetail(user.id);
+
+                const idColumn = document.createElement('p');
+                idColumn.classList.add('text-lg');
+                idColumn.textContent = "#" + user.id;
+
+                const usernameColumn = document.createElement('p');
+                usernameColumn.classList.add('text-lg');
+                usernameColumn.textContent = user.username;
+
+                const roleColumn = document.createElement('p');
+                roleColumn.classList.add('text-lg');
+                roleColumn.textContent = user.role;
+
+                newLineDiv.append(idColumn, usernameColumn, roleColumn);
+                usersTableContent.appendChild(newLineDiv);
+            });
+        }).catch(err => console.error('Error:', err));
 }
 
 function showUserDetail(userId) {
@@ -139,9 +139,9 @@ function showUserDetail(userId) {
     const spinner = new Spinner(opts).spin(target);
 
     authenticatedFetch('/api/admin/getSpecificUserData.php', {
-            method: 'POST', 
-            body: JSON.stringify({ id: userId })
-        })
+        method: 'POST',
+        body: JSON.stringify({ id: userId })
+    })
         .then(res => res.json())
         .then(userData => {
             spinner.stop();
@@ -201,11 +201,11 @@ function showUserDetail(userId) {
                     </div>
                 </div>
             `;
-    })
-    .catch(err => {
-        console.error("Ha ocurrido un error: ", err);
-        rightContent.innerHTML = '<div class="flex items-center justify-center h-full"><p class="text-white text-xl">Error al cargar usuario</p></div>';
-    });
+        })
+        .catch(err => {
+            console.error("Ha ocurrido un error: ", err);
+            rightContent.innerHTML = '<div class="flex items-center justify-center h-full"><p class="text-white text-xl">Error al cargar usuario</p></div>';
+        });
 }
 
 function deleteUser(userId) {
@@ -229,15 +229,15 @@ function deleteUser(userId) {
                 method: 'DELETE',
                 body: JSON.stringify({ id: userId })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.ok) {
-                    notyf.success(data.message);
-                    renderUsersTable();
-                } else {
-                    notyf.error(data.message);
-                }
-            }).catch(err => console.error("Error: ", err));
+                .then(res => res.json())
+                .then(data => {
+                    if (data.ok) {
+                        notyf.success(data.message);
+                        renderUsersTable();
+                    } else {
+                        notyf.error(data.message);
+                    }
+                }).catch(err => console.error("Error: ", err));
         } else {
             notyf.error('La acción ha sido cancelada');
         }
