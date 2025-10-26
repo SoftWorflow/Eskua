@@ -112,7 +112,7 @@ if ($errorResponse !== null) {
     exit;
 }
 
-$defaultUserProfilePicture = "192.168.1.44:8080/images/DefaultUserProfilePicture.jpg";
+$defaultUserProfilePicture = "http://192.168.1.118:8080/images/DefaultUserProfilePicture.jpg";
 
 if ($userRole !== "student") {
     $user = new User($username, $email, $username, $defaultUserProfilePicture, $password, $userRole);
