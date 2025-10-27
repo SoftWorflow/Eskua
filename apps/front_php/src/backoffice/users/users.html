@@ -29,7 +29,7 @@
                 <li><a href="../../home/index.php" class="text-xl interactive text-white hover:text-[#E1A05B]">Inicio</a></li>
                 <li><a onclick="renderUsersTable()" class="text-xl interactive bg-[#E1A05B] py-2 px-8 rounded-md font-normal">Usuarios</a></li>
                 <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
-                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
+                <li><a href="../groups/groups.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
                 <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Material</a></li>
             </ul>
         </nav>
@@ -64,6 +64,7 @@
                     </span>
                     <!-- Input -->
                     <input
+                        id = 'search-bar'
                         type="text"
                         placeholder="Buscar Usuario..."
                         class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"
@@ -89,7 +90,10 @@
             </div>
 
             <!-- Users -->
-            <div id="users-table-content" class="h-[50vh] overflow-y-scroll font-light"></div>
+            <div id="users-table-content" class="h-[50vh] overflow-y-scroll font-light">
+                <div id="spinner-container"></div>
+                <div class="hidden" id="users-table-content-inner-div"></div>
+            </div>
 
         </div>
     </div>

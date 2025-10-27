@@ -31,105 +31,105 @@ function showSpinner() {
 
 const spinner = showSpinner();
 
-authenticatedFetch('/api/admin/getAllUsers.php', { method: 'GET' })
+authenticatedFetch('/api/admin/getAllGroups.php', { method: 'GET' })
     .then(res => res.json())
     .then(data => {
-        const usersTableContentInnerDiv = document.getElementById('users-table-content-inner-div');
-        data.forEach(user => {
+        const groupsTableContentInnerDiv = document.getElementById('groups-table-content-inner-div');
+        data.forEach(group => {
             const newLineDiv = document.createElement('div');
             newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
             newLineDiv.onclick = () => {
-                showUserDetail(user.id);
+                showGroupDetail(group.id);
             }
 
             const idColumn = document.createElement('p');
             idColumn.classList.add('text-lg');
-            idColumn.textContent = "#" + user.id;
+            idColumn.textContent = "#" + group.id;
 
-            const usernameColumn = document.createElement('p');
-            usernameColumn.classList.add('text-lg');
-            usernameColumn.textContent = user.username;
+            const teacherColumn = document.createElement('p');
+            teacherColumn.classList.add('text-lg');
+            teacherColumn.textContent = group.teacher;
 
-            const roleColumn = document.createElement('p');
-            roleColumn.classList.add('text-lg');
-            roleColumn.textContent = user.role
+            const levelColumn = document.createElement('p');
+            levelColumn.classList.add('text-lg');
+            levelColumn.textContent = group.level;
 
-            newLineDiv.append(idColumn, usernameColumn, roleColumn);
-            usersTableContentInnerDiv.appendChild(newLineDiv);
+            newLineDiv.append(idColumn, teacherColumn, levelColumn);
+            groupsTableContentInnerDiv.appendChild(newLineDiv);
         });
 
         spinner.stop();
         document.getElementById('spinner-container').innerHTML = '';
 
-        usersTableContentInnerDiv.classList.remove('hidden');
+        groupsTableContentInnerDiv.classList.remove('hidden');
 
     }).catch(err => console.error('Error:', err));
 
-document.getElementById('search-bar').addEventListener('input', searchUser);
+document.getElementById('search-bar').addEventListener('input', searchGroup);
 
-function searchUser(e) {
-    const usersTableContentInnerDiv = document.getElementById('users-table-content-inner-div');
-    usersTableContentInnerDiv.innerHTML = '';
-    usersTableContentInnerDiv.classList.add('hidden');
+function searchGroup(e) {
+    const groupsTableContentInnerDiv = document.getElementById('groups-table-content-inner-div');
+    groupsTableContentInnerDiv.innerHTML = '';
+    groupsTableContentInnerDiv.classList.add('hidden');
 
     const spinner = showSpinner();
 
-    authenticatedFetch('/api/admin/searchUsers.php', {
+    authenticatedFetch('/api/admin/searchGroups.php', {
         method: 'POST',
-        body: JSON.stringify({ username: e.target.value })
+        body: JSON.stringify({ teacher: e.target.value })
     }).then(res => res.json())
     .then(data => {
         if (data.ok) {
-            data[0].forEach(user => {
-                const newLineDiv = document.createElement('div');
-                newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-                newLineDiv.id = `user-${user.id}`;
+            data[0].forEach(group => {
+            const newLineDiv = document.createElement('div');
+            newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
+            newLineDiv.onclick = () => {
+                showGroupDetail(group.id);
+            }
 
-                newLineDiv.onclick = () => showUserDetail(user.id);
+            const idColumn = document.createElement('p');
+            idColumn.classList.add('text-lg');
+            idColumn.textContent = "#" + group.id;
 
-                const idColumn = document.createElement('p');
-                idColumn.classList.add('text-lg');
-                idColumn.textContent = "#" + user.id;
+            const teacherColumn = document.createElement('p');
+            teacherColumn.classList.add('text-lg');
+            teacherColumn.textContent = group.teacher;
 
-                const usernameColumn = document.createElement('p');
-                usernameColumn.classList.add('text-lg');
-                usernameColumn.textContent = user.username;
+            const levelColumn = document.createElement('p');
+            levelColumn.classList.add('text-lg');
+            levelColumn.textContent = group.level;
 
-                const roleColumn = document.createElement('p');
-                roleColumn.classList.add('text-lg');
-                roleColumn.textContent = user.role;
-
-                newLineDiv.append(idColumn, usernameColumn, roleColumn);
-                usersTableContentInnerDiv.appendChild(newLineDiv);
-            });
+            newLineDiv.append(idColumn, teacherColumn, levelColumn);
+            groupsTableContentInnerDiv.appendChild(newLineDiv);
+        });
 
             spinner.stop();
             document.getElementById('spinner-container').innerHTML = '';
 
-            usersTableContentInnerDiv.classList.remove('hidden');
+            groupsTableContentInnerDiv.classList.remove('hidden');
         } else {
-            usersTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
+            groupsTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
 
             spinner.stop();
             document.getElementById('spinner-container').innerHTML = '';
 
-            usersTableContentInnerDiv.classList.remove('hidden');
+            groupsTableContentInnerDiv.classList.remove('hidden');
         }
     }).catch(err => console.error("Error: ", err));
 }
 
-function renderUsersTable() {
+function renderGroupsTable() {
     const rightContent = document.getElementById('right-content');
 
     rightContent.innerHTML = `
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
+            
             <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
                 <div class="flex flex-col items-center space-y-4">
-                    <h1 class="text-5xl">Usuarios</h1>
-                    <p class="font-light text-sm">Gestiona a todos los usuarios registrados en el sistema.</p>
+                    <h1 class="text-5xl">Grupos</h1>
+                    <p class="font-light text-sm">Gestiona todos los grupos existentes en el sistema.</p>
                 </div>
-                
-                <div class="flex w-full h-14 space-x-8">
+                <div class="flex w-full h-14 space-x-8 ">
                     <div class="relative w-full">
                         <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -138,8 +138,12 @@ function renderUsersTable() {
                                 d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
                             </svg>
                         </span>
-                        <input id="search-bar" type="text" placeholder="Buscar Usuario..."
-                            class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"/>
+                        <input
+                            id = "search-bar"
+                            type="text"
+                            placeholder="Buscar Grupo..."
+                            class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"
+                        />
                         <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="2" stroke="currentColor" class="w-5 h-5">
@@ -149,63 +153,61 @@ function renderUsersTable() {
                         </button>
                     </div>
                 </div>
-                
                 <div class="w-full h-fit h-min-[50vh] shadow-lg/25 flex flex-col rounded-2xl overflow-hidden">
-                    <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-8 py-4 rounded-t-2xl grid grid-cols-3">
-                        <p class="text-lg">ID</p>
-                        <p class="text-lg">Username</p>
-                        <p class="text-lg">Rol</p>
-                    </div>
-                    <div id="users-table-content" class="h-[50vh] overflow-y-scroll font-light">
-                        <div id="spinner-container"></div>
-                        <div class="hidden" id="users-table-content-inner-div"></div>
-                    </div>
+                <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-8 py-4 rounded-t-2xl grid grid-cols-3">
+                    <p class="text-lg">ID</p>
+                    <p class="text-lg">Docente</p>
+                    <p class="text-lg">Nivel</p>
+                </div>
+                <div class="h-[50vh] overflow-y-scroll font-light">
+                    <div id="spinner-container"></div>
+                    <div class="hidden" id="groups-table-content-inner-div"></div>
                 </div>
             </div>
         </div>
     `;
 
-    document.getElementById('search-bar').addEventListener('input', searchUser);
+    document.getElementById('search-bar').addEventListener('input', searchGroup);
 
     // Cargar los usuarios
-    loadUsers();
+    loadGroups();
 }
 
-function loadUsers() {
-    authenticatedFetch('/api/admin/getAllUsers.php', { method: 'GET' })
+function loadGroups() {
+    authenticatedFetch('/api/admin/getAllGroups.php', { method: 'GET' })
         .then(res => res.json())
         .then(data => {
-            const usersTableContentInnerDiv = document.getElementById('users-table-content-inner-div');
-            usersTableContentInnerDiv.innerHTML = '';
+            const groupsTableContentInnerDiv = document.getElementById('groups-table-content-inner-div');
+            groupsTableContentInnerDiv.innerHTML = '';
 
-            data.forEach(user => {
+            data.forEach(group => {
                 const newLineDiv = document.createElement('div');
                 newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-                newLineDiv.id = `user-${user.id}`;
-
-                newLineDiv.onclick = () => showUserDetail(user.id);
+                newLineDiv.onclick = () => {
+                    showGroupDetail(group.id);
+                }
 
                 const idColumn = document.createElement('p');
                 idColumn.classList.add('text-lg');
-                idColumn.textContent = "#" + user.id;
+                idColumn.textContent = "#" + group.id;
 
-                const usernameColumn = document.createElement('p');
-                usernameColumn.classList.add('text-lg');
-                usernameColumn.textContent = user.username;
+                const teacherColumn = document.createElement('p');
+                teacherColumn.classList.add('text-lg');
+                teacherColumn.textContent = group.teacher;
 
-                const roleColumn = document.createElement('p');
-                roleColumn.classList.add('text-lg');
-                roleColumn.textContent = user.role;
+                const levelColumn = document.createElement('p');
+                levelColumn.classList.add('text-lg');
+                levelColumn.textContent = group.level;
 
-                newLineDiv.append(idColumn, usernameColumn, roleColumn);
-                usersTableContentInnerDiv.appendChild(newLineDiv);
+                newLineDiv.append(idColumn, teacherColumn, levelColumn);
+                groupsTableContentInnerDiv.appendChild(newLineDiv);
             });
 
-            usersTableContentInnerDiv.classList.remove('hidden');
+            groupsTableContentInnerDiv.classList.remove('hidden');
         }).catch(err => console.error('Error:', err));
 }
 
-function showUserDetail(userId) {
+function showGroupDetail(groupId) {
     const rightContent = document.getElementById('right-content');
 
     // Spinner config
@@ -236,66 +238,63 @@ function showUserDetail(userId) {
 
     const spinner = new Spinner(opts).spin(target);
 
-    authenticatedFetch('/api/admin/getSpecificUserData.php', {
+    authenticatedFetch('/api/admin/getSpecificGroupData.php', {
         method: 'POST',
-        body: JSON.stringify({ id: userId })
+        body: JSON.stringify({ id: groupId })
     })
         .then(res => res.json())
-        .then(userData => {
+        .then(groupData => {
             spinner.stop();
             rightContent.innerHTML = `
                 <div class="bg-white w-full h-full rounded-t-xl flex flex-col space-y-12 items-center py-12">
                     <div class="flex flex-col w-full h-full items-center space-y-18 justify-center">
                         <div class="flex flex-col items-center space-y-5">
                             <div class="rounded-full bg-[#173345] w-36 h-36 drop-shadow-lg/45 p-1 flex">
-                                <img src="${userData.profile_pic}" 
+                                <img src="http://192.168.1.118:8080/images/DefaultUserProfilePicture.jpg" 
                                     alt="" class="h-full w-full rounded-full aspect-square object-cover">
                             </div>
                             <div class="flex flex-col items-center space-y-1.5">
-                                <h1 class="text-3xl">${userData.display_name || userData.username}</h1>
-                                <p class="font-light text-lg">Tipo de usuario: ${userData.role}</p>
+                                <h1 class="text-3xl">${groupData.level}</h1>
+                                <p class="font-light text-lg">Docente: ${groupData.teacher}</p>
+                                <p class="font-light text-lg">Integrantes: ${groupData.members}</p>
                             </div>
                         </div>
                         
                         <div class="w-8/12 flex flex-col drop-shadow-md/25">
                             <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-6 py-3 rounded-t-2xl">
-                                <p class="text-lg">Datos Personales</p>
+                                <p class="text-lg">Información General</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Id:</p>
-                                <p class="col-span-2">#${userData.id}</p>
+                                <p class="col-span-2">#${groupData.id}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
-                                <p class="font-light col-span-1">Username:</p>
-                                <p class="col-span-2">${userData.username}</p>
+                                <p class="font-light col-span-1">Docente:</p>
+                                <p class="col-span-2">${groupData.teacher}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
-                                <p class="font-light col-span-1">Display Name:</p>
-                                <p class="col-span-2">${userData.display_name || 'N/A'}</p>
+                                <p class="font-light col-span-1">Nivel:</p>
+                                <p class="col-span-2">${groupData.level}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
-                                <p class="font-light col-span-1">Email:</p>
-                                <p class="col-span-2">${userData.email || 'N/A'}</p>
+                                <p class="font-light col-span-1">Integrantes:</p>
+                                <p class="col-span-2">${groupData.members}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
-                                <p class="font-light col-span-1">Rol:</p>
-                                <p class="col-span-2">${userData.role}</p>
+                                <p class="font-light col-span-1">Tareas:</p>
+                                <p class="col-span-2">${groupData.assignments}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] grid grid-cols-3 px-6 py-4 rounded-b-2xl">
-                                <p class="font-light col-span-1">Grupo:</p>
-                                <p class="col-span-2">${userData.group || 'N/A'}</p>
+                                <p class="font-light col-span-1">Código:</p>
+                                <p class="col-span-2">${groupData.code}</p>
                             </div>
                         </div>
-                        
-                        <button onclick="deleteUser(${userData.id})" class="red-button interactive w-52 h-18">
-                            Eliminar Usuario
-                        </button>
                     </div>
                 </div>
             `;
