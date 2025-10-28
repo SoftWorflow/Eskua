@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Info Material - Backoffice</title>
+  <link rel="stylesheet" href="../../output.css">
+</head>
+<body>
+
+  <div class="bg-white w-full h-full rounded-t-xl flex flex-col space-y-12 items-center">
+  <!-- Main Content -->
+  <div class="flex flex-col w-full h-full items-center space-y-18 justify-center">
+    <!-- Top Content -->
+    <div class="flex flex-col items-center space-y-5">
+      <!-- Profile Picture -->
+      <div class="rounded-full bg-[#173345] w-36 h-36 drop-shadow-lg/45 p-1 flex">
+        <img src="" alt="" class="h-full w-full rounded-full aspect-square object-cover">
+      </div>
+      <!-- Name + User type -->
+      <div class="flex flex-col items-center space-y-1.5">
+        <!-- Name -->
+        <h1 class="text-3xl">Título Material</h1>
+        <!-- Material Type -->
+        <p class="font-light text-lg">Tipo de Material: PDF</p>
+      </div>
+    </div>
+  <!-- General Info -->
+  <div class="w-8/12 flex flex-col drop-shadow-md/25">
+    <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-6 py-3 rounded-t-2xl">
+      <p class="text-lg">Información General</p>
+    </div>
+    <!-- ID -->
+    <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
+      <p class="font-light col-span-1">Id:</p>
+      <p class="col-span-2">#195423</p>
+    </div>
+    <!-- Title -->
+    <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
+      <p class="font-light col-span-1">Título:</p>
+      <p class="col-span-2">Señas basicas - Letras</p>
+    </div>
+    <!-- Description -->
+    <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] px-6 py-4 flex items-center">
+        <p class="font-light flex-none" style="width: 33.333%;">Descripcion:</p>
+        <p class="flex-1">Descripcion Material</p>
+        <button class="flex items-center text-gray-400 hover:text-[#E1A05B] transition-transform duration-200 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6 12a1 1 0 112 0 1 1 0 01-2 0zm5 0a1 1 0 112 0 1 1 0 01-2 0zm5 0a1 1 0 112 0 1 1 0 01-2 0z" />
+            </svg>
+        </button>
+    </div>
+    <!-- Material Type -->
+    <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
+      <p class="font-light col-span-1">Tipo de Material:</p>
+      <p class="col-span-2">PDF</p>
+    </div>
+    <!-- Creation date -->
+    <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
+      <p class="font-light col-span-1">Fecha de Creación:</p>
+      <p class="col-span-2">12/5/25</p>
+    </div>
+    <!-- Attached files path -->
+    <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] px-6 py-4 flex items-center rounded-b-2xl">
+        <p class="font-light flex-none" style="width: 33.333%;">Ruta archivos aduntos:</p>
+        <p class="flex-1">/C/user/documents/simplesigns_letters.pdf</p>
+        <button class="flex items-center text-gray-400 hover:text-[#E1A05B] transition-transform duration-200 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6 12a1 1 0 112 0 1 1 0 01-2 0zm5 0a1 1 0 112 0 1 1 0 01-2 0zm5 0a1 1 0 112 0 1 1 0 01-2 0z" />
+            </svg>
+        </button>
+    </div>
+    </div>
+    <div class="flex justify-center gap-8 w-1/2">
+        <!-- Modify Button -->
+        <button class="blue-button interactive w-52 h-18">Modificar Material</button>
+        <!-- Delete Button -->
+         <button class="red-button interactive w-52 h-18">Eliminar Material</button>
+    </div>
+</div>
+
+</body>
+</html>
