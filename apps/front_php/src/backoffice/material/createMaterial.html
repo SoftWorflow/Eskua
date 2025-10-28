@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Material - Backoffice</title>
+  <link rel="stylesheet" href="../../output.css">
+</head>
+<body>
+  
+<div class="flex px-10 pt-10 h-screen space-x-7">
+
+    <div class="bg-[#1B3B50] w-1/6 items-center text-center py-12 rounded-t-2xl flex flex-col place-content-between">
+        <nav class="flex flex-col gap-10">
+            <h1 class="text-3xl text-white">Menu</h1>
+            <ul class="flex flex-col gap-10 font-light">
+                <li><a href="../../home/index.php" class="text-xl interactive text-white hover:text-[#E1A05B]">Inicio</a></li>
+                <li><a onclick="renderUsersTable()" class="text-xl interactive bg-[#E1A05B] py-2 px-8 rounded-md font-normal">Usuarios</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
+                <li><a href="../groups/groups.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Material</a></li>
+            </ul>
+        </nav>
+
+        <h2><a href="" class="interactive text-white no-underline hover:cursor-auto hover:text-[#E1A05B]">Regresar</a></li></h2>
+    </div>
+
+    <!-- Right Panel -->
+    <div id="right-content" class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">
+        <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
+            
+        <!-- Main Content -->
+        <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
+            <!-- Title -->
+            <h1 class="text-5xl">Crear Material</h1>
+            <!-- Center Content -->
+            <div class="flex flex-col border-2 w-full h-full space-x-8 ">
+                <!-- Title -->
+                <div class="">
+                    <h2>Titulo</h2>
+                    <input type="text">
+                </div>
+                <!-- Material Type -->
+                <div>
+                    <!-- Title + Subtitle -->
+                    <div>
+                        <h2>Tipo de Material</h2>
+                        <p>Agrega la etiqueta que corresponda al tipo de material</p>
+                    </div>
+                    <!-- Tags Container -->
+                    <div class="flex gap-2">
+                        <div>PDF</div>
+                        <div>Video</div>
+                        <div>Foto</div>
+                    </div>
+                </div>
+                <!-- Description -->
+                <div>
+                    <h2>Descripción</h2>
+                    <input type="text" name="" id="">
+                </div>
+                <!-- Attach Files -->
+                <div>
+                    <!-- Title + Subtitle -->
+                    <div>
+                        <!-- Title + Icon Container -->
+                        <div>
+                            <h2>Adjuntar Archivos</h2>
+                            <img src="" alt="">
+                        </div>
+                        <p>Elige cualquier archivo desde tu dispositivo para subir.</p>
+                    </div>
+                    <!-- Upload + File Download Container -->
+                    <div>
+                        <!-- Upload Button -->
+                        <div></div>
+                        <!-- File Download -->
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Buttons -->
+            <div>
+                <button></button>
+                <button></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
