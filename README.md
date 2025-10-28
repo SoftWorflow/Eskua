@@ -9,3 +9,7 @@
     5- Para probar el sistema vas a tu navegador de confianza y escribis "http:127.0.0.1:8080/(la carpeta de la pantalla a la que quieras ir)/".
 
     (nota: cuando termines de trabajar, para bajar los servicios, escribí "docker-compose down" y si queres borrar todos los datos guardadoes en la base de datos es este "docker-compose down -v")
+
+## Cosas que dependen de la IP
+
+    En apps/api/user/register.php en la línea 115 se neceista de la IP para la imagen default

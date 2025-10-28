@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Material - Backoffice</title>
   <link rel="stylesheet" href="../../output.css">
+  <script src="../../auth.js"></script>
+  <!-- SWEETALERT 2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Notyf CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <!-- Notyf JS -->
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <!-- LOADING CIRCLE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
+  <script>
+    requireRole('admin');
+  </script>
+  <script src="material.js" defer></script>
 </head>
 <body>
   
@@ -14,10 +27,10 @@
         <nav class="flex flex-col gap-10">
             <h1 class="text-3xl text-white">Menu</h1>
             <ul class="flex flex-col gap-10 font-light">
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Inicio</a></li>
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Usuarios</a></li>
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
-                <li><a href="" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
+                <li><a href="../../home/index.php" class="text-xl interactive text-white hover:text-[#E1A05B]">Inicio</a></li>
+                <li><a href="../users/users.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Usuarios</a></li>
+                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
+                <li><a href="../groups/groups.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
                 <li><a href="" class="text-xl interactive bg-[#E1A05B] py-2 px-8 rounded-md font-normal">Material</a></li>
             </ul>
         </nav>
@@ -26,7 +39,7 @@
     </div>
     
     <!-- Right Panel -->
-    <div class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">
+    <div id="right-content" class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
             
         <!-- Main Content -->
@@ -52,12 +65,13 @@
                         </span>
                         <!-- Input -->
                         <input
+                            id="search-bar"
                             type="text"
                             placeholder="Buscar Material..."
                             class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"
                         />
                         <!-- Filter Icon -->
-                        <button class="absolute inset-y-0 right-12 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                        <button class="absolute inset-y-0 right-12 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="2" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -65,7 +79,7 @@
                             </svg>
                         </button>
                         <!-- Add material Icon -->
-                        <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                        <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="2" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -84,81 +98,11 @@
                 <p class="text-lg">Tipo</p>
             </div>
 
-            <!-- Material Examples-->
+            <!-- Material -->
             <div class="h-[50vh] overflow-y-scroll font-light">
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
-                 <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
-                 <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
-                 <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
-                 <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
-                 <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
-                 <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#135412</p>
-                    <p>Señas basicas - Letras</p>
-                    <p>PDF</p>
-                </div>
-                <div class="bg-[#FBFBFB] hover:bg-[#f5f5f5] border-b border-b-[#DFDFDF] grid grid-cols-3 px-8 py-4">
-                    <p>#235421</p>
-                    <p>Palabras avanzadas</p>
-                    <p>MP4</p>
-                </div>
+                <div id="spinner-container"></div>
+                <div class="hidden" id="material-table-content-inner-div"></div>
             </div>
-
-            
             
         </div>
     </div>
