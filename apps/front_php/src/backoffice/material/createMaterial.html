@@ -44,43 +44,95 @@
                       class="w-full py-3 pl-4 rounded-xl border-0 shadow-md/30 focus:ring-2 focus:ring-[#E1A05B] transition duration-150 bg-[#FBFBFB]"
                     />
                 </div>
-                <!-- Material Type -->
+                <!-- Tipo de Material -->
                 <div class="flex flex-col space-y-2.5 w-full">
-                    <!-- Title + Subtitle -->
-                    <div class="flex flex-col space-x-0.5">
-                        <h2 class="text-2xl font-light">Tipo de Material</h2>
-                        <p class="text-[#A3A3A3] font-light text-sm">Agrega la etiqueta que corresponda al tipo de material</p>
-                    </div>
-                    <!-- Tags Container -->
-                    <div class="flex space-x-5">
-                        <!-- PDF Tag -->
-                        <div class="rounded-full border-2 border-[#E1A05B] text-[#E1A05B] w-32 px-3 py-1 flex items-center justify-between shadow-md/25">
-                            <p class="text-sm">PDF</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </div>
-                        <!-- Video Tag (Not Active) -->
-                        <div class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-md/25">
-                            <p class="text-sm">Video</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6v12m6-6H6" />
-                            </svg>
-                        </div>
-                        <!-- Image Tag (Not Active) -->
-                        <div class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1 flex items-center justify-between shadow-md/25">
-                            <p class="text-sm">Foto</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6v12m6-6H6" />
-                            </svg>
-                        </div>
-                    </div>
+                  <div class="flex flex-col space-x-0.5">
+                    <h2 class="text-2xl font-light">Tipo de Material</h2>
+                    <p class="text-[#A3A3A3] font-light text-sm">
+                      Agrega la etiqueta que corresponda al tipo de material
+                    </p>
+                  </div>
+
+                  <!-- Tags Container -->
+                  <div class="flex space-x-5">
+                    <!-- PDF -->
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="materialType" class="peer hidden" />
+                      <div
+                        class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3]
+                        w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                        transition-all duration-200 ease-in-out
+                        hover:bg-[#f5f5f5] hover:shadow-md
+                        peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                        peer-checked:hover:bg-[#fff8f0]"
+                      >
+                        <p class="text-sm">PDF</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="2.5" stroke="currentColor"
+                          class="w-4 h-4 transition-colors duration-200
+                          peer-hover:stroke-[#E1A05B]
+                          peer-checked:stroke-[#E1A05B]
+                          peer-checked:hover:stroke-[#E54B4B]">
+                          <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v12m6-6H6" />
+                          <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </label>
+
+                    <!-- Video -->
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="materialType" class="peer hidden" />
+                      <div
+                        class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3]
+                        w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                        transition-all duration-200 ease-in-out
+                        hover:bg-[#f5f5f5] hover:shadow-md
+                        peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                        peer-checked:hover:bg-[#fff8f0]"
+                      >
+                        <p class="text-sm">Video</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="2.5" stroke="currentColor"
+                          class="w-4 h-4 transition-colors duration-200
+                          peer-hover:stroke-[#E1A05B]
+                          peer-checked:stroke-[#E1A05B]
+                          peer-checked:hover:stroke-[#E54B4B]">
+                          <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v12m6-6H6" />
+                          <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </label>
+
+                    <!-- Foto -->
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="materialType" class="peer hidden" />
+                      <div
+                        class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3]
+                        w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                        transition-all duration-200 ease-in-out
+                        hover:bg-[#f5f5f5] hover:shadow-md
+                        peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                        peer-checked:hover:bg-[#fff8f0]"
+                      >
+                        <p class="text-sm">Foto</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="2.5" stroke="currentColor"
+                          class="w-4 h-4 transition-colors duration-200
+                          peer-hover:stroke-[#E1A05B]
+                          peer-checked:stroke-[#E1A05B]
+                          peer-checked:hover:stroke-[#E54B4B]">
+                          <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v12m6-6H6" />
+                          <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </label>
+                  </div>
                 </div>
                 <!-- Description -->
                 <div class="flex flex-col gap-3.5 w-full">

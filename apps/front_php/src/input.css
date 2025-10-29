@@ -158,5 +158,9 @@
     @apply border-[#CC4033] text-[#CC4033];
   }
 
+  .hover-src-hover:hover {
+    content: url("../../images/EditPencilHover.svg");
+  }
+
 }
 
