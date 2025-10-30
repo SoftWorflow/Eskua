@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio - Backoffice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../output.css">
+</head>
+<body class="bg-[url(../images/Background2.png)] bg-cover">
+
+  <div class="flex px-10 pt-10 h-screen space-x-7">
+
+    <!-- PANEL LATERAL -->
+    <aside class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg">
+      <nav class="flex flex-col gap-10 text-center">
+        <h1 class="text-2xl font-medium">Menu</h1>
+        <ul class="flex flex-col gap-8">
+          <li><a href="#" class="text-lg px-4 py-1 border border-[#E1A05B] rounded-md">Inicio</a></li>
+          <li><a href="#" class="text-lg text-gray-200 hover:text-white transition">Usuarios</a></li>
+          <li><a href="#" class="text-lg text-gray-200 hover:text-white transition">Juegos</a></li>
+          <li><a href="#" class="text-lg text-gray-200 hover:text-white transition">Grupos</a></li>
+          <li><a href="#" class="text-lg text-gray-200 hover:text-white transition">Material</a></li>
+        </ul>
+      </nav>
+        <a href="#" class="flex items-center justify-center gap-2 text-sm text-gray-300 hover:text-white transition">Cerrar sesión</a>
+    </aside>
+
+    <!-- PANEL PRINCIPAL -->
+    <main class="flex-1 bg-[#1B3B50] rounded-t-2xl px-12 pt-12">
+
+      <!-- FONDO BLANCO -->
+      <div class="bg-white w-full h-full rounded-t-2xl p-10">
+
+        <!-- HEADER -->
+        <div class="flex flex-col space-y-0.5">
+          <h1 class="text-4xl font-semibold text-[#1B3B50]">Backoffice</h1>
+          <p class="text-sm text-gray-500 mt-1 mb-8">Bienvenido de vuelta, Administrador.</p>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex flex-1 space-x-5 border-2 w-full p-4">
+          
+          <!-- LEFT CONTENT -->
+          <div class="flex flex-col space-y-6 w-1/2 border p-2">
+
+            <!-- USERS -->
+            <div class="flex flex-col space-y-4 w-full">
+              <!-- TOTAL USERS -->
+              <div class="flex flex-col justify-center pl-4 py-12 rounded-xl border border-[#E5E7EB] shadow-md/25 h-1/2">
+                <p class="text-lg text-[#6A7282]">Cantidad total de usuarios</p>
+                <p class="text-4xl font-semibold text-[#1B3B50]">2.351</p>
+              </div>
+              <!-- USER TYPES -->
+              <div class="grid grid-cols-4 space-x-2 h-1/2">
+                <!-- INVITADOS -->
+                <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                  <p class="text-[#6A7282]">Invitados</p>
+                  <p class="text-2xl font-semibold text-[#1B3B50]">1.525</p>
+                </div>
+                <!-- ALUMNOS -->
+                <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                  <p class="text-[#6A7282]">Alumnos</p>
+                  <p class="text-2xl font-semibold text-[#1B3B50]">653</p>
+                </div>
+                <!-- DOCENTES -->
+                <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                  <p class="text-[#6A7282]">Docentes</p>
+                  <p class="text-2xl font-semibold text-[#1B3B50]">125</p>
+                </div>
+                <!-- ADMINS -->
+                <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                  <p class="text-[#6A7282]">Admins</p>
+                  <p class="text-2xl font-semibold text-[#1B3B50]">18</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- JUEGOS + GRUPOS & TAREAS -->
+            <div class="flex space-x-3">
+              <!-- JUEGOS -->
+              <div class="flex flex-col w-1/2 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                <!-- TITULO -->
+                <div class="flex py-6 pl-4 items-center space-x-1.5 border-b border-[#E5E7EB]">
+                  <p class="text-[#6A7282]">Mejores Puntajes</p>
+                  <img src="../../../../images/Line.svg" alt="">
+                  <p class="text-xs text-[#6A7282]">Juegos</p>
+                </div>
+                <!-- PUNTOS JUEGOS -->
+                <div class="flex flex-col">
+                  <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Memoria</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]">427</p>
+                  </div>
+                  <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Verdadero Falso</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]">351</p>
+                  </div>
+                  <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Multiple Opción</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]">790</p>
+                  </div>
+                </div>
+              </div>
+              <!-- GRUPOS & TAREAS -->
+              <div class="flex flex-col w-1/2 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                <!-- TITULO -->
+                <div class="flex py-6 pl-4 items-center space-x-1.5 border-b border-[#E5E7EB]">
+                  <p class="text-[#6A7282]">Información General</p>
+                  <img src="../../../../images/Line.svg" alt="">
+                  <p class="text-xs text-[#6A7282]">Grupos</p>
+                </div>
+                <!-- INFO -->
+                <div class="flex flex-col">
+                  <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Grupos</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]">375</p>
+                  </div>
+                  <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Tareas Creadas</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]">1259</p>
+                  </div>
+                  <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Tareas Entregadas</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]">941</p>
+                  </div>
+                </div>
+              </div>
+           </div>
+
+        </div>
+
+        <!-- RIGHT CONTENT -->
+          <div class="flex flex-col w-1/2 border p-2">
+            <!-- MATERIAL PUBLICO -->
+              <div class="flex flex-col justify-center pl-4 py-12 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                <p class="text-lg text-[#6A7282]">Material Público</p>
+                <p class="text-4xl font-semibold text-[#1B3B50]">153</p>
+              </div>
+            <!-- AGREGADOS RECIENTEMENTE -->
+            <div class="flex flex-col justify-center pl-4 py-12 rounded-xl border border-[#E5E7EB] shadow-md/25 h-full">
+
+
+
+            </div>
+          </div> 
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
