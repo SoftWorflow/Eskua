@@ -78,44 +78,44 @@ function searchGroup(e) {
         method: 'POST',
         body: JSON.stringify({ teacher: e.target.value })
     }).then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-            data[0].forEach(group => {
-            const newLineDiv = document.createElement('div');
-            newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-            newLineDiv.onclick = () => {
-                showGroupDetail(group.id);
+        .then(data => {
+            if (data.ok) {
+                data[0].forEach(group => {
+                    const newLineDiv = document.createElement('div');
+                    newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
+                    newLineDiv.onclick = () => {
+                        showGroupDetail(group.id);
+                    }
+
+                    const idColumn = document.createElement('p');
+                    idColumn.classList.add('text-lg');
+                    idColumn.textContent = "#" + group.id;
+
+                    const teacherColumn = document.createElement('p');
+                    teacherColumn.classList.add('text-lg');
+                    teacherColumn.textContent = group.teacher;
+
+                    const levelColumn = document.createElement('p');
+                    levelColumn.classList.add('text-lg');
+                    levelColumn.textContent = group.level;
+
+                    newLineDiv.append(idColumn, teacherColumn, levelColumn);
+                    groupsTableContentInnerDiv.appendChild(newLineDiv);
+                });
+
+                spinner.stop();
+                document.getElementById('spinner-container').innerHTML = '';
+
+                groupsTableContentInnerDiv.classList.remove('hidden');
+            } else {
+                groupsTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
+
+                spinner.stop();
+                document.getElementById('spinner-container').innerHTML = '';
+
+                groupsTableContentInnerDiv.classList.remove('hidden');
             }
-
-            const idColumn = document.createElement('p');
-            idColumn.classList.add('text-lg');
-            idColumn.textContent = "#" + group.id;
-
-            const teacherColumn = document.createElement('p');
-            teacherColumn.classList.add('text-lg');
-            teacherColumn.textContent = group.teacher;
-
-            const levelColumn = document.createElement('p');
-            levelColumn.classList.add('text-lg');
-            levelColumn.textContent = group.level;
-
-            newLineDiv.append(idColumn, teacherColumn, levelColumn);
-            groupsTableContentInnerDiv.appendChild(newLineDiv);
-        });
-
-            spinner.stop();
-            document.getElementById('spinner-container').innerHTML = '';
-
-            groupsTableContentInnerDiv.classList.remove('hidden');
-        } else {
-            groupsTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
-
-            spinner.stop();
-            document.getElementById('spinner-container').innerHTML = '';
-
-            groupsTableContentInnerDiv.classList.remove('hidden');
-        }
-    }).catch(err => console.error("Error: ", err));
+        }).catch(err => console.error("Error: ", err));
 }
 
 function renderGroupsTable() {
@@ -124,10 +124,10 @@ function renderGroupsTable() {
     rightContent.innerHTML = `
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
             
-            <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
-                <div class="flex flex-col items-center space-y-4">
-                    <h1 class="text-5xl">Grupos</h1>
-                    <p class="font-light text-sm">Gestiona todos los grupos existentes en el sistema.</p>
+            <div class="w-full h-fit flex flex-col px-12 space-y-12">
+                <div class="flex flex-col space-y-4">
+                    <h1 class="text-5xl font-semibold text-[#1B3B50]">Grupos</h1>
+                    <p class="text-sm text-[#6A7282]">Gestiona todos los grupos existentes en el sistema.</p>
                 </div>
                 <div class="flex w-full h-14 space-x-8 ">
                     <div class="relative w-full">

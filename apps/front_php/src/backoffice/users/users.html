@@ -22,31 +22,31 @@
 <body>
 <div class="flex px-10 pt-10 h-screen space-x-7">
 
-    <div class="bg-[#1B3B50] w-1/6 items-center text-center py-12 rounded-t-2xl flex flex-col place-content-between">
-        <nav class="flex flex-col gap-10">
-            <h1 class="text-3xl text-white">Menu</h1>
-            <ul class="flex flex-col gap-10 font-light">
-                <li><a href="../../home/index.php" class="text-xl interactive text-white hover:text-[#E1A05B]">Inicio</a></li>
-                <li><a onclick="renderUsersTable()" class="text-xl interactive bg-[#E1A05B] py-2 px-8 rounded-md font-normal">Usuarios</a></li>
-                <li><a href="#" class="text-xl interactive text-white hover:text-[#E1A05B]">Juegos</a></li>
-                <li><a href="../groups/groups.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Grupos</a></li>
-                <li><a href="../material/material.html" class="text-xl interactive text-white hover:text-[#E1A05B]">Material</a></li>
+    <!-- PANEL LATERAL -->
+    <aside class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg">
+        <nav class="flex flex-col gap-10 text-center">
+            <h1 class="text-2xl font-medium">Menu</h1>
+            <ul class="flex flex-col gap-8">
+            <li><a href="../../home/index.php" class="text-lg hover:text-[#E1A05B] transition interactive">Inicio</a></li>
+            <li><a href="../users/users.html" class="text-lg hover:text-[#E1A05B] transition interactive border-2 border-[#E1A05B] rounded-lg px-4 py-2">Usuarios</a></li>
+            <li><a href="../material/material.html" class="text-lg hover:text-[#E1A05B] transition interactive">Material</a></li>
+            <li><a href="../groups/groups.html" class="text-lg hover:text-[#E1A05B] transition interactive">Grupos</a></li>
+            <li><a href="#" class="text-lg hover:text-[#E1A05B] transition interactive">Juegos</a></li>
             </ul>
         </nav>
-
-        <h2><a href="" class="interactive text-white no-underline hover:cursor-auto hover:text-[#E1A05B]">Regresar</a></li></h2>
-    </div>
+        <a href="#" class="flex items-center justify-center gap-2 text-sm text-gray-300 hover:text-white transition">Cerrar sesión</a>
+    </aside>
 
     <!-- Right Panel -->
     <div id="right-content" class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
             
         <!-- Main Content -->
-        <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
+        <div class="w-full h-fit flex flex-col px-12 space-y-12">
             <!-- Title -->
-            <div class="flex flex-col items-center space-y-4">
-                <h1 class="text-5xl">Usuarios</h1>
-                <p class="font-light text-sm">Gestiona a todos los usuarios registrados en el sistema.</p>
+            <div class="flex flex-col space-y-4">
+                <h1 class="text-5xl font-semibold text-[#1B3B50]">Usuarios</h1>
+                <p class="text-sm text-[#6A7282]">Gestiona a todos los usuarios registrados en el sistema.</p>
             </div>
 
             <!-- Top Content -->

@@ -18,14 +18,14 @@ class ContentLoader {
     // Load content HTML
     async loadContent(role) {
         const contentPath = this.getContentPath(role);
-        
+
         try {
             const response = await fetch(contentPath);
-            
+
             if (!response.ok) {
                 throw new Error(`Failed to load content: ${response.status}`);
             }
-            
+
             if (role === 'admin') {
                 const backofficeScript = document.createElement('script');
                 backofficeScript.src = '../backoffice/backofficeMainScript.js';
@@ -50,15 +50,15 @@ class ContentLoader {
     // Inject content into the page
     async injectContent(targetSelector = '#content-container') {
         const userRole = getUserRole() || 'not_logged';
-        
+
         const contentHTML = await this.loadContent(userRole);
         const container = document.querySelector(targetSelector);
-        
+
         if (container) {
             container.innerHTML = contentHTML;
             // Dispatch event for other scripts
-            document.dispatchEvent(new CustomEvent('contentLoaded', { 
-                detail: { role: userRole } 
+            document.dispatchEvent(new CustomEvent('contentLoaded', {
+                detail: { role: userRole }
             }));
         } else {
             console.error(`Content container "${targetSelector}" not found`);

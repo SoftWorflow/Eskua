@@ -78,44 +78,44 @@ function searchUser(e) {
         method: 'POST',
         body: JSON.stringify({ username: e.target.value })
     }).then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-            data[0].forEach(user => {
-                const newLineDiv = document.createElement('div');
-                newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-                newLineDiv.id = `user-${user.id}`;
+        .then(data => {
+            if (data.ok) {
+                data[0].forEach(user => {
+                    const newLineDiv = document.createElement('div');
+                    newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
+                    newLineDiv.id = `user-${user.id}`;
 
-                newLineDiv.onclick = () => showUserDetail(user.id);
+                    newLineDiv.onclick = () => showUserDetail(user.id);
 
-                const idColumn = document.createElement('p');
-                idColumn.classList.add('text-lg');
-                idColumn.textContent = "#" + user.id;
+                    const idColumn = document.createElement('p');
+                    idColumn.classList.add('text-lg');
+                    idColumn.textContent = "#" + user.id;
 
-                const usernameColumn = document.createElement('p');
-                usernameColumn.classList.add('text-lg');
-                usernameColumn.textContent = user.username;
+                    const usernameColumn = document.createElement('p');
+                    usernameColumn.classList.add('text-lg');
+                    usernameColumn.textContent = user.username;
 
-                const roleColumn = document.createElement('p');
-                roleColumn.classList.add('text-lg');
-                roleColumn.textContent = user.role;
+                    const roleColumn = document.createElement('p');
+                    roleColumn.classList.add('text-lg');
+                    roleColumn.textContent = user.role;
 
-                newLineDiv.append(idColumn, usernameColumn, roleColumn);
-                usersTableContentInnerDiv.appendChild(newLineDiv);
-            });
+                    newLineDiv.append(idColumn, usernameColumn, roleColumn);
+                    usersTableContentInnerDiv.appendChild(newLineDiv);
+                });
 
-            spinner.stop();
-            document.getElementById('spinner-container').innerHTML = '';
+                spinner.stop();
+                document.getElementById('spinner-container').innerHTML = '';
 
-            usersTableContentInnerDiv.classList.remove('hidden');
-        } else {
-            usersTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
+                usersTableContentInnerDiv.classList.remove('hidden');
+            } else {
+                usersTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
 
-            spinner.stop();
-            document.getElementById('spinner-container').innerHTML = '';
+                spinner.stop();
+                document.getElementById('spinner-container').innerHTML = '';
 
-            usersTableContentInnerDiv.classList.remove('hidden');
-        }
-    }).catch(err => console.error("Error: ", err));
+                usersTableContentInnerDiv.classList.remove('hidden');
+            }
+        }).catch(err => console.error("Error: ", err));
 }
 
 function renderUsersTable() {
@@ -123,11 +123,11 @@ function renderUsersTable() {
 
     rightContent.innerHTML = `
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
-            <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
-                <div class="flex flex-col items-center space-y-4">
-                    <h1 class="text-5xl">Usuarios</h1>
-                    <p class="font-light text-sm">Gestiona a todos los usuarios registrados en el sistema.</p>
-                </div>
+        <div class="w-full h-fit flex flex-col px-12 space-y-12">
+            <div class="flex flex-col space-y-4">
+                <h1 class="text-5xl font-semibold text-[#1B3B50]">Usuarios</h1>
+                <p class="text-sm text-[#6A7282]">Gestiona a todos los usuarios registrados en el sistema.</p>
+            </div>
                 
                 <div class="flex w-full h-14 space-x-8">
                     <div class="relative w-full">
