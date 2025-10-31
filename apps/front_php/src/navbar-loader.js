@@ -1,13 +1,13 @@
 class NavbarLoader {
     constructor() {
         this.navbarMap = {
-            'admin': 'navbars/navbarAdmin.html',
-            'teacher': 'navbars/navbarTeacher.html',
-            'student': 'navbars/navbarStudent.html',
-            'guest': 'navbars/navbarNormalUser.html'
+            'admin': '/home/navbars/navbarAdmin.html',
+            'teacher': '/home/navbars/navbarTeacher.html',
+            'student': '/home/navbars/navbarStudent.html',
+            'guest': '/home/navbars/navbarNormalUser.html'
         };
 
-        this.defaultNavbar = 'navbars/navbarNotLoged.html';
+        this.defaultNavbar = '/home/navbars/navbarNotLoged.html';
     }
 
     // Get the navbar file based on user role

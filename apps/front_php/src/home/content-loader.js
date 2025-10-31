@@ -1,13 +1,13 @@
 class ContentLoader {
     constructor() {
         this.contentMap = {
-            'admin': 'homes/admin.html',
-            'teacher': 'homes/teacher.html',
-            'student': 'homes/student.html',
-            'guest': 'homes/guest.html',
-            'not_logged': 'homes/public.html'
+            'admin': '/home/homes/admin.html',
+            'teacher': '/home/homes/teacher.html',
+            'student': '/home/homes/student.html',
+            'guest': '/home/homes/guest.html',
+            'not_logged': '/home/homes/public.html'
         };
-        this.defaultContent = 'homes/public.html';
+        this.defaultContent = '/home/homes/public.html';
     }
 
     // Get the content file based on user role
