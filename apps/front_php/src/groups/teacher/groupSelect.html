@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupos - Eskua</title>
+    <link rel="stylesheet" href="../../output.css">
+    <script src="../auth.js"></script>
+    <script src="../../navbar-loader.js"></script>
+    <script src="../../content-loader.js"></script>
+</head>
+<body>
+    <div class="min-h-screen w-full flex flex-col items-center justify-center space-y-18 bg-[url(../images/Background3.png)] bg-fixed">
+   
+        <!-- Titulo -->
+        <div class="space-y-5 text-center">
+            <h2 class="text-6xl font-semibold text-[#1B3B50]">Actividades</h2>
+            <h4 class="text-xl text-[#6A7282]">¿De que forma aprenderas hoy?</h4>
+        </div>
+        
+        <!-- Cartas -->
+        <div class="w-[90vw] flex justify-between space-x-10">
+            <!-- Material -->
+            <div class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-2 hover:bg-[#E1A05B] interactive">
+                <div class="bg-white rounded-md w-full h-full flex flex-col">
+                    <div class="h-3/4 border-b-2 border-[#DFDFDF] flex items-center justify-center">
+                        <img src="../../../../images/Material.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                        <img src="../../../../images/MaterialOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                    </div>
+                    <div class="h-1/4 flex items-center justify-center">
+                        <p class="text-3xl font-semibold text-[#1B3B50] group-hover:text-[#E1A05B] transition duration-200">Material</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Juegos -->
+            <div class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-2 hover:bg-[#E1A05B] interactive">
+                <div class="bg-white rounded-md w-full h-full flex flex-col">
+                    <div class="h-3/4 border-b-2 border-[#DFDFDF] flex items-center justify-center">
+                        <img src="../../../../images/Games.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                        <img src="../../../../images/GameOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                    </div>
+                    <div class="h-1/4 flex items-center justify-center">
+                        <p class="text-3xl font-semibold text-[#1B3B50] group-hover:text-[#E1A05B] transition duration-200">Juegos</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Grupos -->
+            <div class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-2 hover:bg-[#E1A05B] interactive">
+                <div class="bg-white rounded-md w-full h-full flex flex-col">
+                    <div class="h-3/4 border-b-2 border-[#DFDFDF] flex items-center justify-center">
+                        <img src="../../../../images/Groups.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                        <img src="../../../../images/GroupsOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                    </div>
+                    <div class="h-1/4 flex items-center justify-center">
+                        <p class="text-3xl font-semibold text-[#1B3B50] group-hover:text-[#E1A05B] transition duration-200">Grupos</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+<script>
+    (async () => {
+        const userRole = getUserRole();
+        
+        if (userRole !== 'guest') {
+            console.warn('Unauthorized access attempt to guest home');
+            window.location.href = '../../error-pages/403.html';
+            return;
+        }
+    })();
+</script>
+</body>
+</html>

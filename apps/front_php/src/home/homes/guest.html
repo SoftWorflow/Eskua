@@ -1,45 +1,38 @@
-<div class="min-h-screen w-full flex flex-col items-center justify-center space-y-10 bg-[url(../images/Background1.png)] bg-fixed">
+<div class="min-h-screen w-full flex flex-col items-center justify-center space-y-18 bg-[url(../images/Background3.png)] bg-fixed">
    
-    <!-- Titulo -->
-    <div class="space-y-2 text-center mt-30 xl:mt-20">
-        <h2 class="text-5xl">Actividades</h2>
-        <h4 class="text-lg">De que forma aprenderas hoy?</h4>
-    </div>
-    
-    <!-- Cartas -->
-    <div class="w-full lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10 xl:mt-0 justify-items-center">
-
-        <!-- Carta Material -->
-        <a href="../../normal_user/material.html" class="interactive drop-shadow-md/40 hover:drop-shadow-md/70 w-3/4 h-[350px] lg:w-full lg:h-[450px] xl:h-[550px]">
-            <div class="h-4/6 flex items-center justify-center bg-[#1B3B50] rounded-t-lg">
-                <img class="h-1/2" src="../images/MaterialIcon.svg" alt="">
-            </div>
-            <div class="h-2/6 flex items-center justify-center bg-[#173345] rounded-b-lg">
-                <h2 class="text-2xl text-white">Material</h2>
-            </div>
-        </a>
-
-        <!-- Carta IA -->
-        <div class="interactive drop-shadow-md/40 hover:drop-shadow-md/70 w-3/4 h-[350px] lg:w-full lg:h-[450px] xl:h-[550px]">
-            <div class="h-4/6 flex items-center justify-center bg-[#1B3B50] rounded-t-lg">
-                <img class="h-1/2" src="../images/IAIcon.svg" alt="">
-            </div>
-            <div class="h-2/6 flex items-center justify-center bg-[#173345] rounded-b-lg">
-                <h2 class="text-2xl text-white">Reconocimiento IA</h2>
-            </div>
+        <!-- Titulo -->
+        <div class="space-y-5 text-center">
+            <h2 class="text-6xl font-semibold text-[#1B3B50]">Actividades</h2>
+            <h4 class="text-xl text-[#6A7282]">¿De que forma aprenderas hoy?</h4>
         </div>
         
-        <!-- Carta Juegos -->
-        <div class="interactive drop-shadow-md/40 hover:drop-shadow-md/70 w-3/4 h-[350px] lg:w-full lg:h-[450px] xl:h-[550px]">
-            <div class="h-4/6 flex items-center justify-center bg-[#1B3B50] rounded-t-lg">
-                <img class="h-1/2" src="../images/JuegosIcon.svg" alt="">
-            </div>
-            <div class="h-2/6 flex items-center justify-center bg-[#173345] rounded-b-lg">
-                <h2 class="text-2xl text-white">Juegos</h2>
-            </div>
+        <!-- Cartas -->
+        <div class="w-[90vw] flex justify-between space-x-10">
+            <!-- Material -->
+            <a href="" class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-2 hover:bg-[#E1A05B] interactive">
+                <div class="bg-white rounded-md w-full h-full flex flex-col">
+                    <div class="h-3/4 border-b-2 border-[#DFDFDF] flex items-center justify-center">
+                        <img src="../../../../images/Material.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                        <img src="../../../../images/MaterialOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                    </div>
+                    <div class="h-1/4 flex items-center justify-center">
+                        <p class="text-3xl font-semibold text-[#1B3B50] group-hover:text-[#E1A05B] transition duration-200">Material</p>
+                    </div>
+                </div>
+            </a>
+            <!-- Juegos -->
+            <a href="" class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-2 hover:bg-[#E1A05B] interactive">
+                <div class="bg-white rounded-md w-full h-full flex flex-col">
+                    <div class="h-3/4 border-b-2 border-[#DFDFDF] flex items-center justify-center">
+                        <img src="../../../../images/Games.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                        <img src="../../../../images/GameOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                    </div>
+                    <div class="h-1/4 flex items-center justify-center">
+                        <p class="text-3xl font-semibold text-[#1B3B50] group-hover:text-[#E1A05B] transition duration-200">Juegos</p>
+                    </div>
+                </div>
+            </a> 
         </div>
-    </div>
-   
 </div>
 
 <script>

@@ -13,3 +13,7 @@
 ## Cosas que dependen de la IP
 
     En apps/api/user/register.php en la línea 115 se neceista de la IP para la imagen default
+
+## Comandos
+
+docker exec -it eskua-db mysql -u root -p

@@ -4,7 +4,7 @@ class NavbarLoader {
             'admin': 'navbars/navbarAdmin.html',
             'teacher': 'navbars/navbarTeacher.html',
             'student': 'navbars/navbarStudent.html',
-            'guest': 'navbars/navbarGuest.html'
+            'guest': 'navbars/navbarNormalUser.html'
         };
 
         this.defaultNavbar = 'navbars/navbarNotLoged.html';

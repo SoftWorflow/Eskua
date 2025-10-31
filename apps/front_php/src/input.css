@@ -162,5 +162,9 @@
     content: url("../../images/EditPencilHover.svg");
   }
 
+  .scale105 {
+    @apply hover:scale-105 transition duration-150;
+  }
+
 }
 

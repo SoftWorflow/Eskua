@@ -1,26 +1,23 @@
-<div class="fixed xl:top-7 left-0 w-full h-30 flex items-center justify-between px-6 z-50">
-  
-  <!-- Logo a la izquierda -->
-  <div>
-    <img src="../images/EskuaLogo1.png" alt="Logo" class="h-full w-auto">
+<nav class="fixed w-screen flex justify-between items-center shadow-md/25 px-8 bg-white z-50 h-[8vh] md:h-[10vh]">
+
+  <h1 class="md:hidden text-lg font-semibold text-[#1B3B50] italic interactive">Eskua</h1>
+
+  <button class="md:hidden h-8 w-8 interactive scale105">
+    <img src="../../../../images/NavbarHamburguer.svg" alt="">
+  </button>
+
+  <div class="hidden md:block w-24 py-2 interactive scale105">
+    <img src="../../../../images/EskuaLogo1.png" alt="Logo">
   </div>
 
-  <!-- Navbar centrado (solo links, con fondo y blur) -->
-  <nav class="w-5/6 sm:w-2/3 md:w-1/2 lg:w-2/6 bg-white/90 backdrop-blur-md rounded-3xl shadow-lg/30 p-3">
-    <ul class="flex justify-center gap-15 text-base sm:text-lg">
-      <li><a href="#" class="hover:text-[#e1a05b] interactive">Juegos</a></li>
-      <li><a href="#" class="hover:text-[#e1a05b] interactive">IA</a></li>
-      <li><a href="#" class="hover:text-[#e1a05b] interactive">Actividades</a></li>
-      <li><a href="#" class="hover:text-[#e1a05b] interactive">Material</a></li>
-    </ul>
-  </nav>
+  <ul class="hidden absolute top-[10vh] left-0 w-full bg-white text-xl font-medium text-[#1B3B50] shadow-md md:static md:flex md:justify-center md:space-x-8 md:py-0 md:shadow-none">
+    <li><a href="#" class="hover:text-[#E1A05B] interactive">Inicio</a></li>
+    <li><a href="#" class="hover:text-[#E1A05B] interactive">Material</a></li>
+    <li><a href="#" class="hover:text-[#E1A05B] interactive">Juegos</a></li>
+    <li><a href="#" class="hover:text-[#E1A05B] interactive">Juegos</a></li>
+    <li class="md:hidden"><img src="../../../../images/ProfilePic.jpeg" alt="Foto de Perfil" class="w-14 h-14 rounded-full shadow-md/25 object-cover"></li>
+  </ul>
 
-  <!-- Icono y foto a la derecha -->
-  <div class="h-full flex items-center gap-8">
-    <button>
-      <img src="../images/NotificationIcon.svg" alt="Icono" class="h-full">
-    </button>
-    <img src="../images/ProfilePic.jpeg" alt="Perfil" class="aspect-square object-cover w-12 rounded-full drop-shadow-lg/45">
-  </div>
-
-</div>
+  <img src="../../../../images/ProfilePic.jpeg" alt="Foto de Perfil"
+       class="hidden md:block aspect-square object-cover rounded-full shadow-md/25 w-14 h-14 interactive scale105">
+</nav>
