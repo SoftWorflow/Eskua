@@ -158,12 +158,15 @@ async function authenticatedFetch(url, options = {}) {
     
     const defaultOptions = {
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
             'X-Requested-With': 'XMLHttpRequest'
         },
         credentials: 'include'
     };
+
+    if (!(options.body instanceof FormData)) {
+        defaultOptions.headers['Content-Type'] = 'application/json';
+    }
 
     const mergedOptions = {
         ...defaultOptions,

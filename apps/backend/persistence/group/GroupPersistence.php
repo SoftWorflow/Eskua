@@ -21,6 +21,7 @@ class GroupPersistence implements IGroupPersistence {
 
     public function createGroup(Group $group) : bool {
         if ($group === null) return false;
+        return true;
     }
 
     public function getGroupByCode($code) : ?array {

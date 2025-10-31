@@ -150,7 +150,6 @@ create table files(
     extension varchar(20),
     size bigint not null,
     uploader_id int not null,
-    checksum char(64) NULL,
     uploaded_at datetime default current_timestamp,
     is_active bool default true,
     foreign key (uploader_id) references users(id) on delete cascade
@@ -439,7 +438,6 @@ BEGIN
  END //
 
 -- GET REFRESH TOKEN BY TOKEN
-DELIMITER //
 CREATE PROCEDURE getRefreshTokenByToken(
     IN token_value VARCHAR(255)
 )
@@ -449,11 +447,101 @@ BEGIN
     WHERE refresh_token = token_value AND is_revoked = 0;
 END //
 
-DELIMITER //
 CREATE PROCEDURE revokeTokenByToken(
     IN token_value VARCHAR(255)
 )
 BEGIN
     UPDATE tokens SET is_revoked = 1 WHERE refresh_token = token_value;
+END //
+
+CREATE PROCEDURE createFile(
+    IN storage_name VARCHAR(255),
+    IN original_name VARCHAR(255),
+    IN mime VARCHAR(100),
+    IN extension VARCHAR(20),
+    IN size bigint,
+    IN uploader_id int
+)
+BEGIN
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+    INSERT INTO files (storage_name, original_name, mime, extension, size, uploader_id)
+    VALUES (storage_name, original_name, mime, extension, size, uploader_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE createPublicMaterial(
+    IN title VARCHAR(128),
+    IN `description` text
+)
+BEGIN
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+    INSERT INTO public_materials (title, `description`)
+    VALUES (title, `description`);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE createPublicMaterialFile(
+    IN public_material_id int,
+    IN file_id int
+)
+BEGIN
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+    INSERT INTO public_materials_files (public_material, `file`)
+    VALUES (public_material_id, file_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE createFullPublicMaterial(
+    IN p_title VARCHAR(128),
+    IN p_description TEXT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT,
+    IN p_uploader_id INT
+)
+BEGIN
+    DECLARE material_id INT;
+    DECLARE file_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO public_materials (title, description)
+    VALUES (p_title, p_description);
+    SET material_id = LAST_INSERT_ID();
+
+    INSERT INTO files (storage_name, original_name, mime, extension, size, uploader_id)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO public_materials_files (public_material, file)
+    VALUES (material_id, file_id);
+
+    COMMIT;
 END //
 DELIMITER ;

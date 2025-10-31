@@ -65,7 +65,15 @@ authenticatedFetch('/api/admin/getAllUsers.php', { method: 'GET' })
 
     }).catch(err => console.error('Error:', err));
 
-document.getElementById('search-bar').addEventListener('input', searchUser);
+document.getElementById('search-bar').addEventListener('input', debounce(searchUser, 300));
+
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
 
 function searchUser(e) {
     const usersTableContentInnerDiv = document.getElementById('users-table-content-inner-div');
@@ -165,7 +173,7 @@ function renderUsersTable() {
         </div>
     `;
 
-    document.getElementById('search-bar').addEventListener('input', searchUser);
+    document.getElementById('search-bar').addEventListener('input', debounce(searchUser, 300));
 
     // Cargar los usuarios
     loadUsers();

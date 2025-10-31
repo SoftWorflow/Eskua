@@ -65,11 +65,18 @@ authenticatedFetch('/api/admin/getAllGroups.php', { method: 'GET' })
 
     }).catch(err => console.error('Error:', err));
 
-document.getElementById('search-bar').addEventListener('input', searchGroup);
+document.getElementById('search-bar').addEventListener('input', debounce(searchGroup, 300));
+
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
 
 function searchGroup(e) {
-    const groupsTableContentInnerDiv = document.getElementById('groups-table-content-inner-div');
-    groupsTableContentInnerDiv.innerHTML = '';
+    var groupsTableContentInnerDiv = document.getElementById('groups-table-content-inner-div');
     groupsTableContentInnerDiv.classList.add('hidden');
 
     const spinner = showSpinner();
@@ -80,6 +87,7 @@ function searchGroup(e) {
     }).then(res => res.json())
         .then(data => {
             if (data.ok) {
+                groupsTableContentInnerDiv.innerHTML = '';
                 data[0].forEach(group => {
                     const newLineDiv = document.createElement('div');
                     newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
@@ -167,7 +175,7 @@ function renderGroupsTable() {
         </div>
     `;
 
-    document.getElementById('search-bar').addEventListener('input', searchGroup);
+    document.getElementById('search-bar').addEventListener('input', debounce(searchGroup, 300));
 
     // Cargar los usuarios
     loadGroups();

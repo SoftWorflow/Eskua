@@ -1,0 +1,7 @@
+<?php
+
+interface IMaterialPersistence {
+    public function uploadMaterial(PublicMaterial $publicMaterial, File $file, int $uploaderId): bool;
+}
+
+?>

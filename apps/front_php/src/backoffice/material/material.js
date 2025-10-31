@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('search-bar').addEventListener('input', debounce(searchMaterial, 300));
+});
+
 function showSpinner() {
     // Spinner config
     const opts = {
@@ -31,51 +35,78 @@ function showSpinner() {
 
 const spinner = showSpinner();
 
-authenticatedFetch('/api/admin/getAllMaterials.php', { method: 'GET' })
-    .then(res => res.json())
-    .then(data => {
-        if (!data.ok) {
-            const notyf = new Notyf({
-                duration: 3500,
-                position: { x: 'right', y: 'top' },
-                dismissible: true
-            });
+loadMaterials();
 
-            notyf.error('No hay materiales públicos');
-            return;
-        }
-        const materialTableContentInnerDiv = document.getElementById('material-table-content-inner-div');
-        data.forEach(material => {
-            const newLineDiv = document.createElement('div');
-            newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
-            newLineDiv.onclick = () => {
-                // showGroupDetail(group.id);
-            }
+function renderMaterialsTable() {
+    const rightContent = document.getElementById('right-content');
 
-            const idColumn = document.createElement('p');
-            idColumn.classList.add('text-lg');
-            idColumn.textContent = "#" + material.id;
+    rightContent.innerHTML = `
+        <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
+            
+            <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
+                <div class="flex flex-col items-center space-y-4">
+                    <h1 class="text-5xl">Material</h1>
+                    <p class="font-light text-sm">Gestiona todo el material público del sistema.</p>
+                </div>
+                <div class="flex w-full h-14 space-x-8">
+                    <div class="relative w-full">
+                        <!-- Magnifying glass Icon -->
+                        <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                            </svg>
+                        </span>
+                        <input
+                            id="search-bar"
+                            type="text"
+                            placeholder="Buscar Material..."
+                            class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"
+                        />
+                        <button class="absolute inset-y-0 right-12 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 018 17V13.414L3.293 6.707A1 1 0 013 6V4z" />
+                            </svg>
+                        </button>
+                        <button onclick="renderCreateMaterial()"class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                        </button>
+                    </div>
+            </div>
+                <div class="w-full h-fit h-min-[50vh] shadow-lg/25 flex flex-col rounded-2xl overflow-hidden">
+                <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-8 py-4 rounded-t-2xl grid grid-cols-3">
+                    <p class="text-lg">ID</p>
+                    <p class="text-lg">Nombre</p>
+                    <p class="text-lg">Tipo</p>
+                </div>
+                <div class="h-[50vh] overflow-y-scroll font-light">
+                    <div id="spinner-container"></div>
+                    <div class="hidden" id="material-table-content-inner-div"></div>
+                </div>
+            </div>
+        </div>
+    `;
 
-            const titleColumn = document.createElement('p');
-            titleColumn.classList.add('text-lg');
-            titleColumn.textContent = material.title;
+    document.getElementById('search-bar').addEventListener('input', debounce(searchMaterial, 300));
 
-            const typeColumn = document.createElement('p');
-            typeColumn.classList.add('text-lg');
-            typeColumn.textContent = material.type.toUpperCase();;
+    // Cargar los usuarios
+    loadMaterials();
+}
 
-            newLineDiv.append(idColumn, titleColumn, typeColumn);
-            materialTableContentInnerDiv.appendChild(newLineDiv);
-        });
-
-        spinner.stop();
-        document.getElementById('spinner-container').innerHTML = '';
-
-        materialTableContentInnerDiv.classList.remove('hidden');
-
-    }).catch(err => console.error('Error:', err));
-
-document.getElementById('search-bar').addEventListener('input', searchMaterial);
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
 
 function searchMaterial(e) {
     const materialTableContentInnerDiv = document.getElementById('material-table-content-inner-div');
@@ -128,68 +159,6 @@ function searchMaterial(e) {
     }).catch(err => console.error("Error: ", err));
 }
 
-function renderMaterialsTable() {
-    const rightContent = document.getElementById('right-content');
-
-    rightContent.innerHTML = `
-        <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
-            
-            <div class="w-full h-fit flex flex-col px-12 space-y-12 items-center">
-                <div class="flex flex-col items-center space-y-4">
-                    <h1 class="text-5xl">Material</h1>
-                    <p class="font-light text-sm">Gestiona todo el material público del sistema.</p>
-                </div>
-                <div class="flex w-full h-14 space-x-8 ">
-                    <div class="relative w-full">
-                        <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-                            </svg>
-                        </span>
-                        <input
-                            id = "search-bar"
-                            type="text"
-                            placeholder="Buscar Grupo..."
-                            class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"
-                        />
-                        <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 018 17V13.414L3.293 6.707A1 1 0 013 6V4z" />
-                            </svg>
-                        </button>
-                        <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 4v16m8-8H4" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="w-full h-fit h-min-[50vh] shadow-lg/25 flex flex-col rounded-2xl overflow-hidden">
-                <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-8 py-4 rounded-t-2xl grid grid-cols-3">
-                    <p class="text-lg">ID</p>
-                    <p class="text-lg">Nombre</p>
-                    <p class="text-lg">Tipo</p>
-                </div>
-                <div class="h-[50vh] overflow-y-scroll font-light">
-                    <div id="spinner-container"></div>
-                    <div class="hidden" id="material-table-content-inner-div"></div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('search-bar').addEventListener('input', searchMaterial);
-
-    // Cargar los usuarios
-    loadMaterials();
-}
-
 function loadMaterials() {
     authenticatedFetch('/api/admin/getAllMaterials.php', { method: 'GET' })
     .then(res => res.json())
@@ -204,8 +173,12 @@ function loadMaterials() {
             notyf.error('No hay materiales públicos');
             return;
         }
+
         const materialTableContentInnerDiv = document.getElementById('material-table-content-inner-div');
-        data.forEach(material => {
+        
+        
+        Object.values(data).forEach(material => {
+            if (typeof material !== 'object' || material === null || !material.id) return;
             const newLineDiv = document.createElement('div');
             newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
             newLineDiv.onclick = () => {
@@ -222,7 +195,7 @@ function loadMaterials() {
 
             const typeColumn = document.createElement('p');
             typeColumn.classList.add('text-lg');
-            typeColumn.textContent = material.type;
+            typeColumn.textContent = material.type.toUpperCase();
 
             newLineDiv.append(idColumn, titleColumn, typeColumn);
             materialTableContentInnerDiv.appendChild(newLineDiv);
@@ -371,4 +344,149 @@ function deleteMaterial(materialId) {
             notyf.error('La acción ha sido cancelada');
         }
     });
+}
+
+function renderCreateMaterial() {
+    const rightContent = document.getElementById('right-content');
+
+    rightContent.innerHTML = `
+        <div class="bg-white rounded-t-xl w-full h-full flex items-center justify-center space-y-10 p-10">
+        <div class="w-3/4 h-fit flex flex-col px-12 mt-4 space-y-4 items-center">
+            <h1 class="text-4xl text-[#1B3B50] font-semibold">Crear Material</h1>
+            <form id="create-material-form" class="flex flex-col w-full h-full space-x-8 space-y-6 py-4">\
+                <div class="flex flex-col space-y-4 w-full">
+                    <h2 class="text-2xl font-light">Título del Material</h2>
+                    <input
+                      type="text"
+                      placeholder="Título..."
+                      class="w-full py-3 pl-4 rounded-xl border-0 shadow-md/30 focus:ring-2 focus:ring-[#E1A05B] transition duration-150 bg-[#FBFBFB]"
+                      required
+                      id="title-input"
+                    />
+                </div>
+                <div class="flex flex-col gap-3.5 w-full">
+                    <h2 class="text-2xl font-light mb-1">Descripción</h2>
+                    <textarea
+                        placeholder="Agrega una descripción..."
+                        class="w-full h-40 p-4 rounded-xl shadow-md/30 focus:ring-2 focus:ring-[#E1A05B]
+                            transition duration-150 bg-[#FBFBFB] resize-none 
+                            text-gray-700 font-light placeholder-gray-400 placeholder:font-light"
+                        id="description-input"
+                    ></textarea>
+                </div>
+                <div class="flex flex-col space-y-5 w-full">
+                    <div class="flex flex-col space-y-0.5">
+                        <div>
+                            <h2 class="text-2xl font-light">Adjuntar Archivos</h2>
+                            <img src="" alt="">
+                        </div>
+                        <p class="text-[#A3A3A3] text-sm font-light">Elige cualquier archivo desde tu dispositivo para subir.</p>
+                    </div>
+                    <div class="flex space-x-5 w-full">
+                        <label for="material-file" class="flex flex-col space-y-1 border-2 border-dotted border-[#A3A3A3] py-4 px-12 rounded-2xl items-center shadow-md/30 hover:bg-[#fafafa] w-1/2 interactive">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                fill="none" stroke="#3550BA" stroke-width="2" 
+                                stroke-linecap="round" stroke-linejoin="round" 
+                                class="w-6 h-6 mx-auto">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 5 17 10"/>
+                                <line x1="12" y1="5" x2="12" y2="15"/>
+                            </svg>
+                            <p class="font-light text-sm text-[#3550BA]">Abrir el explorador de archivos</p>
+                            <p class="font-light text-[12px] text-[#A3A3A3]">PDF, MP4, PNG, JPG, WEBP</p>
+                        </label>
+
+                        <input 
+                            id="material-file" 
+                            type="file" 
+                            accept=".pdf,.mp4,.png,.jpg,.jpeg"
+                            class="hidden" 
+                            onchange="addNewFile(event)"
+                        />
+                        <div id="files-to-upload" class="w-1/2" ></div>
+                    </div>   
+                </div>
+                <div class="flex space-x-5 w-full">
+                    <button type="submit" class="blue-button py-3.5 w-1/2">Crear Material</button>
+                    <button class="red-button py-3.5 w-1/2">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.getElementById('create-material-form').addEventListener('submit', OnCreateElement);
+}
+
+let uploadsCompleted = 0;
+let totalUploads = 0;
+let uploadedFiles = [];
+
+function addNewFile(event) {
+    const files = event.target.files;
+    if (!files.length) return;
+
+    document.getElementById('material-file').disabled = true;
+
+    const uploadStatus = document.getElementById('files-to-upload');
+    uploadsCompleted = 0;
+    totalUploads = files.length;
+    uploadedFiles = [];
+
+    uploadStatus.innerHTML = '';
+
+    Array.from(files).forEach(file => {
+        const newFileDiv = document.createElement('div');
+        newFileDiv.className = 'flex flex-col space-y-1 justify-center bg-[#fafafa] p-4 rounded-2xl shadow-md/30 h-full';
+
+        newFileDiv.innerHTML = `
+            <div class="flex justify-between items-center space-x-25">
+                <p id="file-name" class="text-sm font-light">${file.name}</p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="3" stroke="#A3A3A3" class="w-6 h-6 interactive hover:stroke-[#CC4033] transition duration-150">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+            <div class="flex justify-between items-center">
+                <p class="text-sm text-[#A3A3A3] font-light" id="time-remaining">${(file.size / 1024).toFixed(1)} KB</p>
+            </div>
+        `;
+
+        uploadStatus.appendChild(newFileDiv);
+    });
+}
+
+function OnCreateElement(e) {
+    e.preventDefault();
+
+    const fileInput = document.getElementById('material-file');
+    const file = fileInput.files[0];
+
+    const titleInput = document.getElementById('title-input');
+    const descriptionInput = document.getElementById('description-input');
+
+    const formData = new FormData();
+
+    formData.append('file', file);
+    formData.append('title', titleInput.value);
+    formData.append('description', descriptionInput.value);
+
+    const notyf = new Notyf({
+        duration: 3500,
+        position: { x: 'right', y: 'top' },
+        dismissible: true
+    });
+
+    authenticatedFetch('/api/admin/uploadPublicMaterialFile.php', {
+        method: 'POST',
+        body: formData
+    }).then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            renderMaterialsTable();
+            notyf.success(data.message);
+        } else {
+            notyf.error(data.error);
+        }
+    }).catch(err => console.error("Error: ", err));
 }
