@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tareas - Eskua</title>
-    <link rel="stylesheet" href="../../output.css">
-    <script src="../../auth.js"></script>
-    <script src="../../navbar-loader.js"></script>
-    <script src="../../home/content-loader.js"></script>
+    <link rel="stylesheet" href="../../../output.css">
+    <script src="../../../auth.js"></script>
+    <script src="../../../navbar-loader.js"></script>
+    <script src="../../../home/content-loader.js"></script>
     <script>
         document.documentElement.style.display = 'none';
         (async () => {
@@ -40,8 +40,8 @@
                   </div>
                   <div class="h-full p-6 pt-8">
                     <ul class="flex flex-col space-y-10 text-xl">
-                      <li><a href="../groupHomeStudent.html" class="font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20">Inicio</a></li>
-                      <li><a href="assignmentsStudent.html" class="font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100">Tareas</a></li>
+                      <li><a href="../groupHomeStudent.html" class="font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100">Inicio</a></li>
+                      <li><a href="assignmentsStudent.html" class="font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20">Tareas</a></li>
                     </ul>
                   </div>
                 </div>
@@ -175,7 +175,7 @@
                       <div class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto">
 
                         <!-- Assignment card -->
-                        <div class="w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0">
+                        <a href="assignmentInfoStudent.html" class="w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline">
                           <div class="flex w-full justify-between pr-10">
                             <div class="flex items-center space-x-5">
                                <img src="../../../../images/Assignment.png" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
@@ -191,7 +191,7 @@
                               <p class="text-[#CC4033]">Vence el 2/11/25</p>
                              </div>
                           </div>
-                        </div>
+                        </a>
 
                       </div>
                       <p class="text-sm text-[#6A7282]">Mostrando 4 de 52</p>

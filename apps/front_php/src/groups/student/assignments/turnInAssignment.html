@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entregar Tarea - Eskua</title>
+    <link rel="stylesheet" href="../../../output.css">
+    <script src="../../../auth.js"></script>
+    <script src="../../../navbar-loader.js"></script>
+    <script src="../../../home/content-loader.js"></script>
+    <script>
+        document.documentElement.style.display = 'none';
+        (async () => {
+            // Allow access even if not logged in
+            await authManager.ensureValidToken();
+            
+            if (authManager.getAccessToken()) {
+                authManager.startTokenMonitoring();
+            }
+            
+            await initializeNavbar('#navbar-container');
+            await initializeContent('#content-container');
+            
+            document.documentElement.style.display = '';
+        })();
+    </script>
+</head>
+<body class="flex justify-center items-center w-screen h-screen">
+  <div class="w-1/2 h-7/12 rounded-xl bg-[#1B3B50] shadow-md/25 p-3">
+    <div class="w-full h-full bg-white rounded-sm flex items-center justify-center">
+      <!-- Return Arrow -->
+      <div class="group">
+          <img src="../../../../images/ReturnArrow.svg" alt="" class="absolute left-[27vw] top-[25vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+          <img src="../../../../images/ReturnArrowOrange.svg" alt="" class="absolute left-[27vw] top-[25vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+      </div>
+
+      <div class="w-3/4 h-full flex flex-col items-center py-10 space-y-8">
+        <h1 class="font-semibold text-5xl text-[#1B3B50]">Entregar Tarea</h1>
+        <textarea name="" id="" class="w-full h-[20vh] border-2 border-[#DFDFDF] resize-none shadow-md/25 rounded-xl px-3 py-4 " placeholder="Escribe un mensaje... "></textarea>
+        <div class="flex flex-col w-full items-start space-y-4">
+          <!-- Attach Files -->
+                <div class="flex flex-col space-y-5 w-full">
+                    <!-- Title + Subtitle -->
+                    <div class="flex flex-col space-y-0.5">
+                        <!-- Title -->
+                        <div>
+                            <h2 class="text-lg text-[#1B3B50] font-semibold">Adjuntar Archivos</h2>
+                        </div>
+                        <p class="text-[#6A7282] text-sm">Elige cualquier archivo desde tu dispositivo para subir.</p>
+                    </div>
+                    <!-- Upload + File Download Container -->
+                    <div class="flex space-x-5 w-full">
+                        <!-- Upload Button -->
+                        <div class="flex flex-col space-y-1 border-2 border-dotted border-[#A3A3A3] py-4 px-12 rounded-2xl items-center shadow-md/30 hover:bg-[#fafafa] w-1/2 interactive">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                fill="none" stroke="#3550BA" stroke-width="2" 
+                                stroke-linecap="round" stroke-linejoin="round" 
+                                class="w-6 h-6 mx-auto">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 5 17 10"/>
+                            <line x1="12" y1="5" x2="12" y2="15"/>
+                            </svg>
+                            <p class="font-light text-sm text-[#3550BA]">Abrir el explorador de archivos</p>
+                            <!-- File types -->
+                            <p class="font-light text-[12px] text-[#A3A3A3]">PDF, MP4, PNG, JPG</p>
+                        </div>
+                        <!-- File Download -->
+                        <div class="flex flex-col space-y-1 justify-center bg-[#fafafa] p-4 rounded-2xl shadow-md/30 w-1/2">
+                            <div class="flex justify-between items-center space-x-25">
+                                <p class="text-sm font-light">Nombre_archivo.pdf</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="3" stroke="#A3A3A3" class="w-6 h-6 hover:stroke-red-500 interactive scale105">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <p class="text-sm text-[#A3A3A3] font-light">443 KB</p>
+                            </div>
+                        </div>
+                    </div>   
+                </div> 
+        </div>
+        <div class="w-full h-1/6 flex items-center justify-center">
+          <button class="orange-button h-full px-14">Confirmar</button>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</body>
+</html>
