@@ -408,7 +408,7 @@ function renderCreateMaterial() {
                 </div>
                 <div class="flex space-x-5 w-full">
                     <button type="submit" class="blue-button py-3.5 w-1/2">Crear Material</button>
-                    <button class="red-button py-3.5 w-1/2">Cancelar</button>
+                    <button type="button" onclick="location.reload()" class="red-button py-3.5 w-1/2">Cancelar</button>
                 </div>
             </form>
         </div>

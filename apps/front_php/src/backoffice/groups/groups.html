@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../../output.css">
   <script src="../../auth.js"></script>
   <script src="/navbar-loader.js"></script>
+  <script src="/backoffice/backoffice-navbar-manager.js"></script>
   <!-- SWEETALERT 2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Notyf CSS -->
@@ -20,6 +21,10 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
         await initializeNavbar();
+    });
+
+    document.addEventListener('navbarLoaded', async () => {
+        updateSelectedPage('groups');
     });
   </script>
   <script src="groups.js" defer></script>
