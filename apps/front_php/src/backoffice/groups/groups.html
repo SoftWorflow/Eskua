@@ -6,6 +6,7 @@
   <title>Grupos - Backoffice</title>
   <link rel="stylesheet" href="../../output.css">
   <script src="../../auth.js"></script>
+  <script src="/navbar-loader.js"></script>
   <!-- SWEETALERT 2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Notyf CSS -->
@@ -16,6 +17,10 @@
   <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
   <script>
     requireRole('admin');
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await initializeNavbar();
+    });
   </script>
   <script src="groups.js" defer></script>
 </head>
@@ -24,19 +29,7 @@
 <div class="flex px-10 pt-10 h-screen space-x-7">
 
     <!-- PANEL LATERAL -->
-    <aside class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg">
-        <nav class="flex flex-col gap-10 text-center">
-            <h1 class="text-2xl font-medium">Menu</h1>
-            <ul class="flex flex-col gap-8">
-            <li><a href="../../home/index.php" class="text-lg hover:text-[#E1A05B] transition interactive">Inicio</a></li>
-            <li><a href="../users/users.html" class="text-lg hover:text-[#E1A05B] transition interactive">Usuarios</a></li>
-            <li><a href="../material/material.html" class="text-lg hover:text-[#E1A05B] transition interactive">Material</a></li>
-            <li><a href="../groups/groups.html" class="text-lg hover:text-[#E1A05B] transition interactive border-2 border-[#E1A05B] rounded-lg px-4 py-2">Grupos</a></li>
-            <li><a href="#" class="text-lg hover:text-[#E1A05B] transition interactive">Juegos</a></li>
-            </ul>
-        </nav>
-        <a href="#" class="flex items-center justify-center gap-2 text-sm text-gray-300 hover:text-white transition">Cerrar sesión</a>
-    </aside>
+    <aside id="navbar-container" class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg"></aside>
 
     <!-- Right Panel -->
     <div id="right-content" class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">

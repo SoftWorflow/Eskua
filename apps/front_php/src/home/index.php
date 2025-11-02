@@ -5,30 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Eskua</title>
     <link rel="stylesheet" href="../output.css">
+    <style>body { visibility: hidden; }</style>
     <script src="../auth.js"></script>
     <script src="../navbar-loader.js"></script>
     <script src="content-loader.js"></script>
     <script>
-        document.documentElement.style.display = 'none';
-
         (async () => {
-            // Allow access even if not logged in
-            await authManager.ensureValidToken();
-            
-            if (authManager.getAccessToken()) {
-                authManager.startTokenMonitoring();
+            try {
+                if (authManager.getAccessToken()) {
+                    authManager.startTokenMonitoring();
+                }
+
+                document.addEventListener('DOMContentLoaded', async () => {
+                    await initializeContent('#content-container');
+                });
+            } catch (error) {
+                console.error("Error during initial authentication or content loading:", error);
             }
-            
-            await initializeNavbar('#navbar-container');
-            await initializeContent('#content-container');
-            
-            document.documentElement.style.display = '';
+
+            document.addEventListener('contentLoaded', async () => {
+                await initializeNavbar('#navbar-container');
+                document.body.style.visibility = 'visible';
+            });
         })();
     </script>
 </head>
 <body>
- 
-    <div id="navbar-container"></div>
 
     <div id="content-container"></div>
 
