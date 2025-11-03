@@ -1,0 +1,141 @@
+<div class="flex px-10 pt-10 h-screen space-x-7">
+
+    <!-- PANEL LATERAL -->
+    <aside id="navbar-container" class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg"></aside>
+
+    <!-- PANEL PRINCIPAL -->
+    <main class="flex flex-1 bg-[#1B3B50] rounded-t-2xl px-12 pt-12">
+
+      <!-- FONDO BLANCO -->
+      <div class="bg-white w-full h-full rounded-t-2xl p-10 flex flex-col justify-center">
+
+        <!-- HEADER -->
+        <div class="flex flex-col space-y-0.5">
+          <h1 class="text-4xl font-semibold text-[#1B3B50]">Backoffice</h1>
+          <p class="text-sm text-gray-500 mt-1 mb-8" id="welcome-text">Bienvenido de vuelta, Administrador.</p>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex flex-col space-y-3 space-x-5">
+          
+          <!-- TOP CONTENT -->
+          <div class="flex w-full space-x-3">
+            <!-- TOTAL USERS -->
+              <div class="flex flex-col justify-center pl-4 py-12 rounded-xl border border-[#E5E7EB] shadow-md/25 w-1/2">
+                <p class="text-lg text-[#6A7282]">Cantidad total de usuarios</p>
+                <p class="text-4xl font-semibold text-[#1B3B50]" id="total-users">0</p>
+              </div>
+               <!-- MATERIAL PUBLICO -->
+              <div class="flex flex-col justify-center pl-4 py-12 rounded-xl border border-[#E5E7EB] shadow-md/25 w-1/2">
+                <p class="text-lg text-[#6A7282]">Material Público</p>
+                <p class="text-4xl font-semibold text-[#1B3B50]" id="total-public-material">0</p>
+              </div>
+          </div>
+
+          <!-- BOTTOM CONTENT -->
+          <div class="flex w-full space-x-3">
+            <!-- LEFT CONTENT -->
+            <div class="flex flex-col space-y-4 w-1/2">
+
+              <!-- USERS -->
+              <div class="flex flex-col space-y-4 w-full">
+                <!-- USER TYPES -->
+                <div class="grid grid-cols-4 space-x-2 h-full">
+                  <!-- INVITADOS -->
+                  <div class="flex flex-col justify-center pl-4 py-12 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                    <p class="text-[#6A7282]">Invitados</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]" id="total-guests">0</p>
+                  </div>
+                  <!-- ALUMNOS -->
+                  <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                    <p class="text-[#6A7282]">Alumnos</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]" id="total-students">0</p>
+                  </div>
+                  <!-- DOCENTES -->
+                  <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                    <p class="text-[#6A7282]">Docentes</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]" id="total-teachers">0</p>
+                  </div>
+                  <!-- ADMINS -->
+                  <div class="flex flex-col justify-center pl-4 py-8 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                    <p class="text-[#6A7282]">Admins</p>
+                    <p class="text-2xl font-semibold text-[#1B3B50]" id="total-admins">0</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- JUEGOS + GRUPOS & TAREAS -->
+              <div class="flex space-x-3">
+                <!-- JUEGOS -->
+                <div class="flex flex-col w-1/2 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                  <!-- TITULO -->
+                  <div class="flex py-6 pl-4 items-center space-x-1.5 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Mejores Puntajes</p>
+                    <img src="../../../../images/Line.svg" alt="">
+                    <p class="text-xs text-[#6A7282]">Juegos</p>
+                  </div>
+                  <!-- PUNTOS JUEGOS -->
+                  <div class="flex flex-col">
+                    <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                      <p class="text-[#6A7282]">Memoria</p>
+                      <p class="text-2xl font-semibold text-[#1B3B50]">0</p>
+                    </div>
+                    <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                      <p class="text-[#6A7282]">Verdadero Falso</p>
+                      <p class="text-2xl font-semibold text-[#1B3B50]">0</p>
+                    </div>
+                    <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                      <p class="text-[#6A7282]">Multiple Opción</p>
+                      <p class="text-2xl font-semibold text-[#1B3B50]">0</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- GRUPOS & TAREAS -->
+                <div class="flex flex-col w-1/2 rounded-xl border border-[#E5E7EB] shadow-md/25">
+                  <!-- TITULO -->
+                  <div class="flex py-6 pl-4 items-center space-x-1.5 border-b border-[#E5E7EB]">
+                    <p class="text-[#6A7282]">Información General</p>
+                    <img src="../../../../images/Line.svg" alt="">
+                    <p class="text-xs text-[#6A7282]">Grupos</p>
+                  </div>
+                  <!-- INFO -->
+                  <div class="flex flex-col">
+                    <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                      <p class="text-[#6A7282]">Grupos</p>
+                      <p class="text-2xl font-semibold text-[#1B3B50]" id="total-groups">0</p>
+                    </div>
+                    <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                      <p class="text-[#6A7282]">Tareas Creadas</p>
+                      <p class="text-2xl font-semibold text-[#1B3B50]" id="total-assignments">0</p>
+                    </div>
+                    <div class="flex flex-col py-5 pl-4 border-b border-[#E5E7EB]">
+                      <p class="text-[#6A7282]">Tareas Entregadas</p>
+                      <p class="text-2xl font-semibold text-[#1B3B50]" id="total-turned-in-assignments">0</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            <div class="flex flex-col w-1/2">
+              <!-- AGREGADOS RECIENTEMENTE -->
+              <div class="flex flex-col flex-1 rounded-xl border border-[#E5E7EB] shadow-md/25 h-full">
+                <!-- HEADER -->
+                <div class="flex items-center pl-5 h-1/7 border-b border-[#E5E7EB]">
+                  <p class="text-[#6A7282]">Agregados Recientemente</p>
+                </div>
+
+                <!-- LISTA MATERIALES -->
+                <div class="flex flex-col w-full h-full px-5 space-y-3 justify-center" id="recent-materials-container"></div>
+
+                </div>
+              </div>
+            </div> 
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>

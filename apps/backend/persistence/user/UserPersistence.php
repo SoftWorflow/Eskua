@@ -43,6 +43,31 @@ class UserPersistence implements IUserPersistence {
         return $res;
     }
 
+    public function addGroupToStudent($userId, $groupId) : bool {
+        if (empty($groupId)) return false;
+
+        $sql = "update students set `group` = ? where `user` = ?;";
+
+        try {
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId, $userId]);
+            $rowCount = $stmt->rowCount();
+            $stmt->closeCursor();
+
+            if ($rowCount === 0) {
+                error_log("No student found with user ID: " . $userId);
+                return false;
+            }
+
+            return true;
+
+        } catch (PDOException $e) {
+            print "Error while trying to assign a group to a student: " . $e->getMessage();
+            return false;
+        }
+    }
+
     public function deleteUser(int $id) : bool {
         if ($this->conn == null || $id == null) return false;
 
@@ -86,7 +111,7 @@ class UserPersistence implements IUserPersistence {
     }
 
     public function getUserById(int $id) : ?array {
-        if ($this->conn == null || $id == null) return false;
+        if ($this->conn == null || $id == null) return null;
 
         $sql = "call getUserById(?);";
 
@@ -115,8 +140,6 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             return null;
         }
-
-        return [$id, $user];
     }
 
     public function getUserByUsername(string $username) : ?array {
@@ -149,8 +172,6 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             return null;
         }
-
-        return [$id, $user];
     }
 
     public function getUserByEmail(string $email) : ?array {
@@ -183,8 +204,6 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             return null;
         }
-
-        return [$id, $user];
     }
 
     // TOKENS
@@ -192,7 +211,7 @@ class UserPersistence implements IUserPersistence {
         if ($this->conn === null || empty($userId) || empty($refreshToken) || empty($refreshExpire)) return false;
         
         // Hacer procedimiento almacendado
-        $sql = "insert into tokens (user_id, refresh_token, expires_at) values (?, ?, ?);";
+        $sql = "call createRefreshToken(?, ?, ?);";
     
         try {
             $stmt = $this->conn->prepare($sql);
@@ -205,13 +224,13 @@ class UserPersistence implements IUserPersistence {
         }
     }
 
-    public function getRefreshToken(string $refreshToken) : ?array {
+    public function getRefreshTokenByToken(string $refreshToken) : ?array {
         if (empty($refreshToken)) return null;
         
-        $sql = "select user_id, refresh_token, expires_at from tokens where refresh_token = ? and is_revoked = 0;";
+        $sql = "call getRefreshTokenByToken(?);";
         
         try {
-            $stmt = $this->db->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->execute([$refreshToken]);
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -228,6 +247,21 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             error_log("Error getting refresh token: " . $e->getMessage());
             return null;
+        }
+    }
+
+    public function revokeRefreshToken($refreshToken) : bool {
+        if (empty($refreshToken)) return false;
+
+        $sql = "revokeTokenByToken(?)";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$refreshToken]);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error revoking token: " . $e->getMessage());
+            return false;
         }
     }
 }

@@ -29,7 +29,7 @@ function refreshToken() : ?array {
     $newToken = $userLogic->refreshToken();
 
     if ($newToken === null) {
-        http_response_code(500);
+        http_response_code(401);
         return null;
     } else {
         $newToken['ok'] = true;

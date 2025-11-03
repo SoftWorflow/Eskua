@@ -20,6 +20,5 @@ RUN composer install --no-dev --optimize-autoloader
 COPY backend/ ./
 
 COPY front_php/ /var/www/html/
-COPY backoffice_php/ /var/www/html/backoffice/
 
 WORKDIR /var/www/html

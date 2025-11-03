@@ -1,0 +1,9 @@
+# Dependencias instaladas
+**/node_modules/
+
+# VSCode
+.vscode/
+
+.env
+
+**/uploads/

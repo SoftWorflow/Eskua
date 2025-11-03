@@ -1,0 +1,68 @@
+<div class="h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+        <!-- FONDO BLANCO -->
+        <div class="w-full h-full bg-white rounded-sm flex flex-col items-center justify-center">
+
+            <!-- MAIN CONTENT -->
+            <div class="w-full flex flex-col space-y-20 items-center">
+                <!-- Titulo -->
+                <div class="flex flex-col items-center space-y-4">
+                    <h2 class="text-6xl font-semibold text-[#1B3B50]">Actividades</h2>
+                    <h4 class="text-lg text-[#6A7282]">¿De que forma aprenderas hoy?</h4>
+                </div>
+                
+                <!-- Cartas -->
+                <div class="grid grid-cols-3 gap-10">
+                    <!-- Material -->
+                    <a href="" class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-1.5 hover:bg-[#E1A05B] interactive no-underline">
+                        <div class="bg-white rounded-md w-full h-full flex flex-col">
+                            <div class="h-3/4 flex items-center justify-center">
+                                <img src="../../../../images/Material.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                                <img src="../../../../images/MaterialOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                            </div>
+                            <div class="h-1/4 flex items-center justify-center bg-[#1B3B50] group-hover:bg-[#E1A05B] transition duration-200">
+                                <p class="text-3xl font-semibold text-white">Material</p>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Juegos -->
+                    <a href="" class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-1.5 hover:bg-[#E1A05B] interactive no-underline">
+                        <div class="bg-white rounded-md w-full h-full flex flex-col">
+                            <div class="h-3/4 flex items-center justify-center">
+                                <img src="../../../../images/Games.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                                <img src="../../../../images/GameOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                            </div>
+                            <div class="h-1/4 flex items-center justify-center bg-[#1B3B50] group-hover:bg-[#E1A05B] transition duration-200">
+                                <p class="text-3xl font-semibold text-white">Juegos</p>
+                            </div>
+                        </div>
+                    </a> 
+                    <!-- Grupos -->
+                    <a href="../../groups/teacher/groupHomeTeacher.html class="group transition duration-200 bg-[#1B3B50] shadow-md/25 w-[525px] h-[525px] rounded-lg flex justify-center items-center p-1.5 hover:bg-[#E1A05B] interactive no-underline">
+                        <div class="bg-white rounded-md w-full h-full flex flex-col">
+                            <div class="h-3/4 flex items-center justify-center">
+                                <img src="../../../../images/Groups.svg" alt="" class="absolute opacity-100 group-hover:opacity-0 transition-opacity duration-200 ease-in-out">
+                                <img src="../../../../images/GroupsOrange.svg" alt="" class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+                            </div>
+                            <div class="h-1/4 flex items-center justify-center bg-[#1B3B50] group-hover:bg-[#E1A05B] transition duration-200">
+                                <p class="text-3xl font-semibold text-white">Grupos</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (async () => {
+        const userRole = getUserRole();
+        
+        if (userRole !== 'teacher') {
+            console.warn('Unauthorized access attempt to teacher home');
+            window.location.href = '../../error-pages/403.html';
+            return;
+        }
+    })();
+</script>

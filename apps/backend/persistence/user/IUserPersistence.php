@@ -2,6 +2,7 @@
 
 interface IUserPersistence {
     public function createUser(User $user) : bool;
+    public function addGroupToStudent($userId, $groupId) : bool;
     public function deleteUser(int $id) : bool;
     public function modifyUser(int $id, User $user) : bool;
     
@@ -10,7 +11,8 @@ interface IUserPersistence {
     public function getUserByEmail(string $email) : ?array;
 
     public function createRefreshToken(int $id, string $refreshToken, string $refreshExpire) : bool;
-    public function getRefreshToken(string $refreshToken) : ?array;
+    public function getRefreshTokenByToken(string $refreshToken) : ?array;
+    public function revokeRefreshToken($refreshToken) : bool;
 }
 
 ?>

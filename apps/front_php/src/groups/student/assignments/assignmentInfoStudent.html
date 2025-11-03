@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Tarea - Eskua</title>
+    <link rel="stylesheet" href="../../../output.css">
+    <script src="../../../auth.js"></script>
+    <script src="../../../navbar-loader.js"></script>
+    <script src="../../../home/content-loader.js"></script>
+    <script>
+        document.documentElement.style.display = 'none';
+        (async () => {
+            // Allow access even if not logged in
+            await authManager.ensureValidToken();
+            
+            if (authManager.getAccessToken()) {
+                authManager.startTokenMonitoring();
+            }
+            
+            await initializeNavbar('#navbar-container');
+            await initializeContent('#content-container');
+            
+            document.documentElement.style.display = '';
+        })();
+    </script>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+        <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+            <!-- FONDO BLANCO -->
+            <div class="w-full h-full bg-white rounded-t-sm flex flex-col items-center justify-center">
+              <!-- MAIN CONTENT -->
+              <div class="flex w-full h-full">
+                <!-- SIDE MENU -->
+                <div class="flex flex-col h-full w-[13vw] border-r-2 border-[#DFDFDF]">
+                  <div class="p-6 border-b-2 border-[#DFDFDF]">
+                    <p class="font-medium text-[#1B3B50] text-2xl">Menu</p>
+                  </div>
+                  <div class="h-full p-6 pt-8">
+                    <ul class="flex flex-col space-y-10 text-xl">
+                      <li><a href="../groupHomeStudent.html" class="font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 ">Inicio</a></li>
+                      <li><a href="assignmentsStudent.html" class="font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20">Tareas</a></li>
+                    </ul>
+                  </div>
+                </div>
+              
+                <!-- RIGHT CONENT -->
+                <div class="w-full flex flex-col items-center justify-center space-y-5">
+
+                  <!-- CONTENT CONTAINER -->
+                  <div class="w-3/4 h-11/12 flex flex-col space-y-20 pt-10">
+
+                    <!-- TITLE -->
+                    <div class="flex flex-col items-center space-y-1.5">
+                      <h1 class="text-6xl font-semibold text-[#1B3B50]">Nombre Tarea</h1>
+                        <!-- ASSIGNMENT TOTAL POINTS -->
+                        <p class="text-lg text-[#6A7282]">10 puntos</p>
+                    </div>
+
+                    <div class="flex flex-col h-fit items-center space-y-8">
+                      <!-- ASSIGNMENT INFO TABLE -->
+                      <div class="h-full w-3/4 flex flex-col shadow-md/25 bg-[#FBFBFB] rounded-xl">
+                        <div class="flex px-5 py-3 border-b-2 border-[#DFDFDF] items-center justify-between">
+                          <p class="text-2xl font-semibold text-[#1B3B50]">Información Tarea</p>
+                          <div class="flex flex-col items-end">
+                            <p class="text-[#6A7282]">Fecha de Entrega</p>
+                            <p class="text-[#6A7282]">25/06/25</p>
+                          </div>
+                        </div>
+
+                        <div class="flex flex-col px-5 py-6 border-b-2 border-[#DFDFDF] space-y-1.5">
+                          <p class="text-2xl font-semibold text-[#1B3B50]">Descripción</p>
+                          <!-- DESCRIPTION -->
+                          <p class="text-[#6A7282] w-10/12 leading-6">
+                            Leer el archivo adjunto donde habla sobre un teorico basico sobre lenguaje de señas como una introduccion al tema, 
+                            al final del archivo se encuentran preguntas sobre cada texto leido, enviar todas las preguntas en un archivo aparte.
+                          </p>
+                        </div>
+
+                        <div class="flex flex-col justify-center space-y-4 p-5">
+                          <p class="text-2xl font-semibold text-[#1B3B50]">Material de Referencia</p>
+                            <div class="flex flex-col h-[13.16vh] rounded-md shadow-md/25 overflow-y-scroll border-2 border-b-0 border-[#DFDFDF]">
+                              <div class="w-full flex p-4 border-b-2 border-[#DFDFDF] items-center space-x-5 hover:bg-[#F2F2F2] transition duration-100">
+                                <img src="../../../../../images/AssignmentIcon.svg" alt="">
+                                <p class="text-[#1B3B50]">Teórico básico - LSU.pdf </p>
+                              </div>
+                            </div>
+                        </div>
+
+                      </div>
+
+                      <!-- BUTTONS CONTAINER -->
+                      <div class="flex w-full justify-center">
+                        <a href="turnInAssignment.html" class="no-underline text-[#E1A05B] group-hover:text-white h-15 w-1/4 orange-button interactive flex items-center justify-center"><button>Entregar</button></a>
+                      </div>
+
+                    </div>
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corregir Tarea - Eskua</title>
+    <link rel="stylesheet" href="../../../output.css">
+    <script src="../../../auth.js"></script>
+    <script src="../../../navbar-loader.js"></script>
+    <script src="../../../home/content-loader.js"></script>
+    <script>
+        document.documentElement.style.display = 'none';
+        (async () => {
+            // Allow access even if not logged in
+            await authManager.ensureValidToken();
+            
+            if (authManager.getAccessToken()) {
+                authManager.startTokenMonitoring();
+            }
+            
+            await initializeNavbar('#navbar-container');
+            await initializeContent('#content-container');
+            
+            document.documentElement.style.display = '';
+        })();
+    </script>
+</head>
+<body class="flex justify-center items-center w-screen h-screen">
+  <div class="w-1/2 h-7/12 rounded-xl bg-[#1B3B50] shadow-md/25 p-3">
+    <div class="w-full h-full bg-white rounded-sm flex items-center justify-center">
+      <!-- Return Arrow -->
+      <div class="group">
+          <img src="../../../../images/ReturnArrow.svg" alt="" class="absolute left-[27vw] top-[25vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+          <img src="../../../../images/ReturnArrowOrange.svg" alt="" class="absolute left-[27vw] top-[25vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+      </div>
+
+      <div class="w-3/4 h-full flex flex-col items-center py-10 space-y-12">
+        <h1 class="font-semibold text-5xl text-[#1B3B50]">Corregir Tarea</h1>
+        <textarea name="" id="" class="w-full h-[20vh] border-2 border-[#DFDFDF] resize-none shadow-md/25 rounded-xl px-3 py-4 " placeholder="Escribe un mensaje... "></textarea>
+        <div class="flex flex-col w-full items-start space-y-4">
+          <p class="font-semibold text-xl text-[#1B3B50]">Agregar calificación</p>
+          <input type="text" name="" id="" class="border-2 border-[#DFDFDF] resize-none shadow-md/25 rounded-xl px-3 py-4 focus:ring-2 focus:ring-[#E1A05B] font-normal" placeholder="Agregar calificación...">
+        </div>
+        <div class="w-full h-1/6 flex items-center justify-center">
+          <button class="orange-button h-full px-14">Confirmar</button>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</body>
+</html>
