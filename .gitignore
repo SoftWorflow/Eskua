@@ -4,4 +4,6 @@
 # VSCode
 .vscode/
 
+.env
+
 **/uploads/
