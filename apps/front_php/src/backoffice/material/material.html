@@ -30,12 +30,12 @@
   <script src="material.js" defer></script>
 </head>
 <body>
-  
 <div class="flex px-10 pt-10 h-screen space-x-7">
 
     <!-- PANEL LATERAL -->
     <aside id="navbar-container" class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg"></aside>
-    
+
+
     <!-- Right Panel -->
     <div id="right-content" class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">
         <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
@@ -63,6 +63,7 @@
                         </span>
                         <!-- Input -->
                         <input
+                            maxlength="128"
                             id="search-bar"
                             type="text"
                             placeholder="Buscar Material..."

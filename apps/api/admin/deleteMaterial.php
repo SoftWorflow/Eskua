@@ -17,6 +17,32 @@ $auth->authorize(['admin']);
 $dbConnection = new db_connect();
 $conn = $dbConnection->connect();
 
+$stmt = $conn->prepare("select pm.uploaded_date as uploadedDate, f.storage_name as storageName from public_materials as pm join public_materials_files as pmf on pm.id = pmf.public_material join files as f on pmf.file = f.id where pm.id = ?;");
+$stmt->execute([$materialId]);
+$materialData = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->closeCursor();
+
+$uploadedDate = new DateTime($materialData['uploadedDate']);
+$storageName = $materialData['storageName'];
+
+$year = $uploadedDate->format('Y');
+$month = $uploadedDate->format('m');
+$day = $uploadedDate->format('d');
+
+$filePath = __DIR__ . '/../../uploads/'.$year.'/'.$month.'/'.$storageName;
+
+if (file_exists($filePath)) {
+    if (!unlink($filePath)) {
+        $response = ['ok' => false, 'message' => 'Hubo un error al eliminar el material'];
+        echo json_encode($response);
+        exit;
+    }
+} else {
+    $response = ['ok' => false, 'message' => 'No se encontró el archivo'];
+    echo json_encode($response);
+    exit;
+}
+
 $stmt = $conn->prepare("call fDeleteMaterial(?)");
 $stmt->execute([$materialId]);
 $affectedRows = $stmt->rowCount();

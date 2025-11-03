@@ -22,6 +22,21 @@ $stmt->execute([$materialId]);
 $materialData = $stmt->fetch(PDO::FETCH_ASSOC);
 $stmt->closeCursor();
 
+$stmt = $conn->prepare("select f.storage_name as storageName from public_materials as pm join public_materials_files as pmf on pm.id = pmf.public_material join files as f on pmf.file = f.id where pm.id = ?;");
+$stmt->execute([$materialId]);
+$storageName = $stmt->fetch(PDO::FETCH_ASSOC)['storageName'];
+$stmt->closeCursor();
+
+$uploadedDate = new DateTime($materialData['uploadedDate']);
+
+$year = $uploadedDate->format('Y');
+$month = $uploadedDate->format('m');
+$day = $uploadedDate->format('d');
+
+$filePath = 'uploads/'.$year.'/'.$month.'/'.$storageName;
+
+$materialData['filePath'] = $filePath;
+
 echo json_encode($materialData);
 
 ?>

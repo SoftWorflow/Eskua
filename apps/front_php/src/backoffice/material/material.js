@@ -182,7 +182,7 @@ function loadMaterials() {
             const newLineDiv = document.createElement('div');
             newLineDiv.classList.add('bg-[#FBFBFB]', 'hover:bg-[#f5f5f5]', 'border-b', 'border-b-[#DFDFDF]', 'grid', 'grid-cols-3', 'px-8', 'py-4', 'interactive');
             newLineDiv.onclick = () => {
-                // showGroupDetail(group.id);
+                showMaterialDetail(material.id);
             }
 
             const idColumn = document.createElement('p');
@@ -191,6 +191,7 @@ function loadMaterials() {
 
             const titleColumn = document.createElement('p');
             titleColumn.classList.add('text-lg');
+            titleColumn.className = 'truncate overflow-hidden whitespace-nowrap pr-8';
             titleColumn.textContent = material.title;
 
             const typeColumn = document.createElement('p');
@@ -256,7 +257,7 @@ function showMaterialDetail(materialId) {
                                     alt="" class="h-full w-full rounded-full aspect-square object-cover">
                             </div>
                             <div class="flex flex-col items-center space-y-1.5">
-                                <h1 class="text-3xl">${materialData.title}</h1>
+                                <h1 class="text-3xl min-w-3xs max-w-2xl truncate overflow-hidden whitespace-nowrap" title="${materialData.title}">${materialData.title}</h1>
                                 <p class="font-light text-lg">Tipo de Material: ${materialData.type.toUpperCase()}</p>
                             </div>
                         </div>
@@ -273,12 +274,12 @@ function showMaterialDetail(materialId) {
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Título:</p>
-                                <p class="col-span-2">${materialData.title}</p>
+                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${materialData.title}">${materialData.title}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Descripción:</p>
-                                <p class="col-span-2">${materialData.description}</p>
+                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${materialData.description == '' ? 'N/A' : materialData.description}">${materialData.description == '' ? 'N/A' : materialData.description}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
@@ -293,13 +294,14 @@ function showMaterialDetail(materialId) {
                             
                             <div class="bg-[#FBFBFB] grid grid-cols-3 px-6 py-4 rounded-b-2xl">
                                 <p class="font-light col-span-1">Ruta de Archivos Adjuntos:</p>
-                                <p class="col-span-2">${materialData.filePath}</p>
+                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${materialData.filePath}">${materialData.filePath}</p>
                             </div>
                         </div>
 
-                        <button onclick="deleteMaterial(${materialData.id})" class="red-button interactive w-52 h-18">
-                            Eliminar Material
-                        </button>
+                        <div class="flex justify-center gap-8 w-1/2">
+                            <button onclick="renderModifyMaterial(${materialData.id}, '${materialData.title}', '${materialData.description}')" class="blue-button interactive w-52 h-18">Modificar Material</button>
+                            <button onclick="deleteMaterial(${materialData.id})" class="red-button interactive w-52 h-18">Eliminar Material</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -308,6 +310,106 @@ function showMaterialDetail(materialId) {
             console.error("Ha ocurrido un error: ", err);
             rightContent.innerHTML = '<div class="flex items-center justify-center h-full"><p class="text-white text-xl">Error al cargar material</p></div>';
         });
+}
+
+function renderModifyMaterial(materialId, title, description) {
+    const rightContent = document.getElementById('right-content');
+
+    // Spinner config
+    const opts = {
+        lines: 12,            // Lines number
+        length: 7,            // Lenght of each line
+        width: 5,             // Widht of the line
+        radius: 10,           // Inner radius of the circle
+        scale: 1.0,           // Spinner scale
+        color: '#ffffff',        // Color
+        opacity: 0.25,        // Lines opacity
+        rotate: 0,            // Initial rotation
+        direction: 1,         // 1: clockwise, -1: anti-clockwise
+        speed: 1,             // Spins per second
+        trail: 60,            // After the trail (%)
+        fps: 20,              // fps
+        zIndex: 2e9,          // z-index
+        className: 'spinner', // Assinged CSS class
+        top: '60%',           // Relative right position from the container
+        left: '60%',          // Relative left position from the container
+        shadow: false,        // Shadow
+        position: 'absolute'  // Position CSS
+    };
+
+    rightContent.innerHTML = '<div id="spinner"></div>';
+
+    const target = document.getElementById('spinner');
+
+    const spinner = new Spinner(opts).spin(target);
+
+    rightContent.innerHTML = `
+        <div class="bg-white rounded-t-xl w-full h-full flex items-center justify-center space-y-10 p-10">
+        <div class="w-3/4 h-fit flex flex-col px-12 mt-4 space-y-4 items-center">
+            <h1 class="text-4xl text-[#1B3B50] font-semibold">Modificar Material</h1>
+            <form id="create-material-form" class="flex flex-col w-full h-full space-x-8 space-y-6 py-4">\
+                <div class="flex flex-col space-y-4 w-full">
+                    <h2 class="text-xl font-medium text-[#1B3B50]">Título del Material</h2>
+                    <input
+                      type="text"
+                      placeholder="Título..."
+                      class="w-full py-3 pl-4 rounded-xl border-0 shadow-md/30 focus:ring-2 focus:ring-[#E1A05B] transition duration-150 bg-[#FBFBFB]"
+                      required
+                      id="title-input"
+                      maxlength="128"
+                      value="${title}"
+                    />
+                </div>
+                <div class="flex flex-col gap-3.5 w-full">
+                    <h2 class="text-xl font-medium text-[#1B3B50] mb-1">Descripción</h2>
+                    <textarea
+                        placeholder="Agrega una descripción..."
+                        class="w-full h-40 p-4 rounded-xl shadow-md/30 focus:ring-2 focus:ring-[#E1A05B]
+                            transition duration-150 bg-[#FBFBFB] resize-none 
+                            text-gray-700 font-light placeholder-gray-400 placeholder:font-light"
+                        id="description-input"
+                        value="${description}"
+                    ></textarea>
+                </div>
+                <div class="flex flex-col space-y-5 w-full">
+                    <div class="flex flex-col space-y-0.5">
+                        <div>
+                            <h2 class="text-xl font-medium text-[#1B3B50]">Adjuntar Archivos</h2>
+                            <img src="" alt="">
+                        </div>
+                        <p class="text-[#A3A3A3] text-sm font-light">Elige cualquier archivo desde tu dispositivo para subir.</p>
+                    </div>
+                    <div class="flex space-x-5 w-full">
+                        <label for="material-file" class="flex flex-col space-y-1 border-2 border-dotted border-[#A3A3A3] py-4 px-12 rounded-2xl items-center shadow-md/30 hover:bg-[#fafafa] w-1/2 interactive">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+                                fill="none" stroke="#3550BA" stroke-width="2" 
+                                stroke-linecap="round" stroke-linejoin="round" 
+                                class="w-6 h-6 mx-auto">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 5 17 10"/>
+                                <line x1="12" y1="5" x2="12" y2="15"/>
+                            </svg>
+                            <p class="font-light text-sm text-[#3550BA]">Abrir el explorador de archivos</p>
+                            <p class="font-light text-[12px] text-[#A3A3A3]">PDF, MP4, PNG, JPG, WEBP</p>
+                        </label>
+
+                        <input 
+                            id="material-file" 
+                            type="file" 
+                            accept=".pdf,.mp4,.png,.jpg,.jpeg"
+                            class="hidden" 
+                            onchange="addNewFile(event)"
+                        />
+                        <div id="files-to-upload" class="w-1/2" ></div>
+                    </div>   
+                </div>
+                <div class="flex space-x-5 w-full">
+                    <button type="submit" class="blue-button py-3.5 w-1/2">Modificar Material</button>
+                    <button type="button" onclick="location.reload()" class="red-button py-3.5 w-1/2">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    `;
 }
 
 function deleteMaterial(materialId) {
@@ -334,8 +436,8 @@ function deleteMaterial(materialId) {
                 .then(res => res.json())
                 .then(data => {
                     if (data.ok) {
+                        renderMaterialsTable();
                         notyf.success(data.message);
-                        renderUsersTable();
                     } else {
                         notyf.error(data.message);
                     }
@@ -362,6 +464,7 @@ function renderCreateMaterial() {
                       class="w-full py-3 pl-4 rounded-xl border-0 shadow-md/30 focus:ring-2 focus:ring-[#E1A05B] transition duration-150 bg-[#FBFBFB]"
                       required
                       id="title-input"
+                      maxlength="128"
                     />
                 </div>
                 <div class="flex flex-col gap-3.5 w-full">

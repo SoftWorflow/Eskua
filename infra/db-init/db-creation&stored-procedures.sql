@@ -544,4 +544,31 @@ BEGIN
 
     COMMIT;
 END //
+
+CREATE PROCEDURE fDeleteMaterial(
+    IN p_material_id INT
+)
+BEGIN
+    DECLARE file_id INT;
+    
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    SELECT `file` INTO file_id FROM public_materials_files WHERE public_material = p_material_id;
+
+    DELETE FROM `public_materials` WHERE id = p_material_id;
+
+    IF file_id IS NOT NULL THEN
+        DELETE FROM `files` WHERE id = file_id;
+    END IF;
+
+    COMMIT;
+
+    SELECT 'Material and associated file deleted successfully' AS message;
+END //
 DELIMITER ;

@@ -6,6 +6,7 @@ services:
     environment:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
+      - TZ=America/Montevideo
     volumes:
       - db_data:/var/lib/mysql
       - ../infra/db-init:/docker-entrypoint-initdb.d:ro
@@ -24,6 +25,7 @@ services:
     environment:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
+      - TZ=America/Montevideo
     build:
       context: ../apps
       dockerfile: Dockerfile
