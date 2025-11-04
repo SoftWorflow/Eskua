@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Eskua</title>
     <link rel="stylesheet" href="../output.css">
+    <link rel="icon" href="/images/EskuaLogo2.png">
     <style>body { visibility: hidden; }</style>
     <script src="../auth.js"></script>
     <script src="../navbar-loader.js"></script>

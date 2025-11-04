@@ -264,6 +264,43 @@ class UserPersistence implements IUserPersistence {
             return false;
         }
     }
+
+    public function getStudentGroup($userId) : ?array {
+        if ($userId === null) return null;
+
+        $sql = "call getStudentGroup(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$userId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$result) return null;
+
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error getting student group: ". $e->getMessage());
+        }
+    }
+
+    public function getGroupMembers(int $groupId) : ?array {
+        if ($groupId === null) return null;
+
+        $sql = "call getGroupMembers(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$result) return null;
+
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error getting group members: ". $e->getMessage());
+        }
+    }
+
 }
 
 ?>

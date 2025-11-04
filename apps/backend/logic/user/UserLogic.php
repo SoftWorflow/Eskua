@@ -281,6 +281,22 @@ class UserLogic implements IUserLogic {
         return $userPersistence->revokeRefreshToken($refreshToken);
     }
 
+    public function getStudentGroup($userId) : ?array {
+        if ($userId == null) return null;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->getStudentGroup($userId);
+    }
+
+    public function getGroupMembers(int $groupId) : ?array {
+        if ($groupId == null) return null;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->getGroupMembers($groupId);
+    }
+
 }
 
 ?>

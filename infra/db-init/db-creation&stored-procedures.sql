@@ -535,7 +535,7 @@ BEGIN
     VALUES (p_title, p_description);
     SET material_id = LAST_INSERT_ID();
 
-    INSERT INTO files (storage_name, original_name, mime, extension, size, uploader_id)
+    INSERT INTO `files` (storage_name, original_name, mime, extension, size, uploader_id)
     VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
     SET file_id = LAST_INSERT_ID();
 
@@ -559,16 +559,94 @@ BEGIN
 
     START TRANSACTION;
 
-    SELECT `file` INTO file_id FROM public_materials_files WHERE public_material = p_material_id;
+    DELETE f
+    FROM `files` f
+    INNER JOIN public_materials_files pmf ON f.id = pmf.`file`
+    WHERE pmf.public_material = p_material_id;
+
+    DELETE FROM public_materials_files WHERE public_material = p_material_id;
 
     DELETE FROM `public_materials` WHERE id = p_material_id;
-
-    IF file_id IS NOT NULL THEN
-        DELETE FROM `files` WHERE id = file_id;
-    END IF;
 
     COMMIT;
 
     SELECT 'Material and associated file deleted successfully' AS message;
+END //
+
+CREATE PROCEDURE createMaterialFile(
+    IN p_material_id INT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT,
+    IN p_uploader_id INT
+)
+BEGIN
+    DECLARE file_id INT;
+
+    INSERT INTO `files` (storage_name, original_name, mime, extension, size, uploader_id)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO public_materials_files (public_material, file)
+    VALUES (p_material_id, file_id);
+END //
+
+CREATE PROCEDURE fDeleteFile(
+    IN p_file_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    DELETE FROM public_materials_files WHERE `file` = p_file_id;
+
+    DELETE FROM `files` WHERE id = p_file_id;
+
+    COMMIT;
+
+    SELECT 'File deleted successfully' AS message;
+END //
+
+CREATE PROCEDURE modifyMaterial(
+    IN p_material_id INT,
+    IN p_title VARCHAR(128),
+    IN p_description TEXT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    UPDATE `public_materials`
+    SET title = p_title,
+        `description` = p_description
+    WHERE id = p_material_id;
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE getStudentGroup(
+    IN p_student_id INT
+)
+BEGIN
+    SELECT * FROM `groups` AS g JOIN `students` AS s ON g.id = s.`group` WHERE s.`user` = p_student_id;
+END //
+
+CREATE PROCEDURE getGroupMembers(
+    IN p_group_id INT
+)
+BEGIN
+    SELECT u.id, u.display_name AS displayName, u.profile_picture_url AS profilePicture FROM `users` AS u JOIN `students` AS s ON u.id = s.`user` JOIN `groups` As g ON s.`group` = g.id WHERE g.id = p_group_id;
 END //
 DELIMITER ;

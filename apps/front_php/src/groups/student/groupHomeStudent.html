@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Grupo - Eskua</title>
     <link rel="stylesheet" href="../../output.css">
+    <link rel="icon" href="/images/EskuaLogo2.png">
     <script src="../../auth.js"></script>
     <script src="../../navbar-loader.js"></script>
-    <script src="../../home/content-loader.js"></script>
+    <script src="../group.js"></script>
     <script>
         document.documentElement.style.display = 'none';
         (async () => {
@@ -19,7 +20,6 @@
             }
             
             await initializeNavbar('#navbar-container');
-            await initializeContent('#content-container');
             
             document.documentElement.style.display = '';
         })();
@@ -47,7 +47,7 @@
                 </div>
               
                 <!-- RIGHT CONENT -->
-                <div class="w-full flex flex-col items-center justify-center space-y-5">
+                <div id="right-content" class="w-full flex flex-col items-center justify-center space-y-5">
 
                   <!-- CONTENT CONTAINER -->
                   <div class="w-3/4 h-11/12 flex flex-col space-y-12 py-10">
@@ -55,11 +55,11 @@
                     <!-- TITLE -->
                     <div class="flex flex-col items-center space-y-1.5">
                       <!-- GROUP NAME -->
-                      <h1 class="text-6xl font-semibold text-[#1B3B50]">Intermedio IEP</h1>
+                      <h1 class="text-6xl font-semibold text-[#1B3B50]" id="group-name">Group Name</h1>
                       <!-- GROUP LEVEL -->
-                      <div class="flex items-center space-x-2">
-                        <p class="text-lg text-[#6A7282]">Nivel de grupo: Intermedio</p>
-                        <img src="../../../images/GroupsStar2.svg" alt="" class="w-8 h-8">
+                      <div class="flex space-x-2">
+                        <p class="text-lg text-[#6A7282]" id="group-level">Group Level</p>
+                        <div id="stars-container" class="flex gap-1 items-center"></div>
                       </div>
                       <p></p>
                     </div>
@@ -152,23 +152,7 @@
                       </div>
 
                       <!-- MEMBERS TABLE -->
-                      <div class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto">
-
-                        <!-- Member card -->
-                        <div class="w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0">
-                          <div class="flex space-x-5">
-                            <img src="../../../images/ProfilePic.jpeg" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
-                            <div class="flex flex-col justify-center w-full">
-                              <p class="text-xl font-medium text-[#1B3B50]">Nombre integrante</p>
-                              <div class="flex items-center space-x-1">
-                                <img src="../../../images/TeacherCrownIcon.svg" alt="" class="h-5 w-5">
-                                <p class="text-lg text-[#E1A05B]">Docente</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
+                      <div id="members-table" class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto"></div>
                       
                       <p class="text-sm text-[#6A7282]">Mostrando 4 de 52</p>
 
