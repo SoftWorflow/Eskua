@@ -649,4 +649,11 @@ CREATE PROCEDURE getGroupMembers(
 BEGIN
     SELECT u.id, u.display_name AS displayName, u.profile_picture_url AS profilePicture FROM `users` AS u JOIN `students` AS s ON u.id = s.`user` JOIN `groups` As g ON s.`group` = g.id WHERE g.id = p_group_id;
 END //
+
+CREATE PROCEDURE getAssignmentsFromGroup(
+    IN p_group_id INT
+)
+BEGIN
+    SELECT a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.assignment WHERE aa.`group` = p_group_id AND aa.is_deleted = false;
+END //
 DELIMITER ;

@@ -281,6 +281,8 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             error_log("Error getting student group: ". $e->getMessage());
         }
+
+        return null;
     }
 
     public function getGroupMembers(int $groupId) : ?array {
@@ -299,6 +301,28 @@ class UserPersistence implements IUserPersistence {
         } catch (PDOException $e) {
             error_log("Error getting group members: ". $e->getMessage());
         }
+
+        return null;
+    }
+
+    public function getAssignmentsFromGroup(int $groupId) : ?array {
+        if ($groupId == null) return null;
+
+        $sql = "call getAssignmentsFromGroup(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$result) return null;
+
+            return $result;
+        } catch (PDOException  $e) {
+            error_log("Error getting assignments from group: " . $e->getMessage());
+        }
+
+        return null;
     }
 
 }

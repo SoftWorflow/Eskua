@@ -31,16 +31,34 @@ if (empty($username)) {
     $errorResponse['username'] = ['error' => 'Este campo es olbigatorio'];
 }
 
+if (strlen($username) > 30) {
+    http_response_code(400);
+    $errorResponse['ok'] = false;
+    $errorResponse['username'] = ['error' => 'Este campo es muy largo'];
+}
+
 if (empty($displayName)) {
     http_response_code(400);
     $errorResponse['ok'] = false;
     $errorResponse['displayName'] = ['error' => 'Este campo es olbigatorio'];
 }
 
+if (strlen($displayName) > 30) {
+    http_response_code(400);
+    $errorResponse['ok'] = false;
+    $errorResponse['displayName'] = ['error' => 'Este campo es muy largo'];
+}
+
 if (empty($email)) {
     http_response_code(400);
     $errorResponse['ok'] = false;
     $errorResponse['email'] = ['error' => 'Este campo es obligatorio'];
+}
+
+if (strlen($email) > 255) {
+    http_response_code(400);
+    $errorResponse['ok'] = false;
+    $errorResponse['email'] = ['error' => 'Este campo es muy largo'];
 }
 
 if (empty($password)) {
@@ -112,7 +130,7 @@ if ($errorResponse !== null) {
     exit;
 }
 
-$defaultUserProfilePicture = "http://192.168.1.118:8080/images/DefaultUserProfilePicture.jpg";
+$defaultUserProfilePicture = "http://192.168.1.142:8080/images/DefaultUserProfilePicture.jpg";
 
 if ($userRole !== "student") {
     $user = new User($username, $email, $username, $defaultUserProfilePicture, $password, $userRole);

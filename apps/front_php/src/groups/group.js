@@ -1,10 +1,10 @@
 let groupStarsImg = '/images/GroupsStar.svg';
 
 document.addEventListener('DOMContentLoaded', () => {
-    setUpHomeContent();
+    renderGroupHome();
 });
 
-async function setUpHomeContent() {
+async function loadHomeContent() {
     const groupName = document.getElementById('group-name');
     const groupLevel = document.getElementById('group-level');
 
@@ -20,8 +20,6 @@ async function setUpHomeContent() {
             return;
         }
         
-        console.log(data);
-
         const group = data.group;
 
         let members = [];
@@ -101,5 +99,325 @@ function parseLevelToStarQuantity(level) {
             return 2;
         case 'avanzado':
             return 3;
+    }
+}
+
+function renderGroupHome() {
+    const rightContent = document.getElementById('right-content');
+
+    rightContent.innerHTML = `
+        <!-- CONTENT CONTAINER -->
+            <div class="w-3/4 h-11/12 flex flex-col space-y-12 py-10">
+
+                <!-- TITLE -->
+                <div class="flex flex-col items-center space-y-1.5">
+                  <!-- GROUP NAME -->
+                  <h1 class="text-6xl font-semibold text-[#1B3B50]" id="group-name"></h1>
+                  <!-- GROUP LEVEL -->
+                  <div class="flex space-x-2">
+                    <p class="text-lg text-[#6A7282]" id="group-level"></p>
+                    <div id="stars-container" class="flex gap-1 items-center"></div>
+                  </div>
+                </div>
+
+                <!-- MEMBERS SEARCH + TABLE -->
+                <div class="flex flex-col h-full space-y-6">
+                    <!-- Search + Filter -->
+                    <div class="flex items-center space-x-5">
+                    <!-- Search Bar -->
+                    <div class="relative w-full">
+                        <!-- Magnifying glass Icon -->
+                        <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                            </svg>
+                        </span>
+                        <!-- Input -->
+                        <input
+                            id = 'search-bar'
+                            type="text"
+                            placeholder="Buscar Integrante..."
+                            class="w-full pl-12 pr-12 rounded-2xl border-0 shadow-md/25 focus:ring-2 focus:ring-[#E1A05B] transition duration-150 bg-[#FBFBFB]"
+                        />
+                        <!-- Filter Icon -->
+                        <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 018 17V13.414L3.293 6.707A1 1 0 013 6V4z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                <div class="flex space-x-2">
+
+                <!-- Docente -->
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="materialType" class="peer hidden" />
+                  <div
+                    class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                    transition-all duration-200 ease-in-out
+                    hover:bg-[#f5f5f5] hover:shadow-md
+                    peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                    peer-checked:hover:bg-[#fff8f0]"
+                  >
+                    <p class="text-sm">Docente</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      stroke-width="2.5" stroke="currentColor"
+                      class="w-4 h-4 transition-colors duration-200
+                      peer-hover:stroke-[#E1A05B]
+                      peer-checked:stroke-[#E1A05B]
+                      peer-checked:hover:stroke-[#E54B4B]">
+                      <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v12m6-6H6" />
+                      <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                </label>
+
+                <!-- Alumno -->
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="materialType" class="peer hidden" />
+                  <div
+                    class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3]
+                    w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                    transition-all duration-200 ease-in-out
+                    hover:bg-[#f5f5f5] hover:shadow-md
+                    peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                    peer-checked:hover:bg-[#fff8f0]"
+                  >
+                    <p class="text-sm">Alumnos</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      stroke-width="2.5" stroke="currentColor"
+                      class="w-4 h-4 transition-colors duration-200
+                      peer-hover:stroke-[#E1A05B]
+                      peer-checked:stroke-[#E1A05B]
+                      peer-checked:hover:stroke-[#E54B4B]">
+                      <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v12m6-6H6" />
+                      <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                </label>
+
+              </div>
+            </div>
+
+            <!-- MEMBERS TABLE -->
+            <div id="members-table" class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto"></div>
+
+            <!-- <p class="text-sm text-[#6A7282]">Mostrando 4 de 52</p> -->
+
+        </div>
+    `;
+
+    loadHomeContent();
+}
+
+function renderTasksTable() {
+    const rightContent = document.getElementById('right-content');
+
+    rightContent.innerHTML = `
+        <!-- CONTENT CONTAINER -->
+        <div class="w-3/4 h-11/12 flex flex-col space-y-14.5 py-10">
+
+            <!-- TITLE -->
+            <div class="flex flex-col items-center space-y-1.5">
+              <h1 class="text-6xl font-semibold text-[#1B3B50]">Tareas</h1>
+                <p class="text-lg text-[#6A7282]">Visualiza tus tareas pendientes, vencidas y entregadas.</p>
+            </div>
+
+            <!-- MEMBERS SEARCH + TABLE -->
+            <div class="flex flex-col h-full space-y-6">
+                <!-- Search + Filter -->
+                <div class="flex items-center space-x-5">
+                <!-- Search Bar -->
+                <div class="relative w-full">
+                    <!-- Magnifying glass Icon -->
+                    <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                        </svg>
+                    </span>
+                    <!-- Input -->
+                    <input
+                        id = 'search-bar'
+                        type="text"
+                        placeholder="Buscar Tarea..."
+                        class="w-full pl-12 pr-12 rounded-2xl border-0 shadow-md/25 focus:ring-2 focus:ring-[#E1A05B] transition duration-150 bg-[#FBFBFB]"
+                    />
+                    
+                    <!-- Filter Icon -->
+                    <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 018 17V13.414L3.293 6.707A1 1 0 013 6V4z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex space-x-2">
+
+                    <!-- Pendientes -->
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="materialType" class="peer hidden" />
+                      <div
+                        class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                        transition-all duration-200 ease-in-out
+                        hover:bg-[#f5f5f5] hover:shadow-md
+                        peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                        peer-checked:hover:bg-[#fff8f0]"
+                      >
+                        <p class="text-sm">Pendientes</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="2.5" stroke="currentColor"
+                          class="w-4 h-4 transition-colors duration-200
+                          peer-hover:stroke-[#E1A05B]
+                          peer-checked:stroke-[#E1A05B]
+                          peer-checked:hover:stroke-[#E54B4B]">
+                          <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v12m6-6H6" />
+                          <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </label>
+
+                    <!-- Vencidas -->
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="materialType" class="peer hidden" />
+                      <div
+                        class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3]
+                        w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                        transition-all duration-200 ease-in-out
+                        hover:bg-[#f5f5f5] hover:shadow-md
+                        peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                        peer-checked:hover:bg-[#fff8f0]"
+                      >
+                        <p class="text-sm">Vencidas</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="2.5" stroke="currentColor"
+                          class="w-4 h-4 transition-colors duration-200
+                          peer-hover:stroke-[#E1A05B]
+                          peer-checked:stroke-[#E1A05B]
+                          peer-checked:hover:stroke-[#E54B4B]">
+                          <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v12m6-6H6" />
+                          <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </label>
+
+                    <!-- Entregadas -->
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="materialType" class="peer hidden" />
+                      <div
+                        class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-sm
+                        transition-all duration-200 ease-in-out
+                        hover:bg-[#f5f5f5] hover:shadow-md
+                        peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B]
+                        peer-checked:hover:bg-[#fff8f0]"
+                      >
+                        <p class="text-sm">Entregadas</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="2.5" stroke="currentColor"
+                          class="w-4 h-4 transition-colors duration-200
+                          peer-hover:stroke-[#E1A05B]
+                          peer-checked:stroke-[#E1A05B]
+                          peer-checked:hover:stroke-[#E54B4B]">
+                          <path class="plus-icon" stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v12m6-6H6" />
+                          <path class="x-icon hidden" stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ASSIGNMENTS TABLE -->
+            <div id="assignments-table" class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto">
+
+                <!-- Assignment card -->
+                <a href="assignmentInfoStudent.html" class="w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline">
+                  
+                </a>
+
+            </div>
+            <p class="text-sm text-[#6A7282]">Mostrando 4 de 52</p>
+        </div>
+    `;
+
+    loadTasks();
+}
+
+async function loadTasks() {
+    const assignmentsTable = document.getElementById('assignments-table');
+
+    assignmentsTable.innerHTML = '';
+
+    authenticatedFetch('/api/student/getAssignmentsFromGroup.php', {
+        method: 'GET'
+    }).then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            if (data[0] === null) {
+                const text = document.createElement('p');
+                text.textContent = 'No hay tareas';
+                text.className = 'text-center mt-6';
+                
+                assignmentsTable.append(text);
+              } else {
+              assignmentsTable.innerHTML = '';
+
+              data[0].forEach(task => {
+                const newTask = document.createElement('a');
+                newTask.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline';
+                newTask.href = 'assignmentInfoStudent.html';
+              
+                newTask.innerHTML = `
+                  <div class="flex w-full justify-between pr-10">
+                    <div class="flex items-center space-x-5">
+                       <img src="../../../../images/Assignment.png" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
+                       <div class="flex flex-col justify-center w-full">
+                          <p class="text-xl font-medium text-[#1B3B50]">${task.name}</p>
+                          <p class="text-base/5 text-[#6A7282] w-3/4">${task.description}</p>
+                       </div>
+                     </div>
+                     <div class="flex flex-col items-end space-y-10">
+                      <p class="text-[#6A7282]">${task.maxScore}</p>
+                      <p class="text-[#CC4033]">Vence el ${task.dueDate}</p>
+                     </div>
+                  </div>
+                `;
+                assignmentsTable.append(newTask);
+              });
+
+            }
+        }
+    }).catch(err => console.error("Error: ", err));
+}
+
+function selectNavbarOption(section) {
+    const homeOption = document.getElementById('home-option');
+    const tasksOption = document.getElementById('tasks-option');
+
+    switch (section) {
+        case 'home':
+            homeOption.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20';
+            tasksOption.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100';
+            break;
+        case 'tasks':
+            homeOption.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100';
+            tasksOption.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20';
+            break;
     }
 }
