@@ -16,9 +16,13 @@ interface IUserLogic {
     public function revokeRefreshToken($refreshToken) : bool;
 
     public function getStudentGroup(int $userId) : ?array;
+    public function getTeacherGroups(int $userId) : ?array;
+
+    public function getGroup(int $groupId) : ?array;
     public function getGroupMembers(int $groupId) : ?array;
 
     public function getAssignmentsFromGroup(int $groupId) : ?array;
+    
 }
 
 ?>

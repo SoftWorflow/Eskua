@@ -6,25 +6,28 @@ require_once(__DIR__ . "/../../../backend/DTO/Users/User.php");
 require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
 header('Content-Type: application/json');
 
-$auth = new AuthMiddleware();
-$auth::authorize(['student']);
+$input = json_decode(file_get_contents('php://input'), true);
 
-$authUser = $auth::authenticate();
-$authUserId = $authUser['user_id'];
+$auth = new AuthMiddleware();
+$auth::authorize(['teacher']);
+
+$user = $auth::authenticate();
+$userId = $user['user_id'];
+
+$groupId = $input['id'];
 
 $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
-$group = $userLogic->getStudentGroup($authUserId);
+$groupMembers = $userLogic->getGroupMembers($groupId);
 
-$teacherData = $userLogic->getUserById($group['teacher'])[1];
-
+$teacherData = $userLogic->getUserById($userId)[1];
 $teacher['displayName'] = $teacherData->getDisplayName();
 $teacher['profilePicture'] = $teacherData->getProfilePictureUrl();
 
-$groupMembers = $userLogic->getGroupMembers($group['id']);
+$group = $userLogic->getGroup($groupId);
 
-if ($groupMembers === null) {
+if ($group === null) {
     http_response_code(500);
-    echo json_encode(['ok'=> false, 'error' => 'No se pudieron obtener los miembros del grupo']);
+    echo json_encode(['ok' => false, 'error' => "Error obteniendo grupo"]);
     exit;
 }
 

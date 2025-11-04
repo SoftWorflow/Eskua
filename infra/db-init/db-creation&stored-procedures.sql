@@ -636,11 +636,11 @@ BEGIN
     COMMIT;
 END //
 
-CREATE PROCEDURE getStudentGroup(
-    IN p_student_id INT
+CREATE PROCEDURE getGroupsOfTeacher(
+    IN p_user_id INT
 )
 BEGIN
-    SELECT * FROM `groups` AS g JOIN `students` AS s ON g.id = s.`group` WHERE s.`user` = p_student_id;
+    SELECT g.*, (SELECT COUNT(*) FROM `students` AS s2 WHERE s2.`group` = g.`id`) AS totalStudents FROM `groups` AS g WHERE g.`teacher` = p_user_id;
 END //
 
 CREATE PROCEDURE getGroupMembers(
@@ -650,10 +650,24 @@ BEGIN
     SELECT u.id, u.display_name AS displayName, u.profile_picture_url AS profilePicture FROM `users` AS u JOIN `students` AS s ON u.id = s.`user` JOIN `groups` As g ON s.`group` = g.id WHERE g.id = p_group_id;
 END //
 
+CREATE PROCEDURE getStudentGroup(
+    IN p_user_id INT
+)
+BEGIN
+    SELECT * FROM `groups` AS g JOIN `students` AS s ON g.id = s.`groups` WHERE s.`user` = p_user_id;
+END //
+
 CREATE PROCEDURE getAssignmentsFromGroup(
     IN p_group_id INT
 )
 BEGIN
     SELECT a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.assignment WHERE aa.`group` = p_group_id AND aa.is_deleted = false;
+END //
+
+CREATE PROCEDURE getGroup(
+    IN p_group_id INT
+)
+BEGIN
+    SELECT * FROM `groups` WHERE id = p_group_id;
 END //
 DELIMITER ;

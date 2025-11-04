@@ -305,6 +305,22 @@ class UserLogic implements IUserLogic {
         return $userPersistence->getAssignmentsFromGroup($groupId);
     }
 
+    public function getTeacherGroups(int $userId) : ?array {
+        if ($userId == null) return null;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->getTeacherGroups($userId);
+    }
+
+    public function getGroup(int $groupId) : ?array {
+        if ($groupId == null) return null;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->getGroup($groupId);
+    }
+
 }
 
 ?>
