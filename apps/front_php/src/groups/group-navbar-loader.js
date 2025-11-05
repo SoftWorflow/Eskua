@@ -1,6 +1,6 @@
 class GroupNavbarLoader {
     async loadNavbar() {
-        const navbarPath = '/groups/teacher/teacher-groups-navbar.html';
+        const navbarPath = '/groups/group-navbar.html';
 
         try {
             const response = await fetch(navbarPath);
@@ -37,14 +37,12 @@ class GroupNavbarLoader {
             container.innerHTML = navbarHTML;
             container.className = 'flex flex-col h-full w-[13vw] border-r-2 border-[#DFDFDF]';
             
+            // CAMBIAR ESTO
             const home = document.getElementById('home');
             home.href = `/groups/teacher/?groupId=${groupId}`;
 
             const tasks = document.getElementById('tasks');
             tasks.href = `/groups/teacher/assignments/?groupId=${groupId}`;
-
-            const config = document.getElementById('config');
-            config.href = `#`;
 
             switch (page) {
                 case 'home':
@@ -52,9 +50,6 @@ class GroupNavbarLoader {
                 break;
                 case 'tasks':
                     tasks.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20';
-                break;
-                case 'config':
-                    config.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20';
                 break;
             }
 
