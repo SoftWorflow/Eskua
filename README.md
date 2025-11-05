@@ -16,4 +16,7 @@
 
 ## Comandos
 
+docker-compose up -d
+docker-compose down -v
+docker-compose build --no-cache
 docker exec -it eskua-db mysql -u root -p

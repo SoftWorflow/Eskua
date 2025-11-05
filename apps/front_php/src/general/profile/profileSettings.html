@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Grupo - Eskua</title>
+    <link rel="stylesheet" href="../../output.css">
+    <script src="../../auth.js"></script>
+    <script src="../../../navbar-loader.js"></script>
+    <script src="../../home/content-loader.js"></script>
+    <script>
+        document.documentElement.style.display = 'none';
+        (async () => {
+            // Allow access even if not logged in
+            await authManager.ensureValidToken();
+            
+            if (authManager.getAccessToken()) {
+                authManager.startTokenMonitoring();
+            }    
+            
+            await initializeNavbar('#navbar-container');
+            await initializeContent('#content-container');
+            
+            document.documentElement.style.display = '';    
+        })();
+    </script>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+        <!-- FONDO BLANCO -->
+        <div class="w-full h-full bg-white rounded-sm flex flex-col items-center justify-center">
+
+            <!-- MAIN CONTENT -->
+            <div class="w-3/4 flex flex-col space-y-12 items-center">
+
+                <!-- Content -->
+                <div class="flex w-full flex-col items-center space-y-20">
+                    <!-- Titulo -->
+                    <div class="flex flex-col items-center space-y-4">
+                        <h2 class="text-6xl font-semibold text-[#1B3B50]">Ajustes Perfil</h2>
+                        <p class="text-lg text-[#6A7282]">Edita la información de tu perfil.</p>
+                    </div>
+
+                    <div class="w-3/4 h-full flex border-2 border-[#DFDFDF] shadow-md/25 pl-10 py-10 rounded-2xl">
+                      <!-- INPUTS -->
+                       <div class="flex flex-col w-7/12 space-y-4">
+                        <!-- NAME -->
+                        <div class="flex flex-col space-y-4">
+                          <p class="text-xl text-[#1B3B50]">Nombre</p>
+                          <div class="relative w-full">
+                            <input type="text" value="Pedro Ramirez" disabled class="w-full border-2 border-[#DFDFDF] shadow-md/25 disabled:bg-gray-50 disabled:cursor-not-allowed">
+                            <button onclick="toggleEdit(this)" class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                  stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- EMAIL -->
+                        <div class="flex flex-col space-y-4">
+                          <p class="text-xl text-[#1B3B50]">Email</p>
+                          <div class="relative w-full">
+                            <input type="text" value="pedro@gmail.com" disabled class="w-full border-2 border-[#DFDFDF] shadow-md/25 disabled:bg-gray-50 disabled:cursor-not-allowed">
+                            <button onclick="toggleEdit(this)" class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                  stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- PASSWORD -->
+                        <div class="flex flex-col space-y-4">
+                          <p class="text-xl text-[#1B3B50]">Contraseña</p>
+                          <div class="relative w-full">
+                            <input type="password" value="pedro123asdasdasd" disabled class="w-full border-2 border-[#DFDFDF] shadow-md/25 disabled:bg-gray-50 disabled:cursor-not-allowed">
+                            
+                            <!-- Botón de editar/lápiz (más a la derecha) -->
+                            <button onclick="toggleEdit(this)" class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                </svg>
+                            </button>
+
+                            <!-- Botón de toggle password (más a la izquierda) -->
+                            <button type="button" onclick="togglePassword(this)" class="absolute inset-y-0 right-12 flex items-center text-gray-400 hover:text-[#E1A05B] transition">
+                                <!-- Icono de ojo abierto (mostrar) -->
+                                <svg class="eye-open w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <!-- Icono de ojo cerrado (ocultar) -->
+                                <svg class="eye-closed w-5 h-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                </svg>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- ROL -->
+                        <div class="flex flex-col space-y-4">
+                          <p class="text-xl text-[#1B3B50]">Rol</p>
+                          <input type="text" value="Usuario Común" disabled class="w-full border-2 border-[#DFDFDF] shadow-md/25 disabled:bg-gray-50 disabled:cursor-not-allowed">
+                        </div>
+                       </div>
+                      <!-- PROFILE PICTURE -->
+                       <div class="flex flex-col w-5/12 h-full items-center justify-center">
+                        <div class="relative">
+                          <img src="../../../../images/ProfilePic.jpeg" alt="Profile Picture" class="rounded-full aspect-square object-cover w-55 h-55 drop-shadow-lg">
+                          
+                          <!-- Botón de editar foto -->
+                          <button onclick="editProfilePicture()" class="absolute bottom-2 right-2 w-12 h-12 bg-[#1B3B50] rounded-full flex items-center justify-center text-white hover:bg-[#E1A05B] transition-colors shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                          </button>
+                        </div>
+                       </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Función para alternar el modo edición
+    function toggleEdit(button) {
+        const input = button.parentElement.querySelector('input');
+        
+        if (input.disabled) {
+            input.disabled = false;
+            input.focus();
+            input.classList.remove('disabled:bg-gray-100', 'disabled:cursor-not-allowed');
+        } else {
+            input.disabled = true;
+            input.classList.add('disabled:bg-gray-100', 'disabled:cursor-not-allowed');
+        }
+    }
+
+    // Función para mostrar/ocultar contraseña
+    function togglePassword(button) {
+        const container = button.parentElement;
+        const input = container.querySelector('input');
+        const eyeOpen = button.querySelector('.eye-open');
+        const eyeClosed = button.querySelector('.eye-closed');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            eyeOpen.classList.add('hidden');
+            eyeClosed.classList.remove('hidden');
+        } else {
+            input.type = 'password';
+            eyeOpen.classList.remove('hidden');
+            eyeClosed.classList.add('hidden');
+        }
+    }
+
+    // Función para editar foto de perfil
+    function editProfilePicture() {
+        // Aquí puedes implementar la lógica para cambiar la foto
+        alert('Funcionalidad para cambiar foto de perfil');
+    }
+</script>
+</body>
+<script>
+    (async () => {
+        const userRole = getUserRole();
+        
+        if (userRole !== 'student') {
+            console.warn('Unauthorized access attempt to student home');
+            window.location.href = '../../error-pages/403.html';
+            return;
+        }
+    })();
+</script>
+</html>
