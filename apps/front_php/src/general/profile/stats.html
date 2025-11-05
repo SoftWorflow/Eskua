@@ -32,16 +32,7 @@
             <div class="w-full h-full bg-white rounded-sm flex flex-col items-center overflow-y-auto">
 
                 <!-- MAIN CONTENT -->
-                <div class="w-full max-w-7xl flex flex-col space-y-12 items-center py-16 px-8">
-
-                    <!-- Botón Atrás -->
-                    <div class="w-full flex justify-start">
-                        <button onclick="window.history.back()" class="text-gray-600 hover:text-[#1B3B50] transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                            </svg>
-                        </button>
-                    </div>
+                <div class="w-full h-full max-w-7xl flex flex-col space-y-12 items-center justify-center py-16 px-8">
 
                     <!-- Título -->
                     <div class="flex flex-col items-center space-y-2">
@@ -50,125 +41,123 @@
                     </div>
 
                     <!-- Contenedor de dos columnas -->
-                    <div class="w-full grid grid-cols-2 gap-12 mt-8">
-                        
-                        <!-- Columna Izquierda: Juegos -->
-                        <div class="flex flex-col space-y-6">
-                            <h3 class="text-2xl font-bold text-[#1B3B50] text-left">Juegos</h3>
-                            
-                            <div class="bg-gray-50 border border-gray-200 rounded-3xl p-8 shadow-sm space-y-6">
-                                
-                                <!-- Juego 1: Memoria -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-20 h-20 bg-[#85D2E2] rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white font-bold text-center text-sm leading-tight">Memoria</span>
+                    <div class="w-11/12 h-[55vh] grid grid-cols-2 space-x-5">
+                        <!-- Juegos -->
+                        <div class="border-2 border-[#DFDFDF] rounded-2xl flex-col shadow-md/25">
+                            <div class="w-full h-1/5 p-5 flex justify-center items-center border-b border-[#DFDFDF]">
+                                <p class="text-3xl font-semibold text-[#1B3B50]">Juegos</p>
+                            </div>
+                            <!-- Puntajes Juegos -->
+                            <div class="h-4/5 flex flex-col justify-center space-y-5 px-5">
+                                <!-- Memoria -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50]">Memoria</p>
                                     </div>
-                                    <div class="flex-grow pt-1">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-sm text-gray-700">Puntación más alta</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">8002</span>
+                                    <div class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Puntación más alta</p>
+                                            <p class="font-semibold text-[#1B3B50]">8002</p>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-gray-700">Última vez jugado</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">12-5-2025</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Juego 2: Verdadero Falso -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-20 h-20 bg-[#85D2E2] rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white font-bold text-center text-xs leading-tight">Verdadero<br>Falso</span>
-                                    </div>
-                                    <div class="flex-grow pt-1">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-sm text-gray-700">Puntación más alta</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">1942</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-gray-700">Última vez jugado</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">05-5-2025</span>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Ultima vez jugado</p>
+                                            <p class="font-semibold text-[#1B3B50]">12-5-2025</p>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Juego 3: Múltiple Opción -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-20 h-20 bg-[#85D2E2] rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white font-bold text-center text-xs leading-tight">Múltiple<br>Opción</span>
+                                <!-- Verdadero Falso -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Verdadero o Falso</p>
                                     </div>
-                                    <div class="flex-grow pt-1">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-sm text-gray-700">Puntación más alta</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">5663</span>
+                                    <div class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Puntación más alta</p>
+                                            <p class="font-semibold text-[#1B3B50]">8002</p>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-gray-700">Última vez jugado</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">23-6-2025</span>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Ultima vez jugado</p>
+                                            <p class="font-semibold text-[#1B3B50]">12-5-2025</p>
                                         </div>
                                     </div>
                                 </div>
-
+                                <!-- Multiple Opcion -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Mútliple Opción</p>
+                                    </div>
+                                    <div class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Puntación más alta</p>
+                                            <p class="font-semibold text-[#1B3B50]">8002</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Ultima vez jugado</p>
+                                            <p class="font-semibold text-[#1B3B50]">12-5-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Columna Derecha: Tareas Creadas -->
-                        <div class="flex flex-col space-y-6">
-                            <h3 class="text-2xl font-bold text-[#1B3B50] text-left">Tareas Creadas</h3>
-                            
-                            <div class="bg-gray-50 border border-gray-200 rounded-3xl p-8 shadow-sm space-y-6">
+                         <!-- Tareas -->
+                        <div class="border-2 border-[#DFDFDF] rounded-2xl flex-col shadow-md/25">
+                            <div class="w-full h-1/5 p-5 flex justify-center items-center border-b border-[#DFDFDF]">
+                                <p class="text-3xl font-semibold text-[#1B3B50]">Tareas</p>
+                            </div>
+                            <!-- Puntajes Tareas -->
+                            <div class="h-4/5 flex flex-col justify-center space-y-5 p-5">
+                                    <!-- Tarea 1 -->
+                                    <div class="flex w-full rounded-xl shadow-md/15">
+                                        <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                            <p class="text-lg font-semibold text-[#1B3B50] text-center">Nombre Tarea</p>
+                                        </div>
+                                        <div class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                            <div class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                                <p class="text-[#1B3B50]">Grupo</p>
+                                                <p class="font-semibold text-[#1B3B50]">Intermedio IEP</p>
+                                            </div>
+                                            <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                                <p class="text-[#1B3B50]">Creada</p>
+                                                <p class="font-semibold text-[#1B3B50]">17:34 | 02-4-2025</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Tarea 2 -->
+                                    <div class="flex w-full rounded-xl shadow-md/15">
+                                        <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                            <p class="text-lg font-semibold text-[#1B3B50] text-center">Nombre Tarea</p>
+                                        </div>
+                                        <div class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                            <div class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                                <p class="text-[#1B3B50]">Grupo</p>
+                                                <p class="font-semibold text-[#1B3B50]">Intermedio IEP</p>
+                                            </div>
+                                            <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                                <p class="text-[#1B3B50]">Creada</p>
+                                                <p class="font-semibold text-[#1B3B50]">17:34 | 02-4-2025</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tarea 3 -->
+                                    <div class="flex w-full rounded-xl shadow-md/15">
+                                        <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                            <p class="text-lg font-semibold text-[#1B3B50] text-center">Nombre Tarea</p>
+                                        </div>
+                                        <div class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                            <div class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                                <p class="text-[#1B3B50]">Grupo</p>
+                                                <p class="font-semibold text-[#1B3B50]">Intermedio IEP</p>
+                                            </div>
+                                            <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                                <p class="text-[#1B3B50]">Creada</p>
+                                                <p class="font-semibold text-[#1B3B50]">17:34 | 02-4-2025</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 
-                                <!-- Tarea 1 -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-20 h-20 bg-[#85D2E2] rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white font-bold text-center text-xs leading-tight">Nombre<br>Tarea</span>
-                                    </div>
-                                    <div class="flex-grow pt-1">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-sm text-gray-700">Grupo</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">Intermedio IEP</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-gray-700">Entregada</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">13:05 | 15-6-2025</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Tarea 2 -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-20 h-20 bg-[#85D2E2] rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white font-bold text-center text-xs leading-tight">Nombre<br>Tarea</span>
-                                    </div>
-                                    <div class="flex-grow pt-1">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-sm text-gray-700">Grupo</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">Avanzado IEP</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-gray-700">Entregada</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">23:55 | 24-5-2025</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Tarea 3 -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-20 h-20 bg-[#85D2E2] rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-white font-bold text-center text-xs leading-tight">Nombre<br>Tarea</span>
-                                    </div>
-                                    <div class="flex-grow pt-1">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-sm text-gray-700">Grupo</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">Avanzado IEP</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-sm text-gray-700">Entregada</span>
-                                            <span class="text-sm font-bold text-[#1B3B50]">17:34 | 02-4-2025</span>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
 
