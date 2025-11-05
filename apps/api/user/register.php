@@ -130,7 +130,7 @@ if ($errorResponse !== null) {
     exit;
 }
 
-$defaultUserProfilePicture = "http://192.168.1.141/images/DefaultUserProfilePicture.jpg";
+$defaultUserProfilePicture = "https://eskua.com.uy/images/DefaultUserProfilePicture.webp";
 
 if ($userRole !== "student") {
     $user = new User($username, $email, $username, $defaultUserProfilePicture, $password, $userRole);

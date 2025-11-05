@@ -36,14 +36,14 @@ async function loadGroupHomeData(groupId) {
         teacherCardDiv.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0';
         teacherCardDiv.innerHTML = `
             <div class="flex space-x-5">
-            <img src="${data.teacher.profilePicture}" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
-            <div class="flex flex-col justify-center w-full">
-                <p class="text-xl font-medium text-[#1B3B50]">${data.teacher.displayName}</p>
-                <div class="flex items-center space-x-1">
-                <img src="/images/TeacherCrownIcon.svg" alt="" class="h-5 w-5">
-                <p class="text-lg text-[#E1A05B]">Docente</p>
+                <img src="${data.teacher.profilePicture}" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
+                <div class="flex flex-col justify-center w-full">
+                    <p class="text-xl font-medium text-[#1B3B50]">${data.teacher.displayName}</p>
+                    <div class="flex items-center space-x-1">
+                    <img src="/images/TeacherCrownIcon.svg" alt="" class="h-5 w-5">
+                    <p class="text-lg text-[#E1A05B]">Docente</p>
+                    </div>
                 </div>
-            </div>
             </div>
         `;
 
@@ -58,14 +58,14 @@ async function loadGroupHomeData(groupId) {
                 memberCardDiv.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0';
                 memberCardDiv.innerHTML = `
                     <div class="flex space-x-5">
-                    <img src="${profilePicture}" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
-                    <div class="flex flex-col justify-center w-full">
-                        <p class="text-xl font-medium text-[#1B3B50]">${displayName}</p>
-                        <div class="flex items-center space-x-1">
-                        <img src="/images/StudentIcon.svg" alt="" class="h-5 w-5">
-                        <p class="text-lg text-[#6A7282]">Alumno</p>
+                        <img src="${profilePicture}" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
+                        <div class="flex flex-col justify-center w-full">
+                            <p class="text-xl font-medium text-[#1B3B50]">${displayName}</p>
+                            <div class="flex items-center space-x-1">
+                            <img src="/images/StudentIcon.svg" alt="" class="h-5 w-5">
+                            <p class="text-lg text-[#6A7282]">Alumno</p>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 `;
                 

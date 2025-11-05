@@ -59,7 +59,7 @@
                         <p class="text-xl text-[#1B3B50] font-semibold">Preferencias</p>
                         <div class="flex flex-col bg-[#1B3B50] px-3 py-5 rounded-lg space-y-1">
                             <a href="stats.html">
-                                <div class="flex justify-between bg-white rounded-lg p-5 items-center hover:bg-[#e0e0e0] interactive">
+                                <div class="flex justify-between bg-white rounded-lg p-5 items-center hover:bg-[#e0e0e0] transition duration-150 interactive">
                                     <div class="flex space-x-3 items-center">
                                         <img src="../../../../images/Stats.svg" alt="" class="h-6.5 w-6.5">
                                         <p class="text-xl text-[#1B3B50]">Estadisticas</p>
@@ -68,7 +68,7 @@
                                 </div>
                             </a>
                             <a href="profileSettings.html" class="no-underline">
-                                <div class="flex justify-between bg-white rounded-lg p-5 items-center hover:bg-[#F2F2F2]">
+                                <div class="flex justify-between bg-white rounded-lg p-5 items-center hover:bg-[#e0e0e0] transition duration-150 interactive">
                                     <div class="flex space-x-3 items-center">
                                         <img src="../../../../images/SettingsIcon.svg" alt="" class="h-6.5 w-6.5">
                                         <p class="text-xl text-[#1B3B50]">Ajustes Perfil</p>
@@ -76,7 +76,7 @@
                                     <img src="../../../../images/RightArrow.svg" alt="" class="w-3 h-3">
                                 </div>
                             </a>
-                            <div class="flex justify-between bg-white rounded-lg p-5 items-center hover:bg-[#F2F2F2]">
+                            <div onclick="authManager.logout()" class="flex justify-between bg-white rounded-lg p-5 items-center hover:bg-[#e0e0e0] transition duration-150 interactive">
                                 <div class="flex space-x-3 items-center">
                                     <img src="../../../../images/LogOutIcon.svg" alt="" class="h-6.5 w-6.5">
                                     <p class="text-xl text-[#1B3B50]">Cerrar Sesión</p>

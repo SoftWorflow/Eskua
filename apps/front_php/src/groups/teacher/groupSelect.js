@@ -21,7 +21,7 @@ async function renderGroupsSelect() {
         if (!data.ok) {
             console.error('Error al cargar los grupos');
             console.error(data.message);
-            window.location = '/home/index.php';
+            window.location = '/';
             return;
         }
 
@@ -52,7 +52,7 @@ async function renderGroupsSelect() {
 }
 
 function loadSpecificGroup(groupId) {
-    window.location.href = `/groups/teacher/groupHomeTeacher.html?groupId=${groupId}`;
+    window.location.href = `/groups/teacher/?groupId=${groupId}`;
 }
 
 function parseLevelToImage(level) {
