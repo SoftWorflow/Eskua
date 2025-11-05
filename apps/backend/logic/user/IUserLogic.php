@@ -21,6 +21,7 @@ interface IUserLogic {
     public function getGroup(int $groupId) : ?array;
     public function getGroupMembers(int $groupId) : ?array;
 
+    public function createAssignment(GroupAssignment $assignment) : bool;
     public function getAssignmentsFromGroup(int $groupId) : ?array;
     
 }

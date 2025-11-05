@@ -7,8 +7,12 @@ async function loadTasks() {
 
     assignmentsTable.innerHTML = '';
 
-    authenticatedFetch('/api/student/getAssignmentsFromGroup.php', {
-        method: 'GET'
+    const urlParams = new URLSearchParams(window.location.search);
+    const groupId = urlParams.get('groupId');
+
+    authenticatedFetch('/api/teacher/getAssignmentsFromGroup.php', {
+        method: 'POST',
+        body: JSON.stringify({id: groupId})
     }).then(res => res.json())
     .then(data => {
         if (data.ok) {
@@ -29,7 +33,7 @@ async function loadTasks() {
                 newTask.innerHTML = `
                   <div class="flex w-full justify-between pr-10">
                     <div class="flex items-center space-x-5">
-                       <img src="../../../../images/Assignment.png" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
+                       <img src="/images/Assignment.png" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
                        <div class="flex flex-col justify-center w-full">
                           <p class="text-xl font-medium text-[#1B3B50]">${task.name}</p>
                           <p class="text-base/5 text-[#6A7282] w-3/4">${task.description}</p>

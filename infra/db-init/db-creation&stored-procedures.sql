@@ -401,20 +401,33 @@ END //
 
 -- CREATE ASSIGNMENT
 CREATE PROCEDURE createAssignment(
-   IN create_name varchar(50),
-   IN create_description TEXT,
-   IN teacher_id int,
-   IN max_score int
+    IN p_teacher_id INT,
+    IN p_group_id INT,
+    IN p_name VARCHAR(50),
+    IN p_description TEXT,
+    IN p_max_score INT,
+    IN p_end_date DATETIME
 )
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    DECLARE assignment_id INT;
+
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
     END;
- START TRANSACTION;
-    
-    INSERT INTO assignments (`name`,`description`,is_deleted)
-    VALUES (create_name, create_description ,FALSE);
+
+    START TRANSACTION;
+
+    INSERT INTO `assignments` (`teacher`, `name`, `description`, `max_score`)
+    VALUES (p_teacher_id, p_name, p_description, p_max_score);
+
+    SET assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments` (`teacher`, `assignment`, `group`, `end_date`)
+    VALUES (p_teacher_id, assignment_id, p_group_id, p_end_date);
+
+    COMMIT;
 END //
 
 -- CREATE REFRESH TOKEN
@@ -654,7 +667,7 @@ CREATE PROCEDURE getStudentGroup(
     IN p_user_id INT
 )
 BEGIN
-    SELECT * FROM `groups` AS g JOIN `students` AS s ON g.id = s.`groups` WHERE s.`user` = p_user_id;
+    SELECT * FROM `groups` AS g JOIN `students` AS s ON g.id = s.`group` WHERE s.`user` = p_user_id;
 END //
 
 CREATE PROCEDURE getAssignmentsFromGroup(

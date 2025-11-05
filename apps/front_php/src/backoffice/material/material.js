@@ -462,8 +462,6 @@ function modifyMaterial(e) {
     formData.append('description', descriptionInput.value);
     formData.append('id', globalMaterialId);
 
-    console.log(formData);
-
     authenticatedFetch('/api/admin/modifyMaterial.php', {
         method: 'POST',
         body: formData

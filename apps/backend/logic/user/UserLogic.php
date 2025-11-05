@@ -1,6 +1,7 @@
 <?php
 
 require_once("IUserLogic.php");
+require_once(__DIR__ . "/../../DTO/GroupAssignment.php");
 require_once(__DIR__ . "/../../DTO/Users/User.php");
 require_once(__DIR__ . "/../../persistence/user/UserPersistenceFacade.php");
 require(__DIR__ . '/../../vendor/autoload.php');
@@ -319,6 +320,10 @@ class UserLogic implements IUserLogic {
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
         return $userPersistence->getGroup($groupId);
+    }
+
+    public function createAssignment(GroupAssignment $assignment) : bool {
+            return false;
     }
 
 }
