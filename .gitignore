@@ -1,9 +1,12 @@
 # Dependencias instaladas
 **/node_modules/
 
+**/certs/
+
 # VSCode
 .vscode/
 
+# Variables de entorno
 .env
 
 **/uploads/
