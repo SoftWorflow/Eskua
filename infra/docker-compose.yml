@@ -37,8 +37,11 @@ services:
       - ../apps/backend:/var/www/backend/
       - ../apps/images:/var/www/html/images/
       - ../infra/apache/httpd.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+      - ../infra/certs/domain.crt:/etc/ssl/certs/domain.crt:ro
+      - ../infra/certs/domain.key:/etc/ssl/private/domain.key:ro
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       db:
         condition: service_healthy

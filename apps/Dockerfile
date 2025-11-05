@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     && docker-php-ext-install pdo pdo_mysql
 
-RUN a2enmod rewrite proxy proxy_http
+RUN a2enmod ssl && a2enmod rewrite \
+    && echo "ServerName eskua.com.uy" >> /etc/apache2/apache2.conf
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

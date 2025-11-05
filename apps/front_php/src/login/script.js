@@ -52,7 +52,7 @@ function SendLogindata(e) {
         if (res.ok) {
             authManager.saveAuth(res);
             
-            window.location.replace(window.location.origin + '/home/index.php');
+            window.location.replace(window.location.origin + '/');
         } else {
             console.error(res.error);
             

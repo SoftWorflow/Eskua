@@ -103,7 +103,7 @@ class AuthManager {
         }
 
         this.clearAuth();
-        window.location.href = '/home/index.php';
+        window.location.href = '/';
     }
 
 
