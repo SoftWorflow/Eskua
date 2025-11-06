@@ -11,6 +11,20 @@ class MaterialLogic implements IMaterialLogic {
 
         return $materialPersistence->uploadMaterial($publicMaterial, $file, $uploaderId);
     }
+
+    public function getAllMaterials() : ?array {
+        $materialPersistence = MaterialPersistenceFacade::getInstance()->getIMaterialPersistence();
+
+        return $materialPersistence->getAllMaterials();
+    }
+
+    public function getMaterial(int $materialId) : ?array {
+        if ($materialId === null) return null;
+
+        $materialPersistence = MaterialPersistenceFacade::getInstance()->getIMaterialPersistence();
+
+        return $materialPersistence->getMaterial($materialId);
+    }
 }
 
 ?>

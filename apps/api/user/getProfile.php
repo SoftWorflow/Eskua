@@ -4,6 +4,7 @@ require_once(__DIR__ . "/../middleware/auth.php");
 
 require_once(__DIR__ . "/../../../backend/DTO/Users/User.php");
 require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
+header('Content-Type: application/json');
 
 $auth = new AuthMiddleware();
 $user = $auth::authenticate();
