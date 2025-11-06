@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
 
 $auth = new AuthMiddleware();
-$auth::authorize(['teacher']);
+$auth::authorize(['teacher', 'student']);
 
 $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
 
@@ -20,12 +20,13 @@ $assignments = $userLogic->getAssignmentsFromGroup($groupId);
 $currentDate = new DateTime('now');
 
 $responseAssignments = [];
-
-foreach ($assignments as $assignment) {
-    $dueDate = new DateTime($assignment['dueDate']);
-
-    if ($dueDate > $currentDate) {
-        $responseAssignments[] = $assignment;
+if ($assignments !== null) {
+    foreach ($assignments as $assignment) {
+        $dueDate = new DateTime($assignment['dueDate']);
+    
+        if ($dueDate > $currentDate) {
+            $responseAssignments[] = $assignment;
+        }
     }
 }
 

@@ -30,19 +30,11 @@ class GroupNavbarLoader {
         const navbarHTML = await this.loadNavbar();
         const container = document.querySelector(targetSelector);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const groupId = urlParams.get('groupId');
-
         if (container) {
             container.innerHTML = navbarHTML;
             container.className = 'flex flex-col h-full w-[13vw] border-r-2 border-[#DFDFDF]';
-            
-            // CAMBIAR ESTO
-            const home = document.getElementById('home');
-            home.href = `/groups/teacher/?groupId=${groupId}`;
 
-            const tasks = document.getElementById('tasks');
-            tasks.href = `/groups/teacher/assignments/?groupId=${groupId}`;
+            this.updateGroupNavbarHref();
 
             switch (page) {
                 case 'home':
@@ -60,6 +52,19 @@ class GroupNavbarLoader {
         } else {
             console.error(`Navbar container "${targetSelector}" not found`);
         }
+    }
+
+    updateGroupNavbarHref() {
+        const userRole = getUserRole();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const groupId = urlParams.get('groupId');
+
+        const home = document.getElementById('home');
+        home.href = `/groups/${userRole}/?groupId=${groupId}`;
+
+        const tasks = document.getElementById('tasks');
+        tasks.href = `/groups/${userRole}/assignments/?groupId=${groupId}`;
     }
 
     async initialize(page, targetSelector = '#group-navbar-container') {

@@ -17,7 +17,7 @@ class NavbarLoader {
 
     // Load navbar HTML content
     async loadNavbar(role) {
-        const navbarPath = this.getNavbarPath(role);
+        let navbarPath = this.getNavbarPath(role);
 
         try {
             const response = await fetch(navbarPath);

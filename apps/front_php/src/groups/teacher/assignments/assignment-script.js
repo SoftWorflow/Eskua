@@ -10,8 +10,6 @@ async function loadTasks() {
     const urlParams = new URLSearchParams(window.location.search);
     const groupId = urlParams.get('groupId');
 
-    console.log(groupId);
-
     if (groupId === undefined || groupId === null || groupId.length === 0 || groupId === "") {
       window.location = '/groups/teacher/groupSelect.html';
       return;
