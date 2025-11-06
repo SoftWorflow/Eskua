@@ -737,4 +737,20 @@ CREATE PROCEDURE getGroup(
 BEGIN
     SELECT * FROM `groups` WHERE id = p_group_id;
 END //
+
+CREATE PROCEDURE getAllPublicMaterials()
+BEGIN
+    SELECT pm.`id` AS `id`, pm.`title` AS `name`, pm.`description` AS `description`, pm.`uploaded_date` AS `createdDate`, f.`extension` AS `type`
+    FROM `public_materials` AS pm JOIN `public_materials_files` AS pmf ON pm.id = pmf.`public_material`
+    JOIN `files` AS f ON pmf.`file` = f.id;
+END //
+
+CREATE PROCEDURE getMaterialById(
+    IN p_material_id INT
+)
+BEGIN
+    SELECT pm.`title` AS `name`, pm.`description` AS `description`, pm.`uploaded_date` AS `createdDate`, f.`original_name` AS `originalName`, f.`extension` AS `type`, f.`storage_name` AS storageName
+    FROM `public_materials` AS pm JOIN `public_materials_files` AS pmf ON pm.id = pmf.`public_material`
+    JOIN `files` AS f ON pmf.`file` = f.id WHERE pm.`id` = p_material_id;
+END //
 DELIMITER ;

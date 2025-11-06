@@ -410,7 +410,7 @@ async function renderModifyMaterial(materialId, title, description) {
                             <input 
                                 id="material-file" 
                                 type="file" 
-                                accept=".pdf,.mp4,.png,.jpg,.jpeg"
+                                accept=".pdf,.mp4,.png,.jpg,.jpeg,.webp"
                                 class="hidden" 
                                 onchange="addNewFile(event)"
                                 disabled
@@ -588,7 +588,7 @@ function renderCreateMaterial() {
                         <input 
                             id="material-file" 
                             type="file" 
-                            accept=".pdf,.mp4,.png,.jpg,.jpeg"
+                            accept=".pdf,.mp4,.png,.jpg,.jpeg,.webp"
                             class="hidden" 
                             onchange="addNewFile(event)"
                         />

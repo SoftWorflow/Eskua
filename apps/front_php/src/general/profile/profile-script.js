@@ -53,13 +53,13 @@ function loadProfileData() {
                 return;
             }
 
-            spinner.stop();
-            infoContainer.classList.remove('hidden');
-
             displayName.innerText = data.profile['displayName'];
             email.innerText = data.profile['email'];
             role.innerText = capFirstLetter(data.profile['role']);
             profilePic.src = data.profile['profilePic'];
+
+            spinner.stop();
+            infoContainer.classList.remove('hidden');
         }).catch(err => console.error("Error: ", err))
 }
 
