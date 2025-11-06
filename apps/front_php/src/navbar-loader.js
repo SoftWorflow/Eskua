@@ -58,6 +58,10 @@ class NavbarLoader {
             document.dispatchEvent(new CustomEvent('navbarLoaded', {
                 detail: { role: userRole }
             }));
+
+            document.querySelectorAll('#profile-picture-navbar').forEach(element => {
+                element.src = authManager.getUser().profile_picture_url;
+            });
         } else {
             console.error(`Navbar container "${targetSelector}" not found`);
         }
