@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
 });
 
@@ -9,6 +9,13 @@ async function loadTasks() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const groupId = urlParams.get('groupId');
+
+    console.log(groupId);
+
+    if (groupId === undefined || groupId === null || groupId.length === 0 || groupId === "") {
+      window.location = '/groups/teacher/groupSelect.html';
+      return;
+    }
 
     authenticatedFetch('/api/teacher/getAssignmentsFromGroup.php', {
         method: 'POST',
@@ -51,4 +58,11 @@ async function loadTasks() {
             }
         }
     }).catch(err => console.error("Error: ", err));
+}
+
+function addNewTask() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const groupId = urlParams.get('groupId');
+  
+  window.location = `/groups/teacher/assignments/createAssignment.html?groupId=${groupId}`;
 }

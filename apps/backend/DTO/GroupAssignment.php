@@ -5,12 +5,14 @@ class GroupAssignment {
     private string $description;
     private int $maxScore;
     private int $groupId;
+    private DateTime $dueDate;
 
-    public function __construct(string $name, string $description, int $maxScore, int $groupId) {
+    public function __construct(string $name, string $description, int $maxScore, int $groupId, DateTime $dueDate) {
         $this->setName($name);
         $this->setDescription($description);
         $this->setMaxScore($maxScore);
         $this->setGroupId($groupId);
+        $this->setDueDate($dueDate);
     }
 
     // NAME
@@ -46,6 +48,15 @@ class GroupAssignment {
 
     public function setGroupId(int $groupId): void {
         $this->groupId = $groupId;
+    }
+
+    // DUE DATE
+    public function getDueDate(): DateTime {
+        return $this->dueDate;
+    }
+
+    public function setDueDate(DateTime $dueDate): void {
+        $this->dueDate = $dueDate;
     }
 }
 

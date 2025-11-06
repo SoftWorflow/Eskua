@@ -322,8 +322,12 @@ class UserLogic implements IUserLogic {
         return $userPersistence->getGroup($groupId);
     }
 
-    public function createAssignment(GroupAssignment $assignment) : bool {
-            return false;
+    public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool {
+        if ($assignment === null) return false;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->createAssignment($assignment, $teacherId);
     }
 
 }

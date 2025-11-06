@@ -365,6 +365,30 @@ class UserPersistence implements IUserPersistence {
         return null;
     }
 
+    public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool {
+        if ($assignment === null) return false;
+
+        $sql = "call createAssignment(?, ?, ?, ?, ?, ?);";
+
+        $groupId = $assignment->getGroupId();
+        $name = $assignment->getName();
+        $description = $assignment->getDescription();
+        $maxScore = $assignment->getMaxScore();
+        $dueDate = $assignment->getDueDate()->format('Y-m-d H:i:s');
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$teacherId, $groupId, $name, $description, $maxScore, $dueDate]);
+            $stmt->closeCursor();
+
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error creating an assignment: ". $e->getMessage());
+        }
+
+        return false;
+    }
+
 }
 
 ?>

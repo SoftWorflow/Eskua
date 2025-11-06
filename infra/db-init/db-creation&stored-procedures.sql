@@ -107,7 +107,6 @@ create table assigned_assignments(
     `group` int not null,
     start_date datetime not null default current_timestamp,
     end_date datetime not null,
-    check (start_date < end_date),
     is_deleted bool not null default false,
     foreign key (teacher) references users(id) on delete cascade,
     foreign key (assignment) references assignments(id) on delete cascade,
@@ -178,6 +177,14 @@ create table public_materials_files(
     foreign key (public_material) references public_materials(id) on delete cascade,
     foreign key (`file`) references files(id) on delete cascade,
     primary key (public_material, `file`)
+);
+
+create table assigned_assignments_files(
+    assigned_assignment int not null,
+    `file` int not null,
+    foreign key (assigned_assignment) references assigned_assignments(id) on delete cascade,
+    foreign key (`file`) references files(id) on delete cascade,
+    primary key (`file`, assigned_assignment)
 );
 
 create table assignments_returns_files(
@@ -554,6 +561,53 @@ BEGIN
 
     INSERT INTO public_materials_files (public_material, file)
     VALUES (material_id, file_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE createFullAssignment(
+    IN p_teacher_id INT,
+    IN p_group_id INT,
+    IN p_name VARCHAR(50),
+    IN p_description TEXT,
+    IN p_max_score INT,
+    IN p_end_date DATETIME,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(50),
+    IN p_size BIGINT
+)
+BEGIN
+    DECLARE assignment_id INT;
+    DECLARE assigned_assignment_id INT;
+    DECLARE file_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO `assignments` (`teacher`, `name`, `description`, `max_score`)
+    VALUES (p_teacher_id, p_name, p_description, p_max_score);
+
+    SET assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments` (`teacher`, `assignment`, `group`, `end_date`)
+    VALUES (p_teacher_id, assignment_id, p_group_id, p_end_date);
+
+    SET assigned_assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `files` (`storage_name`, `original_name`, `mime`, `extension`, `size`, `uploader_id`)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_teacher_id);
+
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments_files` (`assigned_assignment`, `file`)
+    VALUES (assigned_assignment_id, file_id);
 
     COMMIT;
 END //

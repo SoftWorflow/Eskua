@@ -3,6 +3,12 @@ let groupStarsImg = '/images/GroupsStar.svg';
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const groupId = urlParams.get('groupId');
+
+    if (groupId === undefined || groupId === null || groupId.length === 0 || groupId === "") {
+      window.location = '/groups/teacher/groupSelect.html';
+      return;
+    }
+
     loadGroupHomeData(groupId);
 });
 
