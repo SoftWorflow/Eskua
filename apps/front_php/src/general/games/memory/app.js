@@ -41,8 +41,6 @@ let gameState = {
   tiempo: 0,
   puntaje: 0,
   movimientos: 0,
-  rachaActual: 0,
-  mejorRacha: 0,
   timerInterval: null,
   mazo: [],
   cartasVolteadas: [],
@@ -100,30 +98,6 @@ function actualizarHUD() {
   if (elementos.mejorPuntajeDisplay) elementos.mejorPuntajeDisplay.textContent = gameState.mejorPuntaje;
 }
 
-/**
- * Calcula y actualiza la eficiencia del jugador.
- * Basada en pares encontrados y movimientos totales.
- */
-function actualizarEficiencia() {
-  const paresTotales = 12; // hay 12 pares en total
-  const eficienciaRaw = (gameState.paresEncontrados / (gameState.movimientos / 2)) * 100;
-
-  // Clamp para que no pase de 100 ni sea negativo
-  const eficiencia = Math.min(Math.max(eficienciaRaw, 0), 100);
-
-  if (elementos.eficienciaDisplay) {
-    elementos.eficienciaDisplay.textContent = `${eficiencia.toFixed(0)}%`;
-
-    // Color dinámico según desempeño
-    if (eficiencia > 85) {
-      elementos.eficienciaDisplay.style.color = '#4CAF50'; // verde
-    } else if (eficiencia > 60) {
-      elementos.eficienciaDisplay.style.color = '#E1A05B'; // naranja
-    } else {
-      elementos.eficienciaDisplay.style.color = '#E57373'; // rojo
-    }
-  }
-}
 
 /**
  * Calcula y suma el puntaje de un par correcto.
@@ -132,21 +106,17 @@ function actualizarEficiencia() {
 function sumarPuntajePar() {
   const base = 6000;
 
-  // Penalización gradual: movimientos tienen más peso
-  const penalizacionMov = Math.pow(gameState.movimientos / 4, 1.5) * 350; // 👈 más severo
-  const penalizacionTiempo = Math.pow(gameState.tiempo / 35, 1.15) * 120; // 👈 más suave
+  // Penalización gradual: los movimientos pesan más que el tiempo
+  const penalizacionMov = Math.pow(gameState.movimientos / 4, 1.5) * 350;
+  const penalizacionTiempo = Math.pow(gameState.tiempo / 35, 1.15) * 120;
 
-  // Resultado final
+  // Resultado final con límite inferior
   const puntosPar = Math.max(Math.floor(base - penalizacionMov - penalizacionTiempo), 600);
 
-  // Aplicar puntaje
   gameState.puntaje += puntosPar;
-
-  // Feedback visual
   mostrarGanancia(puntosPar);
-  mostrarEvaluacionPar(puntosPar);
-
   actualizarHUD();
+
   return puntosPar;
 }
 
@@ -155,107 +125,34 @@ function sumarPuntajePar() {
  * El color cambia según cuántos puntos se obtuvieron.
  */
 function mostrarGanancia(puntos) {
-  // Determinar color según valor
-  let color = '#E1A05B'; // normal (naranja dorado)
-  if (puntos > 5000) color = '#4CAF50'; // excelente (verde)
-  else if (puntos > 3000) color = '#2F9E44'; // bueno (verde medio)
-  else if (puntos < 1500) color = '#E57373'; // bajo (rojo suave)
+  let color = '#E1A05B';
+  if (puntos > 5000) color = '#4CAF50';
+  else if (puntos > 3000) color = '#2F9E44';
+  else if (puntos < 1500) color = '#E57373';
 
   const anim = document.createElement('div');
   anim.textContent = `+${puntos}`;
-  anim.className = `
-    absolute font-semibold opacity-100 animate-scoreFloat
-  `;
+  anim.className = 'absolute opacity-100';
   anim.style.color = color;
-  anim.style.fontSize = '1.25rem';
+  anim.style.fontFamily = "'Lexend', sans-serif"; // ← fuente Lexend
+  anim.style.fontWeight = '500'; // ← peso Medium
+  anim.style.fontSize = '2.2rem';
   anim.style.left = '50%';
-  anim.style.transform = 'translateX(-50%)';
-  anim.style.top = '-1.5rem';
+  anim.style.top = '-3rem';
+  anim.style.transform = 'translateX(-50%) scale(1)';
   anim.style.pointerEvents = 'none';
-  anim.style.transition = 'all 0.8s ease-out';
+  anim.style.transition = 'all 0.8s ease-in-out';
 
   const parent = elementos.puntajeDisplay?.parentElement;
   if (parent) {
     parent.style.position = 'relative';
     parent.appendChild(anim);
     setTimeout(() => {
+      anim.style.top = '-6rem';
       anim.style.opacity = '0';
-      anim.style.top = '-2.5rem';
+      anim.style.transform = 'translateX(-50%) scale(1.4)';
     }, 10);
-    setTimeout(() => anim.remove(), 900);
-  }
-}
-
-/**
- * Muestra una breve evaluación del desempeño del jugador al acertar un par
- * según los puntos obtenidos.
- */
-function mostrarEvaluacionPar(puntos) {
-  let mensaje = 'Bien hecho';
-  let color = '#E1A05B'; // naranja dorado (default)
-
-  if (puntos > 5200) {
-    mensaje = '¡Excelente!';
-    color = '#4CAF50'; // verde brillante
-  } else if (puntos > 3500) {
-    mensaje = '¡Muy bien!';
-    color = '#2F9E44'; // verde medio
-  } else if (puntos < 2000) {
-    mensaje = 'Podés mejorar';
-    color = '#E57373'; // rojo suave
-  }
-
-  const texto = document.createElement('div');
-  texto.textContent = mensaje;
-  texto.className = `
-    absolute font-semibold text-center text-lg opacity-100 animate-evalFloat
-  `;
-  texto.style.color = color;
-  texto.style.left = '50%';
-  texto.style.transform = 'translateX(-50%)';
-  texto.style.top = '-3rem';
-  texto.style.pointerEvents = 'none';
-  texto.style.transition = 'all 1s ease-out';
-
-  const parent = elementos.puntajeDisplay?.parentElement;
-  if (parent) {
-    parent.style.position = 'relative';
-    parent.appendChild(texto);
-    setTimeout(() => {
-      texto.style.opacity = '0';
-      texto.style.top = '-4rem';
-    }, 10);
-    setTimeout(() => texto.remove(), 1200);
-  }
-}
-
-/**
- * Muestra un efecto visual cuando se encadena una racha de aciertos consecutivos.
- */
-function mostrarBonoRacha(racha, bono) {
-  const texto = document.createElement('div');
-  texto.innerHTML = `
-    🔥 <span class="font-bold">x${racha} Racha</span> +${bono}
-  `;
-  texto.className = `
-    absolute font-semibold text-center text-lg opacity-100 animate-rachaFloat
-  `;
-  texto.style.color = '#E1A05B';
-  texto.style.left = '50%';
-  texto.style.transform = 'translateX(-50%)';
-  texto.style.top = '-3.5rem';
-  texto.style.pointerEvents = 'none';
-  texto.style.transition = 'all 1s ease-out';
-
-  const parent = elementos.puntajeDisplay?.parentElement;
-  if (parent) {
-    parent.style.position = 'relative';
-    parent.appendChild(texto);
-    setTimeout(() => {
-      texto.style.opacity = '0';
-      texto.style.top = '-5rem';
-    }, 10);
-    setTimeout(() => texto.remove(), 1200);
+    setTimeout(() => anim.remove(), 1000);
   }
 }
 
@@ -302,23 +199,14 @@ function crearMazo() {
  * Renderiza el grid de 24 cartas (8×3)
  */
 function renderTablero() {
-  const tableroLetras = document.getElementById('tablero-letras');
-  const tableroSenas = document.getElementById('tablero-senas');
+  const tablero = document.getElementById('tablero');
+  if (!tablero) return;
 
-  if (!tableroLetras || !tableroSenas) return;
-
-  tableroLetras.innerHTML = '';
-  tableroSenas.innerHTML = '';
+  tablero.innerHTML = ''; // Limpiar
 
   gameState.mazo.forEach((carta, index) => {
     const cardEl = crearElementoCarta(carta, index);
-
-    // Separar por tipo: letras a la izquierda, señas a la derecha
-    if (carta.tipo === 'letra') {
-      tableroLetras.appendChild(cardEl);
-    } else {
-      tableroSenas.appendChild(cardEl);
-    }
+    tablero.appendChild(cardEl);
   });
 }
 
@@ -466,7 +354,6 @@ function habilitarTodasLasCartas() {
  */
 function compararCartas() {
   gameState.movimientos++;
-  actualizarEficiencia();
   actualizarHUD();
 
   const [carta1, carta2] = gameState.cartasVolteadas;
@@ -474,10 +361,8 @@ function compararCartas() {
   const pairId2 = carta2.dataset.pairId;
 
   if (pairId1 === pairId2) {
-    // MATCH!
     manejarMatch(carta1, carta2);
   } else {
-    // FAIL
     manejarFallo(carta1, carta2);
   }
 }
@@ -492,43 +377,14 @@ function manejarMatch(carta1, carta2) {
   }, 150);
 
   gameState.paresEncontrados++;
-  gameState.rachaActual++;
-  if (gameState.rachaActual > gameState.mejorRacha) {
-    gameState.mejorRacha = gameState.rachaActual;
-  }
+  const puntosPar = sumarPuntajePar();
 
-  // ✅ Calcular puntos base del par
-  const puntosPar = sumarPuntajePar(gameState.tiempo, gameState.movimientos);
-
-  // ✅ Agregar un pequeño bono según la racha actual
-  let bono = 0;
-  if (gameState.rachaActual > 1) {
-    bono = Math.floor(puntosPar * (0.08 * gameState.rachaActual)); // 8% por nivel de racha
-    gameState.puntaje += bono;
-    mostrarBonoRacha(gameState.rachaActual, bono);
-  }
-
-  // ✅ Feedback visual
-  mostrarGanancia(puntosPar + bono);
-  mostrarEvaluacionPar(puntosPar + bono);
-
-  actualizarEficiencia();
-  actualizarHUD();
-
-  // 🔄 Reset de estado
   gameState.cartasVolteadas = [];
   gameState.inputBloqueado = false;
   habilitarTodasLasCartas();
 
   if (gameState.paresEncontrados === 12) {
     setTimeout(() => chequearVictoria(), 500);
-  }
-
-  if (elementos.eficienciaDisplay) {
-    elementos.eficienciaDisplay.classList.add('efficiency-animate');
-    setTimeout(() => {
-      elementos.eficienciaDisplay.classList.remove('efficiency-animate');
-    }, 500);
   }
 
   actualizarHUD();
@@ -560,9 +416,9 @@ function manejarFallo(carta1, carta2) {
 }
 
 function aplicarHover(cardEl) {
-  const strength = 10; // intensidad del giro
-  const depth = 8;    // hundimiento
-  const scale = 1.01;
+  const strength = 15; // intensidad del giro
+  const depth = 4;     // profundidad del hundimiento
+  const scale = 0.99;  // ligera reducción de tamaño para dar sensación de presión
 
   cardEl.addEventListener("mousemove", (e) => {
     const rect = cardEl.getBoundingClientRect();
@@ -571,17 +427,18 @@ function aplicarHover(cardEl) {
     const midX = rect.width / 2;
     const midY = rect.height / 2;
 
-    const rotateX = ((y - midY) / midY) * strength;
-    const rotateY = ((x - midX) / midX) * -strength;
+    // 🔄 Invertimos la dirección de los ángulos
+    const rotateX = ((y - midY) / midY) * -strength;
+    const rotateY = ((x - midX) / midX) * strength;
 
     cardEl.style.transform = `
       perspective(1000px)
       rotateX(${rotateX}deg)
       rotateY(${rotateY}deg)
-      translateY(-6px)
+      translateY(${depth}px)
       scale(${scale})
     `;
-    cardEl.style.filter = "brightness(1.05)";
+    cardEl.style.filter = "brightness(0.95)";
     cardEl.classList.add("hover-dynamic");
   });
 
@@ -641,14 +498,15 @@ function detenerTimer() {
 function chequearVictoria() {
   detenerTimer();
 
-  // Actualizar mejor puntaje
+  let nuevoRecord = false;
+
   if (gameState.puntaje > gameState.mejorPuntaje) {
     gameState.mejorPuntaje = gameState.puntaje;
     localStorage.setItem('mejorPuntaje', gameState.mejorPuntaje);
-    actualizarHUD();
+    nuevoRecord = true;
   }
 
-  mostrarModalEndgame(true);
+  mostrarModalEndgame(true, nuevoRecord);
 }
 
 /**
@@ -662,13 +520,12 @@ function chequearDerrota() {
 /**
  * Muestra el modal de fin de juego
  */
-function mostrarModalEndgame(victoria) {
+function mostrarModalEndgame(victoria, nuevoRecord = false) {
   if (!elementos.modalEndgame) return;
 
   if (elementos.endgameScore) elementos.endgameScore.textContent = gameState.puntaje;
   if (elementos.endgameTime) elementos.endgameTime.textContent = `Tiempo: ${formatearTiempo(gameState.tiempo)}`;
   if (elementos.endgameMoves) elementos.endgameMoves.textContent = `Movimientos: ${gameState.movimientos}`;
-
 
   if (victoria) {
     if (elementos.endgameIcon) {
@@ -679,8 +536,17 @@ function mostrarModalEndgame(victoria) {
         </svg>
       `;
     }
-    if (elementos.endgameTitle) elementos.endgameTitle.textContent = '¡Felicitaciones!';
-    if (elementos.endgameMessage) elementos.endgameMessage.textContent = '¡Has completado el juego con éxito!';
+
+    let titulo = '¡Felicitaciones!';
+    let mensaje = '¡Has completado el juego con éxito!';
+
+    if (nuevoRecord) {
+      titulo = '🏆 ¡Nuevo Récord!';
+      mensaje = 'Superaste tu mejor puntaje anterior, increíble trabajo.';
+    }
+
+    if (elementos.endgameTitle) elementos.endgameTitle.textContent = titulo;
+    if (elementos.endgameMessage) elementos.endgameMessage.textContent = mensaje;
 
     anunciar('¡Victoria! Has encontrado todos los pares.');
   } else {
@@ -740,10 +606,8 @@ function ocultarTutorial() {
  * Reinicia completamente el juego
  */
 function reiniciar() {
-  // Detener timer
   detenerTimer();
 
-  // Resetear estado
   gameState.tiempo = 0;
   gameState.puntaje = 0;
   gameState.movimientos = 0;
@@ -751,19 +615,13 @@ function reiniciar() {
   gameState.inputBloqueado = false;
   gameState.paresEncontrados = 0;
 
-  // Crear nuevo mazo
   gameState.mazo = crearMazo();
 
-  // Actualizar UI
   actualizarHUD();
-  actualizarEficiencia();
   renderTablero();
 
-  // Ocultar modales
   ocultarModalEndgame();
   ocultarTutorial();
-
-  // Iniciar timer
   iniciarTimer();
 
   anunciar('Juego reiniciado. ¡Buena suerte!');
@@ -783,10 +641,7 @@ function inicializar() {
     puntajeDisplay: document.getElementById('puntaje-display'),
     intentosDisplay: document.getElementById('intentos-display'),
     mejorPuntajeDisplay: document.getElementById('mejor-puntaje'),
-    eficienciaDisplay: document.getElementById('eficiencia-display'),
     tablero: document.getElementById('tablero'),
-    tableroLetras: document.getElementById('tablero-letras'),  // ✅ NUEVO
-    tableroSenas: document.getElementById('tablero-senas'),    // ✅ NUEVO
     modalTutorial: document.getElementById('modal-tutorial'),
     modalEndgame: document.getElementById('modal-endgame'),
     btnTutorial: document.getElementById('btn-tutorial'),
