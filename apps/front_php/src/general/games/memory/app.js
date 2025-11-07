@@ -104,14 +104,14 @@ function actualizarHUD() {
  * Cuanto menor el tiempo y los movimientos, mayor el valor.
  */
 function sumarPuntajePar() {
-  const base = 6000;
+  const base = 5000;
 
   // Penalización gradual: los movimientos pesan más que el tiempo
-  const penalizacionMov = Math.pow(gameState.movimientos / 4, 1.5) * 350;
-  const penalizacionTiempo = Math.pow(gameState.tiempo / 35, 1.15) * 120;
+  const penalizacionMov = Math.pow(gameState.movimientos / 4, 1.3) * 250;
+  const penalizacionTiempo = Math.pow(gameState.tiempo / 35, 1.1) * 100;
 
   // Resultado final con límite inferior
-  const puntosPar = Math.max(Math.floor(base - penalizacionMov - penalizacionTiempo), 600);
+  const puntosPar = Math.max(Math.floor(base - penalizacionMov - penalizacionTiempo), 800);
 
   gameState.puntaje += puntosPar;
   mostrarGanancia(puntosPar);
@@ -210,6 +210,13 @@ function renderTablero() {
   });
 }
 
+function encode(str) {
+  return btoa(str); // base64
+}
+function decode(str) {
+  return atob(str);
+}
+
 /**
  * Crea el elemento DOM de una carta con estructura flip 3D
  */
@@ -218,47 +225,29 @@ function crearElementoCarta(carta, index) {
   container.className = 'card-container aspect-[3/4] relative';
   container.dataset.cardId = carta.id;
   container.dataset.pairId = carta.pairId;
-  container.dataset.index = index;
-  container.tabIndex = 0;
-  container.setAttribute('role', 'button');
-  container.setAttribute('aria-label', `Carta ${index + 1}`);
-  container.setAttribute('aria-pressed', 'false');
+  container.dataset.tipo = carta.tipo;
 
+  // Guardamos el contenido codificado (no legible en DOM)
+  const payload = {
+    tipo: carta.tipo,
+    valor: carta.contenido
+  };
+  container.dataset.payload = btoa(JSON.stringify(payload));
+
+  // Estructura 3D
   const inner = document.createElement('div');
   inner.className = 'card-inner';
 
-  // Dorso (boca abajo)
   const back = document.createElement('div');
   back.className = 'card-face card-back flex items-center justify-center';
   back.innerHTML = `
-    <img 
-      src="/general/games/memory/img/EskuaLogoWhite.webp" 
-      alt="Dorso carta" 
-      class="w-16 h-16 object-contain opacity-90"
-    >
+    <img src="/general/games/memory/img/EskuaLogoWhite.webp"
+         alt="Dorso carta" class="w-16 h-16 opacity-90">
   `;
 
-  // Frente (contenido)
   const front = document.createElement('div');
   front.className = 'card-face card-front flex items-center justify-center';
-
-  if (carta.tipo === 'letra') {
-    // Muestra la letra en grande
-    front.innerHTML = `
-      <div class="text-5xl font-bold select-none" style="color: #1B3B50;">
-        ${carta.contenido}
-      </div>
-    `;
-  } else {
-    // Muestra la seña como imagen
-    front.innerHTML = `
-      <img 
-        src="${carta.contenido}" 
-        alt="Seña ${carta.pairId}" 
-        class="w-30 h-30 object-contain select-none"
-      >
-    `;
-  }
+  // ⚠️ No insertamos nada todavía
 
   inner.appendChild(back);
   inner.appendChild(front);
@@ -280,8 +269,6 @@ function crearElementoCarta(carta, index) {
 function aplicarEventos(cardEl) {
   // Click
   const clickHandler = (e) => {
-    // Prevenir si está arrastrando
-    if (cardEl.classList.contains('dragging')) return;
 
     if (!gameState.inputBloqueado &&
       !cardEl.classList.contains('flipped') &&
@@ -291,52 +278,40 @@ function aplicarEventos(cardEl) {
   };
 
   cardEl.addEventListener('click', clickHandler);
-
-  // Teclado (Enter/Space)
-  const keyHandler = (e) => {
-    if ((e.key === 'Enter' || e.key === ' ') &&
-      !gameState.inputBloqueado &&
-      !cardEl.classList.contains('flipped') &&
-      !cardEl.classList.contains('matched')) {
-      e.preventDefault();
-      voltearCarta(cardEl);
-    }
-  };
-
-  cardEl.addEventListener('keydown', keyHandler);
 }
 
 /**
  * Voltea una carta y gestiona la lógica de comparación
  */
 function voltearCarta(cardEl) {
-  if (gameState.cartasVolteadas.includes(cardEl)) return;
+  if (gameState.inputBloqueado || gameState.cartasVolteadas.includes(cardEl)) return;
 
-  // Añadir clase de animación
-  cardEl.classList.add('flipping');
-  setTimeout(() => cardEl.classList.remove('flipping'), 200);
+  const front = cardEl.querySelector('.card-front');
 
-  // Forzar reflow antes del flip
-  void cardEl.offsetWidth;
+  // Cargar contenido solo al girar
+  if (!front.innerHTML.trim()) {
+    const data = JSON.parse(atob(cardEl.dataset.payload));
+    if (data.tipo === 'letra') {
+      front.innerHTML = `
+        <div class="text-5xl font-bold select-none" style="color:#1B3B50;">
+          ${data.valor}
+        </div>`;
+    } else {
+      front.innerHTML = `
+        <img src="${data.valor}" alt="Seña ${cardEl.dataset.pairId}"
+             class="w-30 h-30 object-contain select-none">`;
+    }
+  }
+
   cardEl.classList.add('flipped');
   cardEl.setAttribute('aria-pressed', 'true');
   gameState.cartasVolteadas.push(cardEl);
 
+  // Comparar si ya hay dos
   if (gameState.cartasVolteadas.length === 2) {
     gameState.inputBloqueado = true;
-    // Deshabilitar visualmente todas las cartas no volteadas
-    deshabilitarCartasNoVolteadas();
-    setTimeout(() => compararCartas(), 800);
+    setTimeout(() => compararCartas(), 700);
   }
-}
-
-/**
- * Deshabilita visualmente las cartas que no están volteadas
- */
-function deshabilitarCartasNoVolteadas() {
-  document.querySelectorAll('.card-container:not(.flipped):not(.matched)').forEach(card => {
-    card.classList.add('disabled');
-  });
 }
 
 /**
@@ -348,7 +323,6 @@ function habilitarTodasLasCartas() {
   });
 }
 
-
 /**
  * Compara las dos cartas volteadas
  */
@@ -356,14 +330,13 @@ function compararCartas() {
   gameState.movimientos++;
   actualizarHUD();
 
-  const [carta1, carta2] = gameState.cartasVolteadas;
-  const pairId1 = carta1.dataset.pairId;
-  const pairId2 = carta2.dataset.pairId;
+  const [c1, c2] = gameState.cartasVolteadas;
+  const parIgual = c1.dataset.pairId === c2.dataset.pairId;
 
-  if (pairId1 === pairId2) {
-    manejarMatch(carta1, carta2);
+  if (parIgual) {
+    manejarMatch(c1, c2);
   } else {
-    manejarFallo(carta1, carta2);
+    manejarFallo(c1, c2);
   }
 }
 
@@ -393,25 +366,21 @@ function manejarMatch(carta1, carta2) {
 /**
  * Maneja un fallo (cartas no coinciden)
  */
-function manejarFallo(carta1, carta2) {
-  carta1.classList.add('fail');
-  carta2.classList.add('fail');
-
+function manejarFallo(c1, c2) {
+  // Marca visual de fallo
+  c1.classList.add('fail');
+  c2.classList.add('fail');
   anunciar("No coinciden.");
 
-  if (gameState.rachaActual > 0) {
-    gameState.rachaActual = 0;
-  }
-
   setTimeout(() => {
-    carta1.classList.remove('flipped', 'fail');
-    carta2.classList.remove('flipped', 'fail');
-    carta1.setAttribute('aria-pressed', 'false');
-    carta2.setAttribute('aria-pressed', 'false');
+    c1.classList.remove('flipped', 'fail');
+    c2.classList.remove('flipped', 'fail');
+    c1.setAttribute('aria-pressed', 'false');
+    c2.setAttribute('aria-pressed', 'false');
 
+    // Resetear el estado de comparación
     gameState.cartasVolteadas = [];
     gameState.inputBloqueado = false;
-    habilitarTodasLasCartas();
   }, 1000);
 }
 
@@ -449,17 +418,6 @@ function aplicarHover(cardEl) {
   });
 }
 
-/**
- * Muestra el progreso visualmente
- */
-function actualizarProgreso() {
-  const progreso = (gameState.paresEncontrados / 12) * 100;
-
-  // Puedes agregar una barra de progreso si quieres
-  if (elementos.tablero) {
-    elementos.tablero.style.opacity = 1 - (progreso * 0.001); // Sutil feedback
-  }
-}
 
 // ========================================
 // TIMER
@@ -509,13 +467,6 @@ function chequearVictoria() {
   mostrarModalEndgame(true, nuevoRecord);
 }
 
-/**
- * Verifica y muestra modal de derrota
- */
-function chequearDerrota() {
-  detenerTimer();
-  mostrarModalEndgame(false);
-}
 
 /**
  * Muestra el modal de fin de juego
@@ -635,7 +586,6 @@ function reiniciar() {
  * Inicializa el juego
  */
 function inicializar() {
-  // Inicializar elementos del DOM
   elementos = {
     tiempoDisplay: document.getElementById('tiempo-display'),
     puntajeDisplay: document.getElementById('puntaje-display'),
@@ -658,18 +608,12 @@ function inicializar() {
     endgameMoves: document.getElementById('endgame-moves'),
   };
 
-  // Resto del código igual...
   actualizarHUD();
 
-  const primeraVez = !localStorage.getItem('tutorialVisto');
-  if (primeraVez) {
-    mostrarTutorial();
-    localStorage.setItem('tutorialVisto', 'true');
-  } else {
-    reiniciar();
-  }
+  // 👇 siempre mostrar el tutorial al cargar
+  mostrarTutorial();
 
-  // Event Listeners...
+  // Eventos
   if (elementos.btnTutorial) {
     elementos.btnTutorial.addEventListener('click', mostrarTutorial);
   }
@@ -694,7 +638,6 @@ function inicializar() {
     });
   }
 
-  // Cerrar modal con ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (elementos.modalTutorial && !elementos.modalTutorial.classList.contains('hidden')) {
@@ -705,74 +648,7 @@ function inicializar() {
       }
     }
   });
-
-  console.log('🎮 Juego Memoria LSU cargado');
-  console.log('💡 Funciones debug disponibles: revelarTodo(), autowin(), autolose(), agregarTiempo(n), agregarIntentos(n), verEstado()');
 }
-
-// ========================================
-// DEBUG FUNCTIONS (útiles para testing)
-// ========================================
-
-/**
- * Revela todas las cartas (debug)
- */
-window.revelarTodo = function () {
-  document.querySelectorAll('.card-container').forEach(card => {
-    card.classList.add('flipped');
-  });
-  console.log('🔍 Todas las cartas reveladas');
-};
-
-/**
- * Victoria instantánea (debug)
- */
-window.autowin = function () {
-  gameState.paresEncontrados = 12;
-  chequearVictoria();
-  console.log('🏆 Victoria forzada');
-};
-
-/**
- * Derrota instantánea (debug)
- */
-window.autolose = function () {
-  gameState.intentos = 0;
-  chequearDerrota();
-  console.log('💀 Derrota forzada');
-};
-
-/**
- * Agregar tiempo (debug)
- */
-window.agregarTiempo = function (segundos) {
-  gameState.tiempo += segundos;
-  actualizarHUD();
-  console.log(`⏱️ +${segundos} segundos agregados`);
-};
-
-/**
- * Agregar intentos (debug)
- */
-window.agregarIntentos = function (cantidad) {
-  gameState.intentos += cantidad;
-  actualizarHUD();
-  console.log(`💪 +${cantidad} intentos agregados`);
-};
-
-/**
- * Ver estado completo (debug)
- */
-window.verEstado = function () {
-  console.log('📊 Estado actual:', {
-    tiempo: gameState.tiempo,
-    puntaje: gameState.puntaje,
-    intentos: gameState.intentos,
-    paresEncontrados: gameState.paresEncontrados,
-    cartasVolteadas: gameState.cartasVolteadas.length,
-    inputBloqueado: gameState.inputBloqueado
-  });
-};
 
 // ========================================
 // INICIO DE LA APLICACIÓN

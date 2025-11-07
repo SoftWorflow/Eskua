@@ -235,61 +235,40 @@
                 </div>
 
                 <!-- Tutorial Modal -->
-                <div id="modal-tutorial" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
-                <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative">
+                <div id="modal-tutorial" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 modal-backdrop hidden">
+                <div class="modal-content bg-white rounded-lg border-4 border-[#1B3B50] shadow-2xl max-w-3xl w-full p-14 relative space-y-10 ">
                         <button id="close-tutorial" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
                             <svg class="w-5 h-5" style="color: #6A7282;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
 
-                        <h2 class="text-3xl font-bold mb-2" style="color: #1B3B50;">¿Cómo jugar?</h2>
-                        <p class="text-sm mb-6" style="color: #6A7282;">Juego Memoria</p>
+                        <div class="w-full flex flex-col justify-center">
+                            <h2 class="text-3xl font-bold mb-2" style="color: #1B3B50;">¿Cómo jugar?</h2>
+                            <p class="text-sm" style="color: #6A7282;">Juego Memoria</p>
+                        </div>
+                        
 
-                        <div class="space-y-6">
+                        <div class="space-y-10 p-6 border-2 border-[#DFDFDF] rounded-xl">
                             <!-- Objetivo -->
                             <div>
                                 <div class="flex items-start gap-3">
                                     <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-white" style="background: #E1A05B;">1</div>
                                     <div>
                                         <h3 class="font-bold mb-1" style="color: #1B3B50;">Objetivo</h3>
-                                        <p style="color: #6A7282;">Formar pares de cartas, agrupando cada letra con su seña correspondiente. El juego termina cuando el jugador encuentra todos los pares o se queda sin intentos.</p>
-                                        <p class="mt-2 text-sm" style="color: #6A7282;">Para conseguir un puntaje más alto, intenta ganar en el menor tiempo posible.</p>
+                                        <p style="color: #6A7282;">Formar <strong class="font-medium text-[#E1A05B]">pares</strong> de cartas, agrupando cada letra con su seña correspondiente. El jugador <strong class="font-medium text-[#E1A05B]">gana cuando revela todas las cartas,</strong> sumando puntos en el proceso.</p>
+                                        <p class="mt-2 text-md" style="color: #6A7282;">Para conseguir un puntaje <strong class="font-medium text-[#E1A05B]">más alto,</strong> intenta ganar en el menor tiempo posible y con la menor cantidad de movimientos.</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Ejemplos -->
-                            <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="bg-gray-50 rounded-xl flex flex-col items-center p-4">
                                 <p class="text-sm font-medium mb-3" style="color: #6A7282;">Ejemplos Pares:</p>
-                                <div class="flex justify-center gap-6 flex-wrap">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-16 h-20 rounded-lg flex items-center justify-center text-2xl font-bold border-2" style="background: #FBFBFB; border-color: #DFDFDF; color: #1B3B50;">A</div>
-                                        <svg class="w-6 h-6" style="color: #E1A05B;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                        </svg>
-                                        <div class="w-16 h-20 rounded-lg flex items-center justify-center border-2" style="background: #FBFBFB; border-color: #DFDFDF;">
-                                            <span class="text-3xl">✊</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-16 h-20 rounded-lg flex items-center justify-center text-2xl font-bold border-2" style="background: #FBFBFB; border-color: #DFDFDF; color: #1B3B50;">B</div>
-                                        <svg class="w-6 h-6" style="color: #E1A05B;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                        </svg>
-                                        <div class="w-16 h-20 rounded-lg flex items-center justify-center border-2" style="background: #FBFBFB; border-color: #DFDFDF;">
-                                            <span class="text-3xl">✋</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-16 h-20 rounded-lg flex items-center justify-center text-2xl font-bold border-2" style="background: #FBFBFB; border-color: #DFDFDF; color: #1B3B50;">C</div>
-                                        <svg class="w-6 h-6" style="color: #E1A05B;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                        </svg>
-                                        <div class="w-16 h-20 rounded-lg flex items-center justify-center border-2" style="background: #FBFBFB; border-color: #DFDFDF;">
-                                            <span class="text-3xl">🤏</span>
-                                        </div>
-                                    </div>
+                                <div class="flex gap-6 flex-wrap">
+                                    <img src="/images/A-Cards.jpg" alt="">
+                                    <img src="/images/B-Cards.jpg" alt="">
+                                    <img src="/images/C-Cards.jpg" alt="">
                                 </div>
                             </div>
 
@@ -298,26 +277,23 @@
                                 <div class="flex items-start gap-3">
                                     <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-white" style="background: #E1A05B;">2</div>
                                     <div>
-                                        <h3 class="font-bold mb-1" style="color: #1B3B50;">Condiciones</h3>
+                                        <h3 class="font-bold mb-1" style="color: #1B3B50;">Mecánicas de juego</h3>
                                         <ul class="space-y-1" style="color: #6A7282;">
-                                            <li>• Solo se pueden dar vuelta dos cartas por turno, si no son iguales, el jugador pierde un intento.</li>
-                                            <li>• El puntaje total se basa en los intentos restantes y el tiempo transcurrido.</li>
-                                            <li class="font-medium" style="color: #E1A05B;">¿Menor tiempo? ¿Más intentos restantes? ¡MAYOR PUNTAJE!</li>
-                                            <li>• Aprender LSU, y divertirse!!</li>
+                                            <li>• Al comenzar el juego, se generan un total de <strong class="font-medium text-[#E1A05B]">12 señas aleatorias</strong>, haciendo que cada partida sea <strong class="font-medium text-[#E1A05B]">única</strong>. Es importante conocer todas las señas, ya que nunca se sabe cuáles pueden aparecer.</li>
+                                            <li>• Solo se pueden dar vuelta <strong class="font-medium text-[#E1A05B]">2</strong> cartas por turno, sumándose <strong class="font-medium text-[#E1A05B]">1</strong> movimiento en el proceso.</li>
+                                            <li>• No hay forma de perder, pero se guarda el <strong class="font-medium  text-[#E1A05B]">récord personal</strong>, ¡así que intenta superarte en cada partida!</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <button id="btn-jugar" class="w-full mt-8 py-3 rounded-lg font-bold text-white text-lg transition-all hover:opacity-90" style="background: #E1A05B;">
-                            Jugar
-                        </button>
+                        <button id="btn-jugar" class="orange-button w-full py-3 rounded-lg font-bold text-lg transition-all hover:opacity-90">Jugar</button>
                     </div>
                 </div>
 
                 <!-- End Game Modal -->
-            <div id="modal-endgame" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+                <div id="modal-endgame" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
                     <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
                         <div id="endgame-icon" class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-4xl"></div>
                         <h2 id="endgame-title" class="text-3xl font-bold mb-2" style="color: #1B3B50;"></h2>
