@@ -32,6 +32,10 @@ class ContentLoader {
                 document.head.appendChild(backofficeScript);
             }
 
+            if (role !== 'not_logged') {
+                requireAuth();
+            }
+
             const contentHTML = await response.text();
             return contentHTML;
         } catch (error) {

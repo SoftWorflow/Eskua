@@ -11,7 +11,7 @@ async function loadTasks() {
     const groupId = urlParams.get('groupId');
 
     if (groupId === undefined || groupId === null || groupId.length === 0 || groupId === "") {
-      window.location = '/groups/teacher/groupSelect.html';
+      window.location = '/groups/teacher/group-select.html';
       return;
     }
 
@@ -33,7 +33,7 @@ async function loadTasks() {
               data[0].forEach(task => {
                 const newTask = document.createElement('a');
                 newTask.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline';
-                newTask.href = 'assignmentInfoStudent.html';
+                newTask.href = `assignment-info.html?taskId=${task.id}&groupId=${groupId}`;
               
                 newTask.innerHTML = `
                   <div class="flex w-full justify-between pr-10">

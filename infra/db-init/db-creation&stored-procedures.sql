@@ -728,7 +728,7 @@ CREATE PROCEDURE getAssignmentsFromGroup(
     IN p_group_id INT
 )
 BEGIN
-    SELECT a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.assignment WHERE aa.`group` = p_group_id AND aa.is_deleted = false;
+    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.assignment WHERE aa.`group` = p_group_id AND aa.is_deleted = false;
 END //
 
 CREATE PROCEDURE getGroup(

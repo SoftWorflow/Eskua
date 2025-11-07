@@ -12,9 +12,10 @@
   <script src="material-script.js"></script>
   <script>
     document.documentElement.style.display = 'none';
+    
     (async () => {
-      await authManager.ensureValidToken();
-
+      await requireAuth();
+      
       if (authManager.getAccessToken()) {
         authManager.startTokenMonitoring();
       }
