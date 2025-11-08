@@ -1,7 +1,10 @@
 <?php
 
 interface IAssignmentLogic {
-    public function createAssignment(GroupAssignment $assignment, File $file, int $teacherId): bool;
+    public function createAssignmentWithFile(GroupAssignment $assignment, File $file): bool;
+    public function createAssignment(GroupAssignment $assignment) : bool;
+    public function getAllAssignmentsCountAdmin() : int;
+    public function getAllTurnedInAssignmentsCountAdmin() : int;
 }
 
 ?>

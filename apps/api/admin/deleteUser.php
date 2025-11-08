@@ -1,33 +1,15 @@
 <?php
 
-require_once(__DIR__ . "/../middleware/auth.php");
-require_once(__DIR__ . "/../../../backend/db_connect.php");
+require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
 header('Content-Type: application/json');
 
 $json_data = file_get_contents('php://input');
 $data = json_decode($json_data, true);
 
-if (!$data && !isset($data['id'])) exit;
+$userId = $data['id'] ?? '';
 
-$userId = $data['id'];
+$userLogic = UserLogicFacade::getInstance()->getIUserLogic();
 
-$auth = new AuthMiddleware();
-$auth->authorize(['admin']);
-
-$dbConnection = new db_connect();
-$conn = $dbConnection->connect();
-
-$stmt = $conn->prepare("call fDeleteUser(?)");
-$stmt->execute([$userId]);
-$affectedRows = $stmt->rowCount();
-
-if ($affectedRows > 0) {
-    $response = ['ok' => true, 'message' => 'Usuario borrado con exito!'];
-} else {
-    http_response_code(501);
-    $response = ['ok' => false, 'message' => 'Hubo un error al eliminar el usuario!'];
-}
-
-echo json_encode($response);
+echo json_encode($userLogic->deleteUserById($userId));
 
 ?>

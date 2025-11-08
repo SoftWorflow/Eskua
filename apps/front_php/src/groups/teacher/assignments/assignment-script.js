@@ -62,5 +62,5 @@ function addNewTask() {
   const urlParams = new URLSearchParams(window.location.search);
   const groupId = urlParams.get('groupId');
   
-  window.location = `/groups/teacher/assignments/createAssignment.html?groupId=${groupId}`;
+  window.location = `/groups/teacher/assignments/create-assignment.html?groupId=${groupId}`;
 }

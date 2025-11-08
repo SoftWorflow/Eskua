@@ -116,7 +116,12 @@ function searchGroup(e) {
 
                 groupsTableContentInnerDiv.classList.remove('hidden');
             } else {
-                groupsTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
+                groupsTableContentInnerDiv.innerHTML = '';
+
+                const text = document.createElement('p');
+                text.innerText = data.message;
+                text.className = 'text-center mt-6';
+                groupsTableContentInnerDiv.append(text);
 
                 spinner.stop();
                 document.getElementById('spinner-container').innerHTML = '';

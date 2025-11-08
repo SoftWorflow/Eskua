@@ -74,21 +74,21 @@ function formatUploadDate(uploadedDateString) {
   const timeDifference = currentDate.getTime() - uploadedDate.getTime();
 
   // Converts the millisecond difference to a minute difference
-  const minuteDifference = Math.floor(timeDifference / (1000 * 60));
+  const minuteDifference = timeDifference / (1000 * 60);
 
   // Converts the millisecond difference to an hour difference
-  const hoursDifference = Math.floor(timeDifference / (1000 * minuteDifference * 60));
+  const hoursDifference = timeDifference / (1000 * 60 * 60);
+
+  const goodMinuteDifference = Math.floor(minuteDifference);
+  const goodHoursDifference = Math.floor(hoursDifference);
 
   if (hoursDifference < 24) {
-    if (hoursDifference === 0) {
-      return `Agregado hace ${minuteDifference} minutos`;
+    if (hoursDifference <= 1) {
+      return `Agregado hace ${goodMinuteDifference} minutos`;
     }
     
-    return `Agregado hace ${hoursDifference} horas`;
-  } else {
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-      return uploadedDate.toLocaleDateString('es-ES', options);
-  }
+    return `Agregado hace ${goodHoursDifference} horas`;
+  } 
 }
 
 loadHomeData();

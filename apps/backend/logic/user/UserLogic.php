@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . "/../../middleware/auth.php");
+
 require_once("IUserLogic.php");
 require_once(__DIR__ . "/../../DTO/GroupAssignment.php");
 require_once(__DIR__ . "/../../DTO/Users/User.php");
@@ -70,18 +72,18 @@ class UserLogic implements IUserLogic {
         return $result;
     }
 
-    /*
-     *  DELETE USER
-    */
-    public function deleteUserById(int $id) : bool {
-        $res = false;
-
-        if ($id == null) return $res;
-        if ($id <= 0) return $res;
+    public function deleteUserById(int $userId) : array {
+        if (empty($userId) || $userId === null) {
+            return ['ok' => false, 'error' => 'No se recibio el identificador del usuario'];
+        }
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
-        $res = $userPersistence->deleteUser($id);
-        return $res;
+
+        if ($userPersistence->deleteUser($userId)) {
+            return ['ok' => true, 'message' => 'Usuario borrado con exito!'];
+        } else {
+            return ['ok' => false, 'message' => 'Hubo un error al eliminar el usuario!'];
+        }
     }
 
     public function deleteUserByUsername(string $username) : bool {
@@ -122,14 +124,20 @@ class UserLogic implements IUserLogic {
     /*
      *  GET USER
     */
-    public function getUserById(int $id) : ?array {
-        if ($id === null) return null;
+    public function getUserById(?int $userId) : ?array {
+        
+        UserLogic::needAuthentication();
+
+        if ($userId === null) {
+            $userId = AuthMiddleware::authenticate()['user_id'];
+            if ($userId === null) return null;
+        }
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
-        $result = $userPersistence->getUserById($id);
+        $result = $userPersistence->getUserById($userId);
 
         $user = $result[1];
-        return [$id, $user];
+        return [$userId, $user];
     }
 
     public function getUserByUsername(string $username) : ?array {
@@ -138,14 +146,7 @@ class UserLogic implements IUserLogic {
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
         $result = $userPersistence->getUserByUsername($username);
 
-        if ($result === null) {
-            return null;
-        }
-
-        $id = $result[0];
-        $user = $result[1];
-
-        return [$id, $user];
+        return $result;
     }
 
     public function getUserByEmail(string $email) : ?array {
@@ -282,7 +283,11 @@ class UserLogic implements IUserLogic {
         return $userPersistence->revokeRefreshToken($refreshToken);
     }
 
-    public function getStudentGroup($userId) : ?array {
+    public function getStudentGroup() : ?array {
+        AuthMiddleware::authorize(['student']);
+
+        $userId = AuthMiddleware::authenticate()['user_id'];
+        
         if ($userId == null) return null;
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
@@ -290,7 +295,27 @@ class UserLogic implements IUserLogic {
         return $userPersistence->getStudentGroup($userId);
     }
 
+    public function getSpecificUserData(int $userId) : array {
+        AuthMiddleware::authorize(['admin']);
+
+        if (empty($userId)) {
+            return ['ok' => false, 'error' => 'Nose riecibio el identificador del usuario'];
+        }
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $user = $userPersistence->getSpecificUserData($userId);
+
+        if (empty($user)) {
+            return ['ok' => false, 'error' => 'Hubo un error al buscar al usuario'];
+        }
+
+        return ['ok' => true, $user];
+    }
+
     public function getGroupMembers(int $groupId) : ?array {
+        AuthMiddleware::authorize(['teacher', 'student']);
+        
         if ($groupId == null) return null;
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
@@ -303,11 +328,33 @@ class UserLogic implements IUserLogic {
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
-        return $userPersistence->getAssignmentsFromGroup($groupId);
+        $assignments = $userPersistence->getAssignmentsFromGroup($groupId);
+
+        if ($assignments === null) return null;
+
+        if (AuthMiddleware::authenticate()['role'] === 'student') {
+            $responseAssignments = [];
+            if ($assignments !== null) {
+                $currentDate = new DateTime('now');
+                foreach ($assignments as $assignment) {
+                    $dueDate = new DateTime($assignment['dueDate']);
+                    if ($dueDate > $currentDate && $assignment['isActive']) {
+                        $responseAssignments[] = $assignment;
+                    }
+                }
+            }
+            $assignments = $responseAssignments;
+        }
+
+        $assignments = array_values($assignments);
+
+        return $assignments;
     }
 
     public function getTeacherGroups(int $userId) : ?array {
-        if ($userId == null) return null;
+        AuthMiddleware::authorize(['teacher']);
+        
+        if ($userId === null) return null;
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
@@ -322,12 +369,52 @@ class UserLogic implements IUserLogic {
         return $userPersistence->getGroup($groupId);
     }
 
-    public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool {
-        if ($assignment === null) return false;
+    public function getAllUsersAdmin(): array {
+        AuthMiddleware::authorize(['admin']);
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
-        return $userPersistence->createAssignment($assignment, $teacherId);
+        $users = $userPersistence->getAllUsersAdmin();
+
+        if (empty($users)) {
+            return ['ok' => false, 'error' => 'Hubo un error al encontrar los usuarios'];
+        }
+
+        return $users;
+    }
+
+    public function searchUsers(string $username) : array {
+        AuthMiddleware::authorize(['admin']);
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $users = $userPersistence->searchUsers($username);
+
+        if (empty($users)) {
+            return ['ok' => false, 'message' => 'No se encontraron resultados'];
+        }
+
+        return ['ok' => true, $users];
+    }
+
+    public function getAllUsersCountAdmin() : array {
+        AuthMiddleware::authorize(['admin']);
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $usersCount = $userPersistence->getAllUsersCountAdmin();
+
+        if (empty($usersCount)) {
+            return ['ok' => false, 'error' => 'Hubo un error al contar los usuarios'];
+        }
+
+        return $usersCount;
+    }
+
+    private static function needAuthentication(): bool {
+        $user = AuthMiddleware::authenticate();
+
+        return $user !== null;
     }
 
 }

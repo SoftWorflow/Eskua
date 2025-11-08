@@ -1,7 +1,5 @@
 <?php
 
-require_once(__DIR__ . "/../middleware/auth.php");
-
 require_once(__DIR__ . "/../../../backend/DTO/Users/User.php");
 require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
 header('Content-Type: application/json');
@@ -15,10 +13,8 @@ if ($user === null) {
     exit;
 }
 
-$userId = $user['user_id'];
-
 $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
-$userData = $userLogic->getUserById($userId);
+$userData = $userLogic->getUserById(null);
 
 $user = $userData[1];
 

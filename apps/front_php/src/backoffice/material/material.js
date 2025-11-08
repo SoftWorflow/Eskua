@@ -153,7 +153,10 @@ function searchMaterial(e) {
 
             materialTableContentInnerDiv.classList.remove('hidden');
         } else {
-            materialTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
+            const text = document.createElement('p');
+            text.innerText = data.message;
+            text.className = 'text-center mt-6';
+            materialTableContentInnerDiv.append(text);
 
             spinner.stop();
             document.getElementById('spinner-container').innerHTML = '';
@@ -253,7 +256,9 @@ function showMaterialDetail(materialId) {
         .then(materialData => {
             spinner.stop();
 
-            globalFilePath = materialData.filePath;
+            material = materialData[0];
+
+            globalFilePath = material.filePath;
             rightContent.innerHTML = `
                 <div class="bg-white w-full h-full rounded-t-xl flex flex-col space-y-12 items-center py-12">
                     <div class="flex flex-col w-full h-full items-center space-y-18 justify-center">
@@ -263,8 +268,8 @@ function showMaterialDetail(materialId) {
                                     alt="" class="h-full w-full rounded-full aspect-square object-cover">
                             </div>
                             <div class="flex flex-col items-center space-y-1.5">
-                                <h1 class="text-3xl min-w-3xs max-w-2xl truncate overflow-hidden whitespace-nowrap text-center" title="${materialData.title}">${materialData.title}</h1>
-                                <p class="font-light text-lg">Tipo de Material: ${materialData.type.toUpperCase()}</p>
+                                <h1 class="text-3xl min-w-3xs max-w-2xl truncate overflow-hidden whitespace-nowrap text-center" title="${material.title}">${material.title}</h1>
+                                <p class="font-light text-lg">Tipo de Material: ${material.type.toUpperCase()}</p>
                             </div>
                         </div>
                         
@@ -275,38 +280,38 @@ function showMaterialDetail(materialId) {
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Id:</p>
-                                <p class="col-span-2">#${materialData.id}</p>
+                                <p class="col-span-2">#${material.id}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Título:</p>
-                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${materialData.title}">${materialData.title}</p>
+                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${material.title}">${material.title}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Descripción:</p>
-                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${materialData.description == '' ? 'N/A' : materialData.description}">${materialData.description == '' ? 'N/A' : materialData.description}</p>
+                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${material.description == '' ? 'N/A' : material.description}">${material.description == '' ? 'N/A' : material.description}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Tipo de Material:</p>
-                                <p class="col-span-2">${materialData.type}</p>
+                                <p class="col-span-2">${material.type}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Fecha de Creación:</p>
-                                <p class="col-span-2">${materialData.uploadedDate}</p>
+                                <p class="col-span-2">${material.uploadedDate}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] grid grid-cols-3 px-6 py-4 rounded-b-2xl">
                                 <p class="font-light col-span-1">Ruta de Archivos Adjuntos:</p>
-                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${materialData.filePath}">${materialData.filePath}</p>
+                                <p class="col-span-2 truncate overflow-hidden whitespace-nowrap" title="${material.filePath}">${material.filePath}</p>
                             </div>
                         </div>
 
                         <div class="flex justify-center gap-8 w-1/2">
-                            <button onclick="renderModifyMaterial(${materialData.id}, '${materialData.title}', '${materialData.description}')" class="blue-button interactive w-52 h-18">Modificar Material</button>
-                            <button onclick="deleteMaterial(${materialData.id})" class="red-button interactive w-52 h-18">Eliminar Material</button>
+                            <button onclick="renderModifyMaterial(${material.id}, '${material.title}', '${material.description}')" class="blue-button interactive w-52 h-18">Modificar Material</button>
+                            <button onclick="deleteMaterial(${material.id})" class="red-button interactive w-52 h-18">Eliminar Material</button>
                         </div>
                     </div>
                 </div>

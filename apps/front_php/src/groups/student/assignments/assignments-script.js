@@ -15,7 +15,7 @@ async function loadTasks() {
         return;
     }
 
-    authenticatedFetch('/api/teacher/getAssignmentsFromGroup.php', {
+    authenticatedFetch('/api/student/getAssignmentsFromGroup.php', {
         method: 'POST',
         body: JSON.stringify({ id: groupId })
     }).then(res => res.json())

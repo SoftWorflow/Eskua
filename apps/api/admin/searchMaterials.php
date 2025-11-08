@@ -1,7 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/../middleware/auth.php");
-require_once(__DIR__ . "/../../../backend/db_connect.php");
+require_once(__DIR__ . "/../../../backend/logic/material/MaterialLogicFacade.php");
 header('Content-Type: application/json');
 
 $auth = new AuthMiddleware();
@@ -12,21 +11,12 @@ $data = json_decode($json_data, true);
 
 if (!$data && !isset($data['title'])) exit;
 
-$materialTitle = $data['title'];
+$materialTitle = $data['title'] ?? '';
 
-$dbConnection = new db_connect();
-$conn = $dbConnection->connect();
+$materialLogic = MaterialLogicFacade::getInstance()->getIMaterialLogic();
 
-$stmt = $conn->prepare("select pm.id as id, pm.title as title, f.extension as `type` from public_materials as pm join public_materials_files as pmf on pm.id = pmf.public_material join files as f on pmf.file = f.id where pm.title like ?;");
-$stmt->execute(["%" . $materialTitle . "%"]);
-$materialsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$materialsData = $materialLogic->searchMaterial($materialTitle);
 
-$stmt->closeCursor();
-
-if (empty($materialsData)) {
-    echo json_encode(['ok' => false, 'message' => 'No se encontraron resultados']);
-} else {
-    echo json_encode(['ok' => true, $materialsData]);
-}
+echo json_encode($materialsData);
 
 ?>

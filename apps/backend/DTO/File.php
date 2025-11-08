@@ -7,16 +7,6 @@ class File {
     private string $mime;
     private string $extension;
     private string $size;
-    public const FILE_PATH = '/var/www/html/uploads';
-    public const MAX_SIZE = 20 * 1024 * 1024; // 20 MB
-    public const ALLOWED_MIME = [
-        'application/pdf',
-        'image/png',
-        'image/jpeg',
-        'image/webp',
-        'video/mp4'
-    ];
-    public const ALLOWED_EXTENSIONS = ['pdf','png','jpg','jpeg','webp', 'mp4'];
 
     public function __construct(string $originalName, string $storageName, string $mime, string $extension, string $size) {
         $this->setOriginalName($originalName);

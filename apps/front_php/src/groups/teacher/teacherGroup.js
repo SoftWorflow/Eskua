@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadGroupHomeData(groupId) {
     const groupName = document.getElementById('group-name');
     const groupLevel = document.getElementById('group-level');
+    const groupCode = document.getElementById('group-code');
 
     const membersTable = document.getElementById('members-table');
 
@@ -26,6 +27,9 @@ async function loadGroupHomeData(groupId) {
         if (!data.ok) return;
 
         const group = data.group;
+
+        groupCode.innerText = group.code;
+        makeCopyable(groupCode);
 
         let members = [];
         members = data.groupMembers;

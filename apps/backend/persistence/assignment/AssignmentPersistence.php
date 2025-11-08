@@ -50,6 +50,44 @@ class AssignmentPersistence implements IAssignmentPersistence {
         return false;
     }
 
+    public function getAllAssignmentsCountAdmin() : int {
+
+        $sql = "select count(*) as total from `assigned_assignments`;";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $assignmentsCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $stmt->closeCursor();
+
+            return $assignmentsCount;
+        } catch (PDOException $e) {
+            print "Error while trying to get assignments count: " . $e->getMessage();
+        }
+
+        return 0;
+
+    }
+
+    public function getAllTurnedInAssignmentsCountAdmin() : int {
+
+        $sql = "select count(*) as total from `turned_in_assignments`;";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $turnedInAssignmentsCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $stmt->closeCursor();
+
+            return $turnedInAssignmentsCount;
+        } catch (PDOException $e) {
+            print "Error while trying to get turned in assignments count: " . $e->getMessage();
+        }
+
+        return 0;
+
+    }
+
 }
 
 ?>

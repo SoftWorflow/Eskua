@@ -13,7 +13,7 @@ $authUser = $auth::authenticate();
 $authUserId = $authUser['user_id'];
 
 $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
-$group = $userLogic->getStudentGroup($authUserId);
+$group = $userLogic->getStudentGroup();
 
 $teacherData = $userLogic->getUserById($group['teacher'])[1];
 

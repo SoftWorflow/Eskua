@@ -1,84 +1,45 @@
 <?php
 
-require_once(__DIR__ . "/../middleware/auth.php");
-require_once(__DIR__ . "/../../../backend/db_connect.php");
+require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
+require_once(__DIR__ . "/../../../backend/logic/material/MaterialLogicFacade.php");
+require_once(__DIR__ . "/../../../backend/logic/group/GroupLogicFacade.php");
+require_once(__DIR__ . "/../../../backend/logic/assignment/AssignmentLogicFacade.php");
 header('Content-Type: application/json');
 
-$auth = new AuthMiddleware();
-$auth->authorize(['admin']);
+$userLogic = UserLogicFacade::getInstance()->getIUserLogic();
+$groupLogic = GroupLogicFacade::getInstance()->getIGroupLogic();
+$materialLogic = MaterialLogicFacade::getInstance()->getIMaterialLogic();
+$assignmentLogic = AssignmentLogicFacade::getInstance()->getIAssignmentLogic();
 
-$dbConnection = new db_connect();
-$conn = $dbConnection->connect();
+$response = [];
 
 // USERS
-$stmt = $conn->prepare("select count(*) as total from `users`;");
-$stmt->execute();
-$totalUserCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
-// GUESTS
-$stmt = $conn->prepare("select count(*) as total from `guests`;");
-$stmt->execute();
-$guestCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
-// STUDENTS
-$stmt = $conn->prepare("select count(*) as total from `students`");
-$stmt->execute();
-$studentCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
-// TEACHERS
-$stmt = $conn->prepare("select count(*) as total from `teachers`;");
-$stmt->execute();
-$teacherCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
-// ADMINS
-$stmt = $conn->prepare("select count(*) as total from `admins`;");
-$stmt->execute();
-$adminCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+$response = array_merge($response, $userLogic->getAllUsersCountAdmin());
 
 // PUBLIC MATERIALS
-$stmt = $conn->prepare("select count(*) as total from `public_materials`;");
-$stmt->execute();
-$publicMaterialsCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+$publicMaterialsCount = $materialLogic->getMaterialsCountAdmin();
+$response['publicMaterialsCount'] = $publicMaterialsCount;
+
+$recentMaterials = $materialLogic->getRecentMaterials();
+$response['recentMaterials'] = $recentMaterials;
 
 // GROUPS
-$stmt = $conn->prepare("select count(*) as total from `groups`;");
-$stmt->execute();
-$groupsCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+$groupsCount = $groupLogic->getAllGroupsCountAdmin();
+$response['groupsCount'] = $groupsCount;
 
 // ASSIGNMENTS
-$stmt = $conn->prepare("select count(*) as total from `assigned_assignments`;");
-$stmt->execute();
-$assignmentsCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+$assignmentsCount = $assignmentLogic->getAllAssignmentsCountAdmin();
+$response['assignmentsCount'] = $assignmentsCount;
 
 // TUREND IN ASSIGNMENTS
-$stmt = $conn->prepare("select count(*) as total from `turned_in_assignments`;");
-$stmt->execute();
-$turnedInAssignmentsCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-
-$stmt = $conn->prepare("select pm.title, f.extension as type, pm.uploaded_date as uploadedDate from public_materials as pm left join public_materials_files as pmf on pm.id = pmf.public_material left join files as f on pmf.file = f.id order by pm.uploaded_date desc limit 4;");
-$stmt->execute();
-$recentMaterials = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$response = [
-    'totalUsers' => $totalUserCount,
-    'totalGuests' => $guestCount,
-    'totalStudents' => $studentCount,
-    'totalTeachers' => $teacherCount,
-    'totalAdmins' => $adminCount,
-    'publicMaterialsCount' => $publicMaterialsCount,
-    'groupsCount' => $groupsCount,
-    'assignmentsCount' => $assignmentsCount,
-    'turnedInAssignmentsCount' => $turnedInAssignmentsCount,
-    'recentMaterials' => $recentMaterials
-];
+$turnedInAssignmentsCount = $assignmentLogic->getAllTurnedInAssignmentsCountAdmin();
+$response['turnedInAssignmentsCount'] = $turnedInAssignmentsCount;
 
 foreach ($response as $key => $value) {
     if ($value == 0) {
         $response[$key] = "N/A";
     }
 }
-
-$stmt->closeCursor();
 
 echo json_encode($response);
 

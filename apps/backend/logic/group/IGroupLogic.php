@@ -3,6 +3,12 @@
 interface IGroupLogic {
     public function createGroup(Group $group) : bool;
     public function getGroupByCode($code) : ?array;
+    public function getAssignment(int $assignmentId) : ?array;
+    public function deactivateAssignment(int $assignmentId) : ?bool;
+    public function getAllGroupsCountAdmin(): int;
+    public function getAllGroupsAdmin(): array;
+    public function getSpecificGroupDataAdmin(int $groupId) : array;
+    public function searchGroupsByTeacherNameAdmin(string $teacherName) : array;
 }
 
 ?>

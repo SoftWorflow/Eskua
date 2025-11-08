@@ -1,7 +1,5 @@
 <?php
 
-require_once(__DIR__ . "/../middleware/auth.php");
-
 require_once(__DIR__ . "/../../../backend/DTO/GroupAssignment.php");
 require_once(__DIR__ . "/../../../backend/DTO/Users/User.php");
 require_once(__DIR__ . "/../../../backend/DTO/File.php");
@@ -10,12 +8,6 @@ require_once(__DIR__ . "/../../../backend/logic/assignment/AssignmentLogicFacade
 require_once(__DIR__ . "/../../../backend/logic/file/FileLogicFacade.php");
 require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
 header('Content-Type: application/json');
-
-$auth = new AuthMiddleware();
-$auth::authorize(['teacher']);
-
-$user = $auth::authenticate();
-$teacherId = $user['user_id'];
 
 $name = $_POST['title'] ?? '';
 $descrption = $_POST['description'] ?? '';
@@ -85,7 +77,7 @@ if ($maxScore <= 0 ) {
 
 $assignment = new GroupAssignment($name, $descrption, $maxScore, $groupId, $dueDate);
 
-$userLogic = UserLogicFacade::getInstance()->getIUserLogic();
+$assignmentLogic = AssignmentLogicFacade::getInstance()->getIAssignmentLogic();
 
 if (isset($_FILES['file'])) {
     $file = $_FILES['file'];
@@ -135,9 +127,8 @@ if (isset($_FILES['file'])) {
 
     $fileObject = new File($origName, $storageName, $mime, $ext, $size);
 
-    $assignmentLogic = AssignmentLogicFacade::getInstance()->getIAssignmentLogic();
 
-    if (!$assignmentLogic->createAssignment($assignment, $fileObject, $teacherId)) {
+    if (!$assignmentLogic->createAssignmentWithFile($assignment, $fileObject)) {
         http_response_code(500);
         echo json_encode(['ok' => false,'message' => 'No se puedo crear la tarea']);
     } else {
@@ -151,7 +142,7 @@ if (isset($_FILES['file'])) {
         exit;
     }
 } else {
-    if (!$userLogic->createAssignment($assignment, $teacherId)) {
+    if (!$assignmentLogic->createAssignment($assignment)) {
         http_response_code(500);
         echo json_encode(['ok' => false,'message' => 'No se puedo crear la tarea']);
     } else {

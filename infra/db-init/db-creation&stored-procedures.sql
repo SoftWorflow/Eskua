@@ -728,7 +728,16 @@ CREATE PROCEDURE getAssignmentsFromGroup(
     IN p_group_id INT
 )
 BEGIN
-    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.assignment WHERE aa.`group` = p_group_id AND aa.is_deleted = false;
+    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate, aa.`is_deleted` AS 'isActive' FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.`assignment` WHERE aa.`group` = p_group_id;
+END //
+
+CREATE PROCEDURE getAssignmentById(
+    IN p_assignment_id INT
+)
+BEGIN
+    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.`max_score` AS `maxScore`, f.`original_name` AS `originalName`, f.`storage_name` AS `storageName`, aa.`end_date` AS `dueDate`, f.`uploaded_at` AS `createdAt`
+    FROM `assignments` AS a JOIN `assigned_assignments` AS aa JOIN  `assigned_assignments_files` AS aaf ON aa.`assignment` = aaf.`assigned_assignment`
+    JOIN `files` AS f ON aaf.`file` = f.`id` WHERE a.`id` = p_assignment_id AND f.`is_active` = true;
 END //
 
 CREATE PROCEDURE getGroup(
@@ -749,8 +758,15 @@ CREATE PROCEDURE getMaterialById(
     IN p_material_id INT
 )
 BEGIN
-    SELECT pm.`title` AS `name`, pm.`description` AS `description`, pm.`uploaded_date` AS `createdDate`, f.`original_name` AS `originalName`, f.`extension` AS `type`, f.`storage_name` AS storageName
+    SELECT pm.`title` AS `name`, pm.`description` AS `description`, pm.`uploaded_date` AS `createdDate`, f.`original_name` AS `originalName`, f.`extension` AS `type`, f.`storage_name` AS `storageName`
     FROM `public_materials` AS pm JOIN `public_materials_files` AS pmf ON pm.id = pmf.`public_material`
     JOIN `files` AS f ON pmf.`file` = f.id WHERE pm.`id` = p_material_id;
+END //
+
+CREATE PROCEDURE lDeactivateAssignment(
+    IN p_assignment_id INT
+)
+BEGIN
+    UPDATE `assigned_assignments` SET `is_deleted` = true WHERE `assignment` = p_assignment_id;
 END //
 DELIMITER ;
