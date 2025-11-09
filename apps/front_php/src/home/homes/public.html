@@ -1,52 +1,317 @@
 <div id="navbar-container"></div>
 
-<div class="bg-blue-100 h-screen">
-    <div class="text-5xl font-medium mb-5">Eskua, Aprende lengua de <br> señas como nunca antes.</div>
-    <div class="text-xl mb-5">Aprende lengua de señas de la forma que mas <br> se adapte a ti, desde material descargable y <br> juegos originales a reconocimiento de señas <br> en tiempo real.</div>
-    <button onclick="window.location = '/login'" class="bg-blue-800 text-white text-lg rounded-lg shadow-xl p-3 interactive">Iniciar Sesion</button>
-</div>
+<!-- HERO -->
+<section class="h-screen w-screen flex justify-center items-center pt-25 border-b-4 border-[#D9D9D9]">
+    <div class="h-full w-11/12 flex items-center space-x-5">
 
-<!-- Cartas -->
- 
-    <div class="container mx-auto px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <!-- Card Principiante -->
-            <div class="bg-primary text-white rounded-3xl p-12 shadow-lg hover:bg-white hover:text-primary transition-all duration-300 hover:shadow-xl">
-                <div class="flex flex-col">
-                    <div class="w-80 h-80 overflow-hidden mb-8 mx-auto">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400&h=400&fit=crop" alt="Principiante">
+        <div class="flex flex-col h-full w-1/2 px-5 space-y-15 justify-center">
+            <div class="flex flex-col space-y-7">
+                <h1 class="w-full text-5xl font-semibold text-[#1B3B50] leading-14">
+                    <strong class="font-semibold text-6xl text-[#E1A05B]">Eskua</strong>
+                    <br> Tu nueva herramienta para <br>
+                    aprender <strong class="font-semibold text-5xl text-[#E1A05B]">LSU</strong> como nunca antes!
+                </h1>
+                <p class="text-2xl text-[#6A7282]">
+                    Aprende el lenguaje de señas uruguayo de la manera que <br> más se adapte a ti, desde material
+                    educativo descargable <br> y juegos originales a grupos educativos exclusivos para <br> alumnos
+                    y
+                    docentes.
+                </p>
+            </div>
+
+            <div class="flex space-x-8">
+                <a href="/login/index.html"><button class="orange-button2 py-5 px-12">Iniciar Sesión</button></a>
+                <a href="/register/index.html"><button class="blue-button2 py-5 px-12">Registrarse</button></a>
+            </div>
+        </div>
+
+        <div class="w-1/2 h-3/4 flex justify-center items-center">
+            <img id="hero-image" src="/images/Usign.jpg" alt="Seña Eskua" class="h-full object-contain">
+        </div>
+    </div>
+</section>
+
+<!-- WAYS TO LEARN -->
+<section class="h-screen w-screen flex justify-center items-center border-b-4 border-[#D9D9D9] pt-14">
+
+    <div class="h-10/12 w-10/12 space-y-15">
+        <div class="flex flex-col justify-center items-center space-y-2">
+            <h2 class="font-semibold text-5xl text-[#1B3B50]">Formas de Aprender</h2>
+            <p class="text-2xl text-[#6A7282] text-center">Eskua ofrece 3 maneras completamente <br> distintas de
+                aprender LSU!</p>
+        </div>
+
+        <div class="grid grid-cols-3 w-full gap-6">
+
+            <div class="bg-[#1B3B50] rounded-md p-2 h-[55vh]">
+                <div class="bg-white rounded-sm h-full flex flex-col">
+                    <img src="/images/materialImage.jpg" alt=""
+                        class="h-1/2 border-b-2 border-[#D9D9D9] object-contain">
+                    <div class="flex flex-col space-y-5 h-1/2 p-10">
+                        <p class="text-3xl font-semibold text-[#1B3B50]">Material Educativo</p>
+                        <p class="text-xl text-[#6A7282]">
+                            Estudia el teorico detrás de LSU.
+                            <br> Eskua ofrece una variedad extensa
+                            <br> de materiales en forma de textos
+                            <br> digitales y videos subtitulados para
+                            <br> todos los niveles.
+                        </p>
                     </div>
-                    <h3 class="text-3xl font-bold mb-4">Principiante</h3>
-                    <p class="text-base leading-relaxed">Inicia tu camino en la lengua de señas aprendiendo el abecedario, saludos y expresiones simples. Ideal para quienes comienzan desde cero.</p>
                 </div>
             </div>
 
-            <!-- Card Intermedio -->
-            <div class="bg-primary text-white rounded-3xl p-12 shadow-lg hover:bg-white hover:text-primary transition-all duration-300 hover:shadow-xl relative">
-                <div class="flex flex-col">
-                    <div class="relative mb-8 mx-auto">
-                        <div class="w-80 h-80 overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1598520106830-8c45c2035460?w=400&h=400&fit=crop" alt="Intermedio">
-                        </div>
+            <div class="bg-[#1B3B50] rounded-md p-2 h-[55vh]">
+                <div class="bg-white rounded-sm h-full flex flex-col">
+                    <img src="/images/gameImage.png" alt=""
+                        class="h-1/2 border-b-2 border-[#D9D9D9] object-contain p-10">
+                    <div class="flex flex-col space-y-5 h-1/2 p-10">
+                        <p class="text-3xl font-semibold text-[#1B3B50]">Juegos</p>
+                        <p class="text-xl text-[#6A7282]">
+                            Pon a prueba tus conocimientos sobre el
+                            <br> lenguaje de señas con divertidos juegos de cartas como el memoria, donde cada
+                            <br> partida es única!
+                        </p>
                     </div>
-                    <h3 class="text-3xl font-bold mb-4">Intermedio</h3>
-                    <p class="text-base leading-relaxed">Amplía tu vocabulario y aprende frases más complejas para comunicarte con mayor fluidez en diferentes situaciones cotidianas.</p>
                 </div>
             </div>
 
-            <!-- Card Avanzado -->
-            <div class="bg-primary text-white rounded-3xl p-12 shadow-lg hover:bg-white hover:text-primary transition-all duration-300 hover:shadow-xl relative">
-                <div class="flex flex-col">
-                    <div class="relative mb-8 mx-auto">
-                        <div class="w-80 h-80 overflow-hidden">
-                            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=400&fit=crop" alt="Intermedio">
-                        </div>
+            <div class="bg-[#1B3B50] rounded-md p-2 h-[55vh]">
+                <div class="bg-white rounded-sm h-full flex flex-col">
+                    <img src="/images/groupImage.jpg" alt="" class="h-1/2 border-b-2 border-[#D9D9D9] object-cover p-5">
+                    <div class="flex flex-col space-y-5 h-1/2 p-10">
+                        <p class="text-3xl font-semibold text-[#1B3B50]">Grupos</p>
+                        <p class="text-xl text-[#6A7282]">
+                            Diseñada para estudiantes, Eskua ofrece grupos educativos con
+                            funcionalidades unicas donde los alumnos pueden realizar tareas propuestas por su docente.
+                        </p>
+                        <p class="text-sm text-[#E1A05B]">Exclusivo para docentes y alumnos.</p>
                     </div>
-                    <h3 class="text-3xl font-bold mb-4">Avanzado</h3>
-                    <p class="text-base leading-relaxed">Perfecciona tu expresión y comprensión en lengua de señas, abordando temas técnicos, narración y matices culturales para un dominio completo.</p>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+</section>
+
+<!-- AI RECOGNITION -->
+<section class="h-screen w-screen flex flex-col items-center justify-center border-b-4 border-[#D9D9D9]">
+
+    <div class="h-3/4 w-3/4 flex flex-col space-y-20">
+
+        <div class="space-y-5">
+            <div class="space-y-3">
+                <p class="text-3xl text-[#E1A05B]">Proximamente</p>
+                <h2 class="font-semibold text-5xl text-[#1B3B50]">Reconocimiento con IA</h2>
+            </div>
+            <p class="text-2xl text-[#6A7282]">
+                Una inovadora manera para practicar y familiarizarse con el lenguaje de señas,
+                <br> el reconocimiento con inteligencia artificial. Prende tu camara y haz una seña, el sistema
+                <br> la reconocera y te ayudara a mejorar con retroalimentacion en tiempo real!
+            </p>
+        </div>
+
+        <img src="/images/AiImage.png" alt="" class="shadow-md/25 rounded-2xl">
+    </div>
+
+</section>
+
+<!-- EDUCATION PLANS -->
+<section class="h-screen w-screen flex flex-col items-center justify-center border-b-4 border-[#D9D9D9]">
+
+    <div class="h-3/4 w-3/4 flex flex-col items-center space-y-15">
+
+        <div class="text-center space-y-4">
+
+            <div class="space-y-2">
+                <p class="text-2xl text-[#E1A05B]">Proximamente</p>
+                <h2 class="text-5xl font-semibold text-[#1B3B50]">Planes Educativos</h2>
+            </div>
+            <p class="text-2xl text-[#6A7282] ">
+                Eskua, ofrece planes para centros educativos
+                <br> con descuentos increibles!
+            </p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-10">
+
+            <div class="h-[53vh] bg-[#1B3B50] rounded-xl p-2">
+                <div class="w-full h-full bg-white rounded-sm p-10 flex flex-col justify-center space-y-10">
+                    <div class="space-y-5">
+                        <h3 class="font-medium text-3xl text-[#1B3B50]">Inicial</h3>
+                        <div class="flex space-x-1">
+                            <p class="text-[#6A7282]">$</p>
+                            <p class="text-4xl text-[#E1A05B]">40.00</p>
+                            <p class="text-[#6A7282]">/mes</p>
+                        </div>
+                        <p class="text-[#6A7282]">Plan más básico, destinado para centros <br> pequeños.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-[#6A7282]">Incluye:</p>
+                        <ul class="pl-10">
+                            <li class="text-[#1B3B50] list-disc">50 cuentas de alumnos premium.</li>
+                            <li class="text-[#1B3B50] list-disc">2 cuentas de docente premium.</li>
+                            <li class="text-[#1B3B50] list-disc">Acceso a material público exclusivo.</li>
+                            <li class="text-[#1B3B50] list-disc">Acceso a reconocimiento de señas en <br> tiempo real.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="blue-button2 w-full p-4">Ver Más</button>
+                </div>
+            </div>
+
+            <div class="h-[53vh] bg-[#1B3B50] rounded-xl p-2">
+                <div class="w-full h-full bg-white rounded-sm p-10 flex flex-col justify-center space-y-10">
+                    <div class="space-y-5">
+                        <h3 class="font-medium text-3xl text-[#1B3B50]">Regular</h3>
+                        <div class="flex space-x-1">
+                            <p class="text-[#6A7282]">$</p>
+                            <p class="text-4xl text-[#E1A05B]">75.00</p>
+                            <p class="text-[#6A7282]">/mes</p>
+                        </div>
+                        <p class="text-[#6A7282]">Plan intermedio, destinado para grupos con <br> una cantidad moderada
+                            de
+                            alumnos.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-[#6A7282]">Incluye:</p>
+                        <ul class="pl-10">
+                            <li class="text-[#1B3B50] list-disc">100 cuentas de alumnos premium.</li>
+                            <li class="text-[#1B3B50] list-disc">5 cuentas de docente premium.</li>
+                            <li class="text-[#1B3B50] list-disc">Acceso a material público exclusivo.</li>
+                            <li class="text-[#1B3B50] list-disc">Acceso a reconocimiento de señas en <br> tiempo real.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="blue-button2 w-full p-4">Ver Más</button>
+                </div>
+            </div>
+
+            <div class="h-[53vh] bg-[#1B3B50] rounded-xl p-2">
+                <div class="w-full h-full bg-white rounded-sm p-10 flex flex-col justify-center space-y-10">
+                    <div class="space-y-5">
+                        <h3 class="font-medium text-3xl text-[#1B3B50]">Avanzado</h3>
+                        <div class="flex space-x-1">
+                            <p class="text-[#6A7282]">$</p>
+                            <p class="text-4xl text-[#E1A05B]">135.00</p>
+                            <p class="text-[#6A7282]">/mes</p>
+                        </div>
+                        <p class="text-[#6A7282]">Plan más exclusivo, destinado para grandes <br> centros educativos.
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-[#6A7282]">Incluye:</p>
+                        <ul class="pl-10">
+                            <li class="text-[#1B3B50] list-disc">200 cuentas de alumnos premium.</li>
+                            <li class="text-[#1B3B50] list-disc">10 cuentas de docente premium.</li>
+                            <li class="text-[#1B3B50] list-disc">Acceso a material público exclusivo.</li>
+                            <li class="text-[#1B3B50] list-disc">Acceso a reconocimiento de señas en <br> tiempo real.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="blue-button2 w-full p-4">Ver Más</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT US -->
+<section class="relative h-screen w-screen flex flex-col items-center justify-between pt-10 overflow-hidden">
+
+    <div class=" h-full flex flex-col items-center justify-end space-y-5 text-center z-10">
+        <h2 class="text-5xl font-semibold text-[#1B3B50]">Sobre Nosotros</h2>
+        <p class="text-2xl text-[#6A7282] leading-relaxed">
+            Desarrollado por el equipo de Soft Workflow.
+            <br> Somos 4 estudiantes de informática de 3ro Bachillerato
+            <br> Tecnológico del Liceo IEP ubicado en el Pinar, Canelones.
+        </p>
+    </div>
+
+    <img src="/images/logoSoftWorkflow.png" alt="Logo Soft Workflow"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[75%] w-65 z-0 select-none">
+
+    <div class="relative w-full flex justify-center items-end z-10">
+
+        <div class="absolute bottom-0 w-[600px] h-[600px] bg-[#E9F2F6] rounded-full -z-10 translate-y-1/4"></div>
+
+        <img src="/images/fotoNosotros.png" alt="Equipo Soft Workflow"
+            class="w-auto max-w-[1100px] object-contain select-none">
+
+        <p class="absolute text-sm text-[#1B3B50] bg-white py-5 px-8 rounded-t-lg border-2 border-b-0 border-[#1B3B50]">
+            "Eskua"
+            representado en LSU
+        </p>
+    </div>
+</section>
+
+
+<footer class="w-screen">
+
+    <div class="bg-[#1B3B50] flex justify-between px-25 py-10">
+
+        <div class="space-y-10">
+
+            <div class="space-y-3">
+                <h3 class="text-3xl text-white">Eskua</h3>
+                <p class="text-white">
+                    Eskua es una aplicación educativa diseñada
+                    <br> para facilitar el aprendizaje del lenguaje de señas.
+                    <br> Su objetivo principal es promover la inclusión y
+                    <br> de la comunidad hipoacusica.
+                </p>
+            </div>
+
+            <div class="flex space-x-6">
+                <img src="/images/Message.svg" alt=""
+                    class="hover:opacity-70 scale105 transition duration-150 interactive">
+                <img src="/images/Community.svg" alt=""
+                    class="hover:opacity-70 scale105 transition duration-150 interactive">
+                <img src="/images/Phone.svg" alt=""
+                    class="hover:opacity-70 scale105 transition duration-150 interactive">
+                <img src="/images/Mail.svg" alt=""
+                    class="hover:opacity-70 scale105 transition duration-150 interactive">
+            </div>
+            <a href="/">
+                <button
+                    class="bg-[#E1A05B] scroll-smooth interactive rounded-md px-10 py-4 hover:bg-[#c58d52] hover:scale-103 transition duration-150 text-white">
+                    Volver a inicio
+                </button>
+            </a>
+        </div>
+
+        <div>
+            <div class="flex space-x-25">
+
+                <ul class="text-[#85D2E2] space-y-5">
+                    <p class="font-medium">Navegación Sitio</p>
+                    <li class="font-light interactive hover:opacity-50 transition duration-150">Inicio</li>
+                    <li class="font-light interactive hover:opacity-50 transition duration-150">Aprende</li>
+                    <li class="font-light interactive hover:opacity-50 transition duration-150">Reconocimiento IA</li>
+                    <li class="font-light interactive hover:opacity-50 transition duration-150">Planes Educativos</li>
+                    <li class="font-light interactive hover:opacity-50 transition duration-150">Sobre Nosotros</li>
+                    <div class="flex space-x-8">
+                        <li class="interactive hover:opacity-50 transition duration-150"><a href="/register"
+                                class="no-underline text-[#85D2E2] font-light">Registrarse</a></li>
+                        <li class="interactive hover:opacity-50 transition duration-150"><a href="/login"
+                                class="no-underline text-[#85D2E2] font-light">Iniciar Sesión</a></li>
+                    </div>
+                </ul>
+
+                <ul class="text-[#85D2E2] space-y-5">
+                    <p class="font-medium">Legal</p>
+                    <li class="font-light">Política de Privacidad</li>
+                    <li class="font-light">Terminos y Condiciones</li>
+                    <li class="font-light">Copyright</li>
+                </ul>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="bg-[#85D2E2] text-center text-[#1B3B50] p-2">
+        <p>Copyright © 2025 Soft Workflow, Todos los derechos reservados. </p>
+    </div>
+</footer>

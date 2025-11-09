@@ -114,13 +114,13 @@
   }
 
   .orange-button {
-    @apply border-2 border-[#E1A05B] text-[#E1A05B] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#E1A05B] hover:text-white transition-colors duration-150 hover:cursor-pointer;
+    @apply border-2 border-[#E1A05B] text-[#E1A05B] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#E1A05B] hover:text-white transition duration-1000 hover:cursor-pointer;
     font-family: 'Lexend', sans-serif;
     font-weight: 400;
   }
 
   .orange-button2 {
-    @apply text-white rounded-2xl text-xl drop-shadow-md/25 bg-[#E1A05B] hover:bg-white hover:text-[#E1A05B] hover:border-2 hover:border-[#E1A05B] transition-colors duration-150 hover:cursor-pointer;
+    @apply border-2 border-[#E1A05B] text-white rounded-2xl text-xl drop-shadow-md/25 bg-[#E1A05B] hover:bg-white hover:text-[#E1A05B] hover:border-2 hover:border-[#E1A05B] transition-colors duration-150 hover:cursor-pointer;
     font-family: 'Lexend', sans-serif;
     font-weight: 400;
   }
@@ -133,6 +133,12 @@
 
   .blue-button {
     @apply border-2 border-[#1B3B50] text-[#1B3B50] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#1B3B50] hover:text-white transition-colors duration-150 hover:cursor-pointer;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+
+   .blue-button2 {
+    @apply border-2 border-[#1B3B50] text-white rounded-2xl text-xl drop-shadow-md/25 bg-[#1B3B50] hover:bg-white hover:text-[#1B3B50] hover:border-2 hover:border-[#1B3B50] transition-colors duration-150 hover:cursor-pointer;
     font-family: 'Lexend', sans-serif;
     font-weight: 400;
   }
