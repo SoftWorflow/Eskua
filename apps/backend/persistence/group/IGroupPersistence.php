@@ -9,6 +9,8 @@ interface IGroupPersistence {
     public function getAllGroupsAdmin(): array;
     public function getSpecificGroupData(int $groupId) : array;
     public function searchGroupsByTeacherNameAdmin(string $teacherName) : array;
+    public function getGroupMembers(int $groupId) : array;
+    public function getGroup(int $groupId) : array;
 }
 
 ?>

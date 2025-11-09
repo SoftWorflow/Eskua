@@ -18,7 +18,7 @@ class AssignmentPersistence implements IAssignmentPersistence {
         }
     }
 
-    public function createAssignment(GroupAssignment $assignment, File $file, int $teacherId): bool {
+    public function createAssignmentWithFile(GroupAssignment $assignment, File $file, int $teacherId): bool {
         if ($assignment === null || $file === null || $teacherId === null) return false;
 
         $sql = "call createFullAssignment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -40,6 +40,31 @@ class AssignmentPersistence implements IAssignmentPersistence {
         try {
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$teacherId, $groupId, $assignmentName, $assignmentDescription, $assignmentMaxScore, $assignmentDueDate, $fileStorageName, $fileOriginalName, $fileMime, $fileExtension, $fileSize]);
+            $stmt->closeCursor();
+
+            return true;
+        } catch (PDOException $e) {
+            print "Error while trying to upload a material: " . $e->getMessage();
+        }
+
+        return false;
+    }
+
+    public function createAssignment(GroupAssignment $assignment, int $teacherId): bool {
+        if ($assignment === null || $teacherId === null) return false;
+
+        $sql = "call createAssignment(?, ?, ?, ?, ?, ?);";
+
+        // Assignment
+        $groupId = $assignment->getGroupId();
+        $assignmentName = $assignment->getName();
+        $assignmentDescription = $assignment->getDescription();
+        $assignmentMaxScore = $assignment->getMaxScore();
+        $assignmentDueDate = $assignment->getDueDate()->format('Y-m-d H:i:s');
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$teacherId, $groupId, $assignmentName, $assignmentDescription, $assignmentMaxScore, $assignmentDueDate]);
             $stmt->closeCursor();
 
             return true;

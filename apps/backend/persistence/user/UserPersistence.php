@@ -143,7 +143,7 @@ class UserPersistence implements IUserPersistence {
     }
 
     public function getUserByUsername(string $username) : ?array {
-        if ($this->conn == null || empty($username)) return null;
+        if ($this->conn == null || empty($username)) return [];
 
         $sql = "call getUserByUsername(?);";
 
@@ -168,14 +168,16 @@ class UserPersistence implements IUserPersistence {
                 return [$id, $user];
             }
 
-            return null;
+            return [];
         } catch (PDOException $e) {
-            return null;
+            echo "Error when trying to get user by username: " . $e->getMessage();
         }
+
+        return [];
     }
 
     public function getUserByEmail(string $email) : ?array {
-        if ($this->conn == null || empty($email)) return null;
+        if ($this->conn == null || empty($email)) return [];
 
         $sql = "call getUserByEmail(?);";
 
@@ -200,10 +202,11 @@ class UserPersistence implements IUserPersistence {
                 return [$id, $user];
             }
 
-            return null;
+            return [];
         } catch (PDOException $e) {
-            return null;
+            echo "Error when trying to get user by email: " . $e->getMessage();
         }
+        return [];
     }
 
     // TOKENS
@@ -285,26 +288,6 @@ class UserPersistence implements IUserPersistence {
         return null;
     }
 
-    public function getGroupMembers(int $groupId) : ?array {
-        if ($groupId === null) return null;
-
-        $sql = "call getGroupMembers(?);";
-
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$groupId]);
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if (!$result) return null;
-
-            return $result;
-        } catch (PDOException $e) {
-            error_log("Error getting group members: ". $e->getMessage());
-        }
-
-        return null;
-    }
-
     public function getAssignmentsFromGroup(int $groupId) : ?array {
         if ($groupId == null) return null;
 
@@ -325,8 +308,8 @@ class UserPersistence implements IUserPersistence {
         return null;
     }
 
-    public function getTeacherGroups(int $userId) : ?array {
-        if ($userId === null) return null;
+    public function getTeacherGroups(int $userId) : array {
+        if ($userId === null) return [];
 
         $sql = "call getGroupsOfTeacher(?);";
 
@@ -335,34 +318,12 @@ class UserPersistence implements IUserPersistence {
             $stmt->execute([$userId]);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if (!$result) return null;
-
             return $result;
         } catch (PDOException $e) {
             error_log("Error getting teacher groups: ". $e->getMessage());
         }
 
-        return null;
-    }
-
-    public function getGroup(int $groupId) : ?array {
-        if ($groupId == null) return null;
-
-        $sql = "call getGroup(?);";
-
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$groupId]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$result) return null;
-
-            return $result;
-        } catch (PDOException $e) {
-            error_log("Error getting the group: ". $e->getMessage());
-        }
-
-        return null;
+        return [];
     }
 
     public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool {

@@ -85,7 +85,11 @@ class MaterialLogic implements IMaterialLogic {
 
         $materials = $materialPersistence->getAllMaterials();
 
-        if ($materials !== null && count($materials) !== 0) {
+        if ($materials === null) {
+            return ['ok' => false, 'error' => 'Hubo un error al obtener los materiales públicos'];
+        }
+
+        if (count($materials) !== 0) {
             foreach ($materials as &$material) {
                 if (isset($material['createdDate']) && !empty($material['createdDate'])) {
                     $date = DateTime::createFromFormat('Y-m-d H:i:s', $material['createdDate']);
@@ -97,7 +101,7 @@ class MaterialLogic implements IMaterialLogic {
             unset($material);
         }
 
-        return $materials;
+        return ['ok' => true, 'materials' => $materials];
     }
 
     public function getAllMaterialsAdmin(): array {

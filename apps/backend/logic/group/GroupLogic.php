@@ -27,12 +27,52 @@ class GroupLogic implements IGroupLogic {
         return [$id, $group];
     }
 
-    public function getAssignment(int $assignmentId) : ?array {
-        if ($assignmentId === null) return null;
+    public function getGroup (int $groupId) : array {
+        if ($groupId === null || empty($groupId)) {
+            return ['ok' => false, 'error' => 'No se recibió el identificador del grupo'];
+        }
 
         $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
 
-        return $groupPersistence->getAssignment($assignmentId);
+        $group = $groupPersistence->getGroup($groupId);
+
+        if (empty($group)) {
+            return ['ok' => false, 'error' => 'No se encontró el grupo'];
+        }
+
+        return ['ok' => true, 'group' => $group];
+    }
+
+    public function getAssignment(int $assignmentId) : array {
+        AuthMiddleware::authorize(['admin', 'teacher', 'student']);
+        
+        if (empty($assignmentId) || $assignmentId === null) {
+            return ['ok' => false, 'message' => 'No se recibió el identificador de la tarea'];
+        }
+
+        $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
+
+        $assignment = $groupPersistence->getAssignment($assignmentId);
+
+        if (empty($assignment)) {
+            return ['ok' => false, 'message' => 'No se encontró la tarea'];
+        }
+
+        $dueDate = new DateTime($assignment['dueDate']);
+
+        $assignment['dueDate'] = $dueDate->format("d/m/Y");
+
+        $storageName = $assignment['storageName'];
+        $createdDate = new DateTime($assignment['createdAt']);
+
+        $year = $createdDate->format('Y');
+        $month = $createdDate->format('m');
+
+        $filePath = 'uploads/'.$year.'/'.$month.'/'.$storageName;
+
+        $assignment['filePath'] = $filePath;
+
+        return ['ok' => true, 'task' => $assignment];
     }
 
     public function deactivateAssignment(int $assignmentId) : ?bool {
@@ -93,6 +133,24 @@ class GroupLogic implements IGroupLogic {
         }
 
         return ['ok' => true, $groupsData];
+    }
+
+    public function getGroupMembers(int $groupId) : array {
+        AuthMiddleware::authorize(['teacher', 'student']);
+        
+        if ($groupId === null || empty($groupId) || $groupId < 0) {
+            return ['ok' => false, 'error' => 'No se recibió el identificador del grupo'];
+        }
+
+        $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
+
+        $members = $groupPersistence->getGroupMembers($groupId);
+
+        if (empty($members)) {
+            return ['ok' => false, 'error' => 'No se pudieron obtener los miembros del grupo'];
+        }
+
+        return ['ok' => true, 'members' => $members];
     }
 
 }

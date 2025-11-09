@@ -12,9 +12,7 @@ interface IUserPersistence {
     public function getRefreshTokenByToken(string $refreshToken) : ?array;
     public function revokeRefreshToken($refreshToken) : bool;
     public function getStudentGroup(int $userId) : ?array;
-    public function getTeacherGroups(int $userId) : ?array;
-    public function getGroup(int $groupId) : ?array;
-    public function getGroupMembers(int $groupId) : ?array;
+    public function getTeacherGroups(int $userId) : array;
     public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool;
     public function getAssignmentsFromGroup(int $groupId) : ?array;
     public function getAllUsersAdmin(): array;

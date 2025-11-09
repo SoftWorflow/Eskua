@@ -39,9 +39,9 @@ async function loadTasks() {
                   <div class="flex w-full justify-between pr-10">
                     <div class="flex items-center space-x-5">
                        <img src="/images/Assignment.png" alt="" class="w-20 h-20 shadow-md/25 rounded-md object-cover">
-                       <div class="flex flex-col justify-center w-full">
-                          <p class="text-xl font-medium text-[#1B3B50]">${task.name}</p>
-                          <p class="text-base/5 text-[#6A7282] w-3/4">${task.description}</p>
+                       <div class="flex flex-col justify-center w-full overflow-ellipsis">
+                          <p class="text-xl font-medium text-[#1B3B50] max-w-[25vw] truncate">${task.name}</p>
+                          <p class="text-base/5 text-[#6A7282] max-w-[30vw] truncate">${task.description}</p>
                        </div>
                      </div>
                      <div class="flex flex-col items-end space-y-10">

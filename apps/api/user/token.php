@@ -53,9 +53,11 @@ function getUserRoleFromToken(string $jwtToken) : string {
         return '';
 
     } catch (\Firebase\JWT\ExpiredException $e) {
-        return null;
+        echo 'Token expired: ' . $e->getMessage();
     } catch (\Exception $e) {
-        return null;
+        echo 'Token error: ' . $e->getMessage();
     }
+
+    return '';
 }
 ?>

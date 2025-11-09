@@ -73,7 +73,7 @@ class GroupPersistence implements IGroupPersistence {
     }
 
     public function getAssignment(int $assignmentId) : ?array {
-        if ($assignmentId === null) return null;
+        if ($assignmentId === null || empty($assignmentId)) return [];
 
         $sql = "call getAssignmentById(?);";
 
@@ -83,14 +83,48 @@ class GroupPersistence implements IGroupPersistence {
             $dbAssignment = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
-            if (!$dbAssignment) return null;
-
             return $dbAssignment;
         } catch (PDOException $e) {
             echo "Error when getting assignment: " . $e->getMessage();
         }
 
-        return null;
+        return [];
+    }
+
+    public function getGroup(int $groupId) : array {
+        if ($groupId === null || empty($groupId)) return []; 
+
+        $sql = "call getGroup(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error getting the group: ". $e->getMessage());
+        }
+
+        return [];
+    }
+    
+    public function getGroupMembers(int $groupId) : array {
+        if ($groupId === null) return [];
+
+        $sql = "call getGroupMembers(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error getting group members: ". $e->getMessage());
+        }
+
+        return [];
     }
 
     public function deactivateAssignment(int $assignmentId) : ?bool {

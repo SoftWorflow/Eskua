@@ -155,6 +155,12 @@ function HidingAndShowingHandler(password, eyeIcon) {
 
 function SendRegisterData(e) {
     e.preventDefault();
+
+    const notyf = new Notyf({
+        duration: 2000,
+        position: { x: 'right', y: 'top' },
+        dismissible: true
+    });
     
     const usernameInput = document.getElementById('username-input');
     const displayNameInput = document.getElementById('display-name');
@@ -192,6 +198,10 @@ function SendRegisterData(e) {
         if (res.ok) {
             FinalLogin();
         } else {
+            if (res.userType) {
+                notyf.error(res.userType['error']);
+            }
+
             if (res.username) {
                 const usernameError = res.username['error'];
                 const usernameErrorElement = document.getElementById('username-error-message');
