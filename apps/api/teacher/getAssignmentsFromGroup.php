@@ -14,17 +14,6 @@ $assignments = $userLogic->getAssignmentsFromGroup($groupId);
 
 $currentDate = new DateTime('now');
 
-$responseAssignments = [];
-if ($assignments !== null) {
-    foreach ($assignments as $assignment) {
-        $dueDate = new DateTime($assignment['dueDate']);
-    
-        if ($dueDate > $currentDate) {
-            $responseAssignments[] = $assignment;
-        }
-    }
-}
-
 echo json_encode(['ok' => true, $assignments]);
 
 ?>

@@ -113,6 +113,108 @@ class AssignmentPersistence implements IAssignmentPersistence {
 
     }
 
+    public function modifyAssignment(GroupAssignment $assignment, int $assignmentId): bool {
+
+        $sql = "call modifyAssignment(?, ?, ?, ?, ?);";
+
+        $assignmentName = $assignment->getName();
+        $assignmentDescription = $assignment->getDescription();
+        $assignmentMaxScore = $assignment->getMaxScore();
+        $assignmentDueDate = $assignment->getDueDate()->format('Y-m-d H:i:s');
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId, $assignmentName, $assignmentDescription, $assignmentMaxScore, $assignmentDueDate]);
+            $stmt->closeCursor();
+
+            return true;
+        } catch (PDOException $e) {
+            print "Error while trying to modify assignment: " . $e->getMessage();
+        }
+        return false;
+
+    }
+
+    public function getAssignmentFileId(int $assignmentId): ?int {
+        if (empty($assignmentId) || $assignmentId === null) return null;
+        
+        $sql = "select f.`id` AS id from `files` as f join `assigned_assignments_files` as aaf on f.`id` = aaf.`file` join `assigned_assignments` as aa on aaf.`assigned_assignment` = aa.`id` join `assignments` as a on aa.`assignment` = a.`id` where a.`id` = ?;";
+    
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId]);
+            $fileId = $stmt->fetch(PDO::FETCH_ASSOC)['id'];
+            $stmt->closeCursor();
+
+            return $fileId;
+        } catch (PDOException $e) {
+            print "Error while trying to get assignment file id: " . $e->getMessage();
+        }
+
+        return null;
+    }
+
+    public function deleteAssignmentFileAssociation(int $fileId) : bool {
+        if (empty($fileId) || $fileId === null) return false;
+        
+        $sql = "delete from `files` as f where f.`id` = ?;";
+    
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$fileId]);
+            $affectedRows = $stmt->rowCount();
+            $stmt->closeCursor();
+
+            return $affectedRows > 0;
+        } catch (PDOException $e) {
+            print "Error while trying to delete assignment file association: " . $e->getMessage();
+        }
+
+        return false;
+    }
+
+    public function createAssignmentFile(int $assignmentId, string $storageName, string $originalName, string $mime, string $extention, int $size, int $userId): bool {
+        if (empty($assignmentId) || empty($storageName) || empty($originalName) || empty($mime) || empty($extention) || empty($size) || empty($userId)) {
+            return false;
+        }
+
+        $sql = "call createAssignmentFile(?, ?, ?, ?, ?, ?, ?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId, $storageName, $originalName, $mime, $extention, $size, $userId]);
+            $affectedRows = $stmt->rowCount();
+            $stmt->closeCursor();
+
+            return $affectedRows > 0;
+        } catch (PDOException $e) {
+            print "Error while trying to create assignment file: " . $e->getMessage();
+        }
+
+        return false;
+    }
+
+    public function getSpecificAssignment(int $assignmentId): array {
+        if ($assignmentId === null || empty($assignmentId)) {
+            return [];
+        }
+        
+        $sql = "call getAssignmentById(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId]);
+            $assignmentData = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+
+            return $assignmentData ? $assignmentData : [];
+        } catch (PDOException $e) {
+            print "Error while trying to get specific assignment: " . $e->getMessage();
+        }
+
+        return [];
+    }
+
 }
 
 ?>

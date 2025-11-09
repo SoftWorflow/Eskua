@@ -47,7 +47,6 @@ function SendCode(e) {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
         },
-        credentials: 'include',
         body: JSON.stringify(userData)
     }).then(res => res.json())
     .then(res => {
@@ -191,7 +190,6 @@ function SendRegisterData(e) {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
         },
-        credentials: 'include',
         body: JSON.stringify(userData)
     }).then(res => res.json())
     .then(res => {

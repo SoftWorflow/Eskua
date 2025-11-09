@@ -182,10 +182,143 @@ class AssignmentLogic implements IAssignmentLogic {
         return $turnedInAssignmentsCount;
     }
 
-    private static function needAuthentication(): bool {
-        $user = AuthMiddleware::authenticate();
+    public function modifyAssignment(int $assignmentId, GroupAssignment $assignment,bool $hasChangedFile, ?array $file = null, ?string $filePath = ''): array {
+        AuthMiddleware::authorize(['teacher']);
 
-        return $user !== null;
+        $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
+
+        if ($file === null && $hasChangedFile) {
+            // Delete file
+            $filePath = ltrim($filePath, '/');
+            $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+            $absPath = $docRoot . '/' . $filePath;
+            
+            $fileId = $assignmentPersistence->getAssignmentFileId($assignmentId);
+
+            if (!$assignmentPersistence->deleteAssignmentFileAssociation($fileId)) {
+                return ['ok' => false, 'error' => 'Hubo un error al modificar el archivo'];
+            }
+
+            if (file_exists($absPath)) {
+                if (!unlink($absPath)) {
+                    return ['ok'=> false, 'error'=> 'Hubo un error al remplazar el archivo'];
+                }
+            } else {
+                return ['ok'=> false,'error'=> 'El archivo a eliminar no existe'];
+            }
+        }
+
+        if ($file !== null) {
+            if (!AssignmentLogic::checkFileToUpload($file)['ok']) {
+                http_response_code(400);
+                return AssignmentLogic::checkFileToUpload($file);
+            }
+
+            $year = date('Y');
+            $month = date('m');
+            $uploadDirBase = AssignmentLogic::FILE_PATH;
+            $targetDir = sprintf("%s/%s/%s", $uploadDirBase, $year, $month);
+
+            if (!is_dir($targetDir)) {
+                mkdir($targetDir, 0750, true);
+            }
+
+            $filePath = ltrim($filePath, '/');
+            $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+            $absPath = $docRoot . '/' . $filePath;
+            if (file_exists($absPath) || $filePath !== 'undefined') {
+                if (!unlink($absPath)) {
+                    return ['ok'=> false, 'error'=> 'Hubo un error al remplazar el archivo'];
+                }
+            }
+
+            $size = $file['size'];
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->file($file['tmp_name']);
+            $origName = $file['name'];
+            $extention = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+
+            // Random name + extension
+            $storageName = bin2hex(random_bytes(16)) . '.' . $extention;
+            $targetPath = $targetDir . '/' . $storageName;
+
+            if ($filePath !== 'undefined') {
+                $fileId = $assignmentPersistence->getAssignmentFileId($assignmentId);
+                if (!$assignmentPersistence->deleteAssignmentFileAssociation($fileId)) {
+                    return ['ok' => false, 'error' => 'Hubo un error al modificar el archivo'];
+                }
+            }
+
+            if ($this->createAssignmentFile($assignmentId, $storageName, $origName, $mime, $extention, $size, AuthMiddleware::authenticate()['user_id'])) {
+                return ['ok' => false, 'error' => 'Hubo un error al modificar el archivo'];
+            }
+        
+            $modified = $assignmentPersistence->modifyAssignment($assignment, $assignmentId);
+
+            if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+                http_response_code(500);
+                return ['ok' => false, 'error' => 'Fallo al mover el archivo'];
+            }
+
+            if ($modified) {
+                http_response_code(200);
+                return ['ok' => true, 'message' => 'La tarea fué modificada con éxito'];
+            } else {
+                http_response_code(500);
+                return ['ok' => false, 'message' => 'No se pudo modificar la tarea'];
+            }
+        };
+
+        $modified = $assignmentPersistence->modifyAssignment($assignment, $assignmentId);
+
+        if (!$modified) {
+            http_response_code(500);
+            return ['ok' => false, 'message' => 'No se pudo modificar la tarea'];
+        } else {
+            http_response_code(200);
+            return ['ok' => true, 'message' => 'La tarea fué modificada con éxito'];
+        }
+    }
+
+    public function getSpecificAssignment(int $assignmentId): array {
+        if (empty($assignmentId) || $assignmentId < 0 || $assignmentId === null) {
+            http_response_code(400);
+            return ['ok' => false, 'error' => 'No se recibió el dientificador de la tarea'];
+        }
+
+        $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
+
+        $assignment = $assignmentPersistence->getSpecificAssignment($assignmentId);
+    
+        if (empty($assignment)) {
+            http_response_code(404);
+            return ['ok' => false, 'error' => 'No se encontró la tarea'];
+        }
+
+        $dueDate = new DateTime($assignment['dueDate']);
+
+        $assignment['dueDate'] = $dueDate->format("d/m/Y");
+
+        if ($assignment['originalName'] !== null) {
+            $storageName = $assignment['storageName'];
+            $createdDate = new DateTime($assignment['createdAt']);
+
+            $year = $createdDate->format('Y');
+            $month = $createdDate->format('m');
+
+            $filePath = 'uploads/'.$year.'/'.$month.'/'.$storageName;
+
+            $assignment['filePath'] = $filePath;
+        }
+
+        http_response_code(200);
+        return ['ok' => true, 'task' => $assignment];
+    }
+
+    public function createAssignmentFile(string $assignmentId, string $storageName, string $originalName,  string $mime, string $extention, int $size, int $userId): bool {
+        $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
+
+        return $assignmentPersistence->createAssignmentFile($assignmentId, $storageName, $originalName, $mime, $extention, $size, $userId);
     }
 
 }

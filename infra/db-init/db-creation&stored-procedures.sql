@@ -735,9 +735,22 @@ CREATE PROCEDURE getAssignmentById(
     IN p_assignment_id INT
 )
 BEGIN
-    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.`max_score` AS `maxScore`, f.`original_name` AS `originalName`, f.`storage_name` AS `storageName`, aa.`end_date` AS `dueDate`, f.`uploaded_at` AS `createdAt`
-    FROM `assignments` AS a JOIN `assigned_assignments` AS aa JOIN  `assigned_assignments_files` AS aaf ON aa.`assignment` = aaf.`assigned_assignment`
-    JOIN `files` AS f ON aaf.`file` = f.`id` WHERE a.`id` = p_assignment_id AND f.`is_active` = true;
+    SELECT 
+        a.id        AS id,
+        a.name      AS name,
+        a.description AS description,
+        a.max_score AS maxScore,
+        f.original_name AS originalName,
+        f.storage_name  AS storageName,
+        f.size          AS size,
+        aa.end_date     AS dueDate,
+        f.uploaded_at   AS createdAt
+    FROM assignments AS a
+    JOIN assigned_assignments AS aa ON a.id = aa.assignment
+    LEFT JOIN assigned_assignments_files AS aaf ON aa.id = aaf.assigned_assignment
+    LEFT JOIN files AS f ON aaf.file = f.id
+    WHERE a.id = p_assignment_id
+      AND (f.is_active = TRUE OR f.id IS NULL);
 END //
 
 CREATE PROCEDURE getGroup(
@@ -768,5 +781,58 @@ CREATE PROCEDURE lDeactivateAssignment(
 )
 BEGIN
     UPDATE `assigned_assignments` SET `is_deleted` = true WHERE `assignment` = p_assignment_id;
+END //
+
+CREATE PROCEDURE modifyAssignment(
+    IN p_assignment_id INT,
+    IN p_name VARCHAR(50),
+    IN p_description TEXT,
+    IN p_max_score INT,
+    IN p_end_date DATETIME
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    UPDATE `assignments` AS a SET a.`name` = p_name, a.`description` = p_description, a.`max_score` = p_max_score WHERE a.`id` = p_assignment_id;
+
+    UPDATE `assigned_assignments` AS aa SET aa.`end_date` = p_end_date WHERE aa.`assignment` = p_assignment_id;
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE createAssignmentFile(
+    IN p_assignment_id INT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT,
+    IN p_uploader_id INT
+)
+BEGIN
+    DECLARE file_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO `files` (`storage_name`, `original_name`, `mime`, `extension`, `size`, `uploader_id`)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments_files` (assigned_assignment, `file`)
+    VALUES (p_assignment_id, file_id);
+
+    COMMIT;
 END //
 DELIMITER ;

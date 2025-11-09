@@ -72,25 +72,6 @@ class GroupPersistence implements IGroupPersistence {
         return null;
     }
 
-    public function getAssignment(int $assignmentId) : ?array {
-        if ($assignmentId === null || empty($assignmentId)) return [];
-
-        $sql = "call getAssignmentById(?);";
-
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$assignmentId]);
-            $dbAssignment = $stmt->fetch(PDO::FETCH_ASSOC);
-            $stmt->closeCursor();
-
-            return $dbAssignment;
-        } catch (PDOException $e) {
-            echo "Error when getting assignment: " . $e->getMessage();
-        }
-
-        return [];
-    }
-
     public function getGroup(int $groupId) : array {
         if ($groupId === null || empty($groupId)) return []; 
 

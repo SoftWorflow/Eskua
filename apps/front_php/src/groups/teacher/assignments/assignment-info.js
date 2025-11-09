@@ -62,8 +62,6 @@ async function loadTask() {
                 console.error('Hubo un error al cargar la tarea');
             }
 
-            console.log(data);
-
             const task = data.task;
 
             name.innerText = task.name;
@@ -74,14 +72,21 @@ async function loadTask() {
 
             dueDate.innerText = task.dueDate;
 
-            fileContainer.innerHTML = `
-                <a
-                  href="/${task.filePath}" target="_blank"
-                  class="w-full flex p-4 border-b-2 border-[#DFDFDF] items-center space-x-5 hover:bg-[#F2F2F2] transition duration-100 interactive no-underline">
-                  <img src="/images/AssignmentIcon.svg" alt="">
-                  <p class="text-[#1B3B50]">${task.originalName}</p>
-                </a>
-            `;
+            if (task.originalName) {
+                fileContainer.innerHTML = `
+                    <a
+                    href="/${task.filePath}" target="_blank"
+                    class="w-full flex p-4 border-b-2 border-[#DFDFDF] items-center space-x-5 hover:bg-[#F2F2F2] transition duration-100 interactive no-underline">
+                    <img src="/images/AssignmentIcon.svg" alt="">
+                    <p class="text-[#1B3B50]">${task.originalName}</p>
+                    </a>
+                `;
+            } else {
+                const text = document.createElement('p');
+                text.innerText = 'No hay archivos adjuntos';
+                text.className = 'text-center mt-4';
+                fileContainer.append(text);
+            }
 
             spinner.stop();
 
@@ -93,22 +98,57 @@ async function loadTask() {
 function deactivateAssignment() {
     const urlParams = new URLSearchParams(window.location.search);
     const taskId = urlParams.get('taskId');
+    const groupId = urlParams.get('groupId');
+
+    const notyf = new Notyf({
+        duration: 3500,
+        position: { x: 'right', y: 'top' },
+        dismissible: true
+    });
 
     authenticatedFetch('/api/teacher/deactivateAssignment.php', {
         method: 'POST',
-        body: JSON.stringify({taskId: taskId})
+        body: JSON.stringify({ taskId: taskId })
     }).then(res => res.json())
-    .then(data => {
-        if (!data.ok) {
-            const notyf = new Notyf({
-                duration: 3500,
-                position: { x: 'right', y: 'top' },
-                dismissible: true
+        .then(data => {
+            if (!data.ok) {
+                notyf.error(data.error);
+            }
+
+            showSuccess(data.message, () => {
+                window.location = `/groups/teacher/assignments/?groupId=${groupId}`;
             });
 
-            notyf.error(data.error);
-        }
+        }).catch(err => console.error(err));
+}
 
-        notyf.success(data.message);
-    }).catch(err => console.error(err));
+function showSuccess(message, onDismiss) {
+    const duration = 750;
+    const notyf = new Notyf({
+        duration,
+        position: { x: 'right', y: 'top' }
+    });
+
+    const n = notyf.success(message);
+
+    // If the users close's the notification
+    if (n && typeof n.on === 'function') {
+        n.on('dismiss', () => {
+            if (onDismiss) onDismiss();
+        });
+    }
+
+    if (onDismiss) {
+        setTimeout(() => {
+            onDismiss();
+        }, duration);
+    }
+}
+
+function modifyAssignment() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('taskId');
+    const groupId = urlParams.get('groupId');
+
+    window.location = `/groups/teacher/assignments/modify-assignment.html?taskId=${taskId}&groupId=${groupId}`;
 }

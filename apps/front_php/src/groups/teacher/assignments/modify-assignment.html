@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modificar Tarea - Eskua</title>
+  <link rel="stylesheet" href="/output.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="icon" href="/images/EskuaLogo2.png">
+  <script src="/auth.js"></script>
+  <script src="/navbar-loader.js"></script>
+  <script src="/groups/group-navbar-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="modify-script.js"></script>
+  <!-- Notyf CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <!-- Notyf JS -->
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <!-- LOADING CIRCLE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
+  <script>
+    document.documentElement.style.display = 'none';
+    requireRole('teacher');
+
+    (async () => {
+      // Allow access even if not logged in
+      await authManager.ensureValidToken();
+
+      if (authManager.getAccessToken()) {
+        authManager.startTokenMonitoring();
+      }
+
+      await initializeNavbar('#navbar-container');
+      await initializeGroupNavbar('tasks');
+
+      document.documentElement.style.display = '';
+    })();
+  </script>
+
+  <style>
+    body {
+      font-family: 'Lexend', sans-serif;
+    }
+
+    /* Contenedor del calendario */
+    .flatpickr-calendar {
+      margin-top: -6px;
+      /* lo sube un poco */
+      box-shadow: 0 4px 20px rgba(27, 59, 80, 0.25);
+      border: 1px solid #DFDFDF;
+      border-radius: 0.75rem;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    /* Encabezado: mes y año */
+    .flatpickr-months .flatpickr-month {
+      background-color: #1B3B50;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 0.75rem 0.75rem 0 0;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    /* Dropdown (selector de mes/año) */
+    .flatpickr-current-month .numInputWrapper,
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+      background-color: #1B3B50;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+    }
+
+    .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+      background-color: white;
+      color: #1B3B50;
+      font-family: 'Lexend', sans-serif;
+      font-size: 14px;
+    }
+
+    .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month:hover {
+      background-color: #E1A05B;
+      color: white;
+    }
+
+    /* Flechas de navegación */
+    .flatpickr-prev-month svg,
+    .flatpickr-next-month svg {
+      fill: white !important;
+    }
+
+    /* Días */
+    .flatpickr-day {
+      font-family: 'Lexend', sans-serif;
+      font-size: 13px;
+      color: #1B3B50;
+    }
+
+    .flatpickr-day.today {
+      border-color: #E1A05B;
+      color: #E1A05B;
+    }
+
+    .flatpickr-day.selected {
+      background: #1B3B50;
+      border-color: #1B3B50;
+      color: white;
+    }
+
+    /* Días de la semana */
+    .flatpickr-weekday {
+      color: #1B3B50;
+      font-weight: 600;
+      font-size: 13px;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    /* Flechitas del año (up/down) */
+    .flatpickr-current-month .numInputWrapper span.arrowUp::after,
+    .flatpickr-current-month .numInputWrapper span.arrowDown::after {
+      border-bottom-color: white !important;
+      /* para la de arriba */
+      border-top-color: white !important;
+      /* para la de abajo */
+    }
+
+    /* Quitar fondo oscuro al hover */
+    .flatpickr-current-month .numInputWrapper span:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar-container"></div>
+  <div
+    class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+      <!-- FONDO BLANCO -->
+      <div class="w-full h-full bg-white rounded-t-sm flex flex-col items-center justify-center">
+        <!-- MAIN CONTENT -->
+        <div class="flex w-full h-full">
+          <!-- SIDE MENU -->
+          <div id="group-navbar-container"></div>
+
+          <!-- RIGHT CONENT -->
+          <div class="w-full flex flex-col items-center justify-center space-y-5">
+
+            <!-- CONTENT CONTAINER -->
+            <div class="w-3/4 h-11/12 flex flex-col pt-10 justify-center items-center">
+
+              <div id="spinner-container"></div>
+
+              <div id="info-container" class="hidden flex flex-col space-y-10 w-full h-full">
+                <!-- TITLE -->
+                <div class="flex flex-col items-center mb-8">
+                  <h1 class="text-6xl font-semibold text-[#1B3B50]">Modificar Tarea</h1>
+                  <!-- SUBHEADING -->
+                  <p class="text-lg text-[#6A7282]">Edita la informacion de la tarea.</p>
+                </div>
+
+                <div class="w-full flex space-x-4 mb-0">
+                  <div class="w-3/4 h- shadow-md/25 rounded-xl flex flex-col bg-[#FBFBFB] border-2 border-[#DFDFDF]">
+                    <!-- ASSIGNMENT TITLE -->
+                    <div class="flex flex-col border-b-2 border-[#DFDFDF] py-6 px-6 space-y-2 justify-center">
+                      <p class="text-2xl font-semibold text-[#1B3B50]">Título</p>
+                      <input type="text" name="" id="title-input" maxlength="50"
+                        class="bg-white border-2 border-[#DFDFDF] shadow-md/25 rounded-xl px-3 py-4 focus:ring-2 focus:ring-[#E1A05B] font-normal"
+                        placeholder="Agregar título..." value="Nombre Tarea">
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="flex flex-col border-b-2 border-[#DFDFDF] p-6 space-y-3 justify-center relative">
+                      <p class="text-2xl font-semibold text-[#1B3B50] title-description">Descripción</p>
+                      <textarea name="" id="description-input" placeholder="Agregar Descripción"
+                        class="bg-white h-[10vh] resize-none border-2 border-[#DFDFDF] shadow-md/25 rounded-xl px-3 py-4 focus:ring-2 focus:ring-[#E1A05B] font-normal">Descripcion Tarea</textarea>
+                    </div>
+
+                    <div class="flex flex-col p-6 space-y-4 justify-center">
+                      <div class="flex flex-col space-y-0.5">
+                        <div>
+                          <h2 class="text-xl font-medium text-[#1B3B50]">Adjuntar Archivos</h2>
+                          <img src="" alt="">
+                        </div>
+                        <p class="text-[#A3A3A3] text-sm font-light">Elige cualquier archivo desde tu dispositivo para
+                          subir.</p>
+                      </div>
+                      <div class="flex space-x-5 w-full">
+                        <label id="file-input-label"
+                          for="file-input"
+                          class="flex flex-col space-y-1 border-2 border-dotted border-[#A3A3A3] py-4 px-12 rounded-2xl items-center shadow-md/30 hover:bg-[#fafafa] w-1/2 interactive">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#3550BA"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mx-auto">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 5 17 10" />
+                            <line x1="12" y1="5" x2="12" y2="15" />
+                          </svg>
+                          <p class="font-light text-sm text-[#3550BA] select-none">Abrir el explorador de archivos</p>
+                          <p class="font-light text-[12px] text-[#A3A3A3] select-none">PDF, MP4, PNG, JPG, WEBP</p>
+                        </label>
+
+                        <input id="file-input" type="file" accept=".pdf,.mp4,.png,.jpg,.jpeg,.webp" class="hidden" onchange="addNewFile(event)"/>
+                        <div id="files-to-upload" class="w-1/2"></div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                  <!-- RIGHT PANEL -->
+                  <div class="w-1/4 h-full shadow-md/25 rounded-xl bg-[#FBFBFB] border-2 border-[#DFDFDF]">
+                    <div class="h-1/2 border-b-2 border-[#DFDFDF] flex flex-col justify-center px-6 space-y-5">
+                      <p class="text-xl font-semibold text-[#1B3B50]">Puntos Totales</p>
+                      <!-- TOTAL POINTS INPUT -->
+                      <input type="number" name="" id="max-score-input"
+                        class="border-2 border-[#DFDFDF] shadow-md/25 rounded-xl px-3 py-4 focus:ring-2 focus:ring-[#E1A05B] font-normal"
+                        placeholder="Agregar total..." value="10">
+                    </div>
+                    <div class="h-1/2 flex flex-col justify-center px-6 space-y-5">
+                      <p class="text-xl font-semibold text-[#1B3B50]">Fecha de vencimiento</p>
+                      <!-- CALENDAR -->
+                      <input id="deadline" type="" placeholder="Selecciona una fecha" value="25-11-25"
+                        class="h-[15vh] border-2 border-[#DFDFDF] shadow-md/25 rounded-xl px-3 py-4 focus:ring-2 focus:ring-[#E1A05B] font-normal scale105">
+
+                      <script>
+                        flatpickr("#deadline", {
+                          dateFormat: "d-m-y",
+                          minDate: "today",
+                          locale: {
+                            firstDayOfWeek: 1,
+                            weekdays: {
+                              shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                              longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            },
+                            months: {
+                              shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                              longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            },
+                          },
+                        });
+                      </script>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="flex w-full justify-center items-center mt-4">
+                  <button onclick="modifyTask()" class="orange-button interactive w-1/4 px-10 py-4">Guardar Cambios</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>

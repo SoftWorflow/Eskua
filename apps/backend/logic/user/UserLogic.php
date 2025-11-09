@@ -7,6 +7,7 @@ require_once(__DIR__ . "/../../DTO/GroupAssignment.php");
 require_once(__DIR__ . "/../../DTO/Users/User.php");
 require_once(__DIR__ . "/../../persistence/user/UserPersistenceFacade.php");
 require_once(__DIR__ . "/../../persistence/group/GroupPersistenceFacade.php");
+require_once(__DIR__ . "/../../logic/group/GroupLogicFacade.php");
 require(__DIR__ . '/../../vendor/autoload.php');
 
 use Firebase\JWT\JWT;
@@ -15,7 +16,7 @@ use Firebase\JWT\Key;
 class UserLogic implements IUserLogic {
 
     private const ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES = 15;
-    private const DEFAULT_USER_PROFILE_PICTURE_URL = "https://eskua.com.uy/images/DefaultUserProfilePicture.webp";
+    private const DEFAULT_USER_PROFILE_PICTURE_URL = "/images/DefaultUserProfilePicture.webp";
 
     // CREATE USER
     public function createUser(User $user) : bool {
@@ -127,8 +128,6 @@ class UserLogic implements IUserLogic {
      *  GET USER
     */
     public function getUserById(?int $userId = null) : ?array {
-        
-        UserLogic::needAuthentication();
 
         if ($userId === null) {
             $userId = AuthMiddleware::authenticate()['user_id'];
@@ -212,6 +211,7 @@ class UserLogic implements IUserLogic {
             $errorResponse['userRole'] = ['error' => 'Hay un error con el tipo de usuario'];
         }
 
+        
         if (empty($groupCode)) {
             if ($userRole === "student") {
                 http_response_code(400);
@@ -281,7 +281,7 @@ class UserLogic implements IUserLogic {
                 return ['ok' => false, 'error' => 'El codigo de grupo no es válido'];
             }
 
-            $groupId = $studentGroup['id'];
+            $groupId = $studentGroup[0];
 
             if (!$this->createStudent($user, $groupId)) {
                 http_response_code(500);
@@ -601,12 +601,6 @@ class UserLogic implements IUserLogic {
         }
 
         return $usersCount;
-    }
-
-    private static function needAuthentication(): bool {
-        $user = AuthMiddleware::authenticate();
-
-        return $user !== null;
     }
 
 }

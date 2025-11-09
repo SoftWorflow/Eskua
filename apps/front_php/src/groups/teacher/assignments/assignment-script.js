@@ -46,7 +46,7 @@ async function loadTasks() {
                      </div>
                      <div class="flex flex-col items-end space-y-10">
                       <p class="text-[#6A7282]">${task.maxScore}</p>
-                      <p class="text-[#CC4033]">Vence el ${task.dueDate}</p>
+                      <p class="text-[#CC4033]">${task.isActive > 0 ? 'Desactivada' : 'Vence el ' + task.dueDate}</p>
                      </div>
                   </div>
                 `;

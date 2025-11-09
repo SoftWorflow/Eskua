@@ -27,7 +27,7 @@ class GroupLogic implements IGroupLogic {
         return [$id, $group];
     }
 
-    public function getGroup (int $groupId) : array {
+    public function getGroup(int $groupId) : array {
         if ($groupId === null || empty($groupId)) {
             return ['ok' => false, 'error' => 'No se recibió el identificador del grupo'];
         }
@@ -43,44 +43,23 @@ class GroupLogic implements IGroupLogic {
         return ['ok' => true, 'group' => $group];
     }
 
-    public function getAssignment(int $assignmentId) : array {
-        AuthMiddleware::authorize(['admin', 'teacher', 'student']);
-        
+    public function deactivateAssignment(int $assignmentId) : array {
+        AuthMiddleware::authorize(['admin', 'teacher']);
+
         if (empty($assignmentId) || $assignmentId === null) {
-            return ['ok' => false, 'message' => 'No se recibió el identificador de la tarea'];
+            http_response_code(400);
+            return ['ok' => false, 'error' => 'No se recibió el identificador de la tarea'];
         }
 
         $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
 
-        $assignment = $groupPersistence->getAssignment($assignmentId);
+        $result = $groupPersistence->deactivateAssignment($assignmentId);
 
-        if (empty($assignment)) {
-            return ['ok' => false, 'message' => 'No se encontró la tarea'];
+        if (!$result) {
+            return ['ok' => false, 'error' => 'Hubo un error al desactivar la tarea'];
         }
 
-        $dueDate = new DateTime($assignment['dueDate']);
-
-        $assignment['dueDate'] = $dueDate->format("d/m/Y");
-
-        $storageName = $assignment['storageName'];
-        $createdDate = new DateTime($assignment['createdAt']);
-
-        $year = $createdDate->format('Y');
-        $month = $createdDate->format('m');
-
-        $filePath = 'uploads/'.$year.'/'.$month.'/'.$storageName;
-
-        $assignment['filePath'] = $filePath;
-
-        return ['ok' => true, 'task' => $assignment];
-    }
-
-    public function deactivateAssignment(int $assignmentId) : ?bool {
-        if ($assignmentId === null) return null;
-
-        $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
-
-        return $groupPersistence->deactivateAssignment($assignmentId);
+        return ['ok' => true, 'message' => 'El material se ha desactivado correctamente'];
     }
 
     public function getAllGroupsCountAdmin(): int {
@@ -145,10 +124,6 @@ class GroupLogic implements IGroupLogic {
         $groupPersistence = GroupPersistenceFacade::getInstance()->getIGroupPersistence();
 
         $members = $groupPersistence->getGroupMembers($groupId);
-
-        if (empty($members)) {
-            return ['ok' => false, 'error' => 'No se pudieron obtener los miembros del grupo'];
-        }
 
         return ['ok' => true, 'members' => $members];
     }

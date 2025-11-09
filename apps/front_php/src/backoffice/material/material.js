@@ -326,7 +326,7 @@ function showMaterialDetail(materialId) {
 async function renderModifyMaterial(materialId, title, description) {
     const rightContent = document.getElementById('right-content');
 
-    globalMaterialId = materialId;
+    globalTaskId = materialId;
 
     // Spinner config
     const opts = {
@@ -465,7 +465,7 @@ function modifyMaterial(e) {
     formData.append('filePath', globalFilePath);
     formData.append('title', titleInput.value);
     formData.append('description', descriptionInput.value);
-    formData.append('id', globalMaterialId);
+    formData.append('id', globalTaskId);
 
     authenticatedFetch('/api/admin/modifyMaterial.php', {
         method: 'POST',

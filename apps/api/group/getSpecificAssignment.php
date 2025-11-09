@@ -1,15 +1,15 @@
 <?php
 
-require_once(__DIR__ . "/../../../backend/logic/group/GroupLogicFacade.php");
+require_once(__DIR__ . "/../../../backend/logic/assignment/AssignmentLogicFacade.php");
 header('Content-Type: application/json');
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 $assignmentId = $input['taskId'] ?? '';
 
-$groupLogic = GroupLogicFacade::getInstance()->getIGroupLogic();
+$assignmentLogic = AssignmentLogicFacade::getInstance()->getIAssignmentLogic();
 
-$assignment = $groupLogic->getAssignment($assignmentId);
+$assignment = $assignmentLogic->getSpecificAssignment($assignmentId);
 
 echo json_encode($assignment);
 
