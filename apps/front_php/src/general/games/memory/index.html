@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,33 +16,33 @@
         (async () => {
             // Allow access even if not logged in
             await authManager.ensureValidToken();
-            
+
             if (authManager.getAccessToken()) {
                 authManager.startTokenMonitoring();
             }
-            
+
             await initializeNavbar('#navbar-container');
 
             document.documentElement.style.display = '';
         })();
     </script>
-    
+
     <!-- Google Fonts: Lexend -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   
+
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         * {
-        font-family: 'Lexend', sans-serif;
-        -webkit-tap-highlight-color: transparent;
+            font-family: 'Lexend', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Fondo general */
         body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
 
         /* === Cartas === */
@@ -106,55 +107,89 @@
 
         /* Match correcto */
         @keyframes matched-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(225, 160, 91, 0.6); }
-            50% { box-shadow: 0 0 28px rgba(225, 160, 91, 0.9); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(225, 160, 91, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 28px rgba(225, 160, 91, 0.9);
+            }
         }
+
         .card-container.matched .card-front {
             border-color: #E1A05B;
             border-width: 3px;
             animation: matched-glow 1s ease-in-out;
         }
+
         .card-container.matched {
-        pointer-events: none;
+            pointer-events: none;
         }
 
         /* === Cartas falladas === */
         @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-6px); }
-        50% { transform: translateX(6px); }
-        75% { transform: translateX(-4px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-6px);
+            }
+
+            50% {
+                transform: translateX(6px);
+            }
+
+            75% {
+                transform: translateX(-4px);
+            }
         }
+
         .card-container.fail {
-        animation: shake 0.45s ease;
+            animation: shake 0.45s ease;
         }
+
         .card-container.fail .card-front {
-        background: #ffecec;
-        border-color: #ff5c5c;
-        border-width: 3px;
+            background: #ffecec;
+            border-color: #ff5c5c;
+            border-width: 3px;
         }
 
         /* Cartas bloqueadas durante error */
         .card-container.disabled {
-        pointer-events: none;
-        opacity: 0.6;
-        filter: grayscale(0.4);
+            pointer-events: none;
+            opacity: 0.6;
+            filter: grayscale(0.4);
         }
 
         /* Modal */
         .modal-backdrop {
-        background: rgba(27, 59, 80, 0.9);
-        backdrop-filter: blur(8px);
-        animation: fadeIn 0.3s ease;
+            background: rgba(27, 59, 80, 0.9);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.3s ease;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
 
         .card-front img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center;
-            image-rendering: auto; /* mantiene buena calidad */
+            image-rendering: auto;
+            /* mantiene buena calidad */
             display: block;
         }
 
@@ -166,80 +201,92 @@
             padding: 8%;
             box-sizing: border-box;
         }
-
     </style>
 </head>
+
 <body>
     <div id="navbar-container"></div>
-    <div class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div
+        class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
         <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
             <!-- FONDO BLANCO -->
             <div class="w-full h-full bg-white rounded-t-sm flex flex-col items-center justify-center">
+
                 <!-- Return Arrow -->
-                <div class="group" onclick="window.location='/home/index.php'">
-                    <img src="../../../../images/ReturnArrow.svg" alt="" class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
-                    <img src="../../../../images/ReturnArrowOrange.svg" alt="" class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+                <div class="group" onclick="window.history.back()">
+                    <img src="../../../../images/ReturnArrow.svg" alt=""
+                        class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+                    <img src="../../../../images/ReturnArrowOrange.svg" alt=""
+                        class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
                 </div>
 
                 <!-- Main Container -->
                 <div class="w-full max-w-7xl">
-                    
+
                     <!-- Header -->
-                   <header class="bg-white rounded-2xl shadow-md/25 p-6 mb-6">
+                    <header class="bg-white rounded-2xl shadow-md/25 p-6 mb-6">
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
-                            
+
                             <!-- Izquierda -->
-                            <button id="btn-tutorial" class="px-8 py-3 shadow-md/25 rounded-md font-medium bg-[#DFDFDF] text-[#1B3B50] hover:opacity-80 transition interactive">
-                            Tutorial
+                            <button id="btn-tutorial"
+                                class="px-8 py-3 shadow-md/25 rounded-md font-medium bg-[#DFDFDF] text-[#1B3B50] hover:opacity-80 transition interactive">
+                                Tutorial
                             </button>
 
                             <!-- Centro: HUD -->
                             <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 text-center">
-                            <!-- Tiempo -->
-                            <div class="px-6">
-                                <p class="text-sm text-[#6A7282] font-medium">Tiempo</p>
-                                <p id="tiempo-display" class="text-2xl font-bold text-[#1B3B50]">00:00</p>
-                            </div>
-                            <!-- Puntaje -->
-                            <div class="px-6 py-2 rounded-xl bg-[#FFF5EB]">
-                                <p class="text-sm text-[#6A7282] font-medium">Puntaje</p>
-                                <p id="puntaje-display" class="text-4xl font-bold text-[#E1A05B]">0</p>
-                            </div>
-                            <!-- Movimientos -->
-                            <div class="px-2.5">
-                                <p class="text-sm text-[#6A7282] font-medium">Movimientos</p>
-                                <p id="intentos-display" class="text-2xl font-bold text-[#1B3B50]">0</p>
-                            </div>
+                                <!-- Tiempo -->
+                                <div class="px-6">
+                                    <p class="text-sm text-[#6A7282] font-medium">Tiempo</p>
+                                    <p id="tiempo-display" class="text-2xl font-bold text-[#1B3B50]">00:00</p>
+                                </div>
+                                <!-- Puntaje -->
+                                <div class="px-6 py-2 rounded-xl bg-[#FFF5EB]">
+                                    <p class="text-sm text-[#6A7282] font-medium">Puntaje</p>
+                                    <p id="puntaje-display" class="text-4xl font-bold text-[#E1A05B]">0</p>
+                                </div>
+                                <!-- Movimientos -->
+                                <div class="px-2.5">
+                                    <p class="text-sm text-[#6A7282] font-medium">Movimientos</p>
+                                    <p id="intentos-display" class="text-2xl font-bold text-[#1B3B50]">0</p>
+                                </div>
                             </div>
 
                             <!-- Derecha -->
-                            <button id="btn-reiniciar" class="px-8 py-3 shadow-md/25 rounded-md font-medium bg-[#1B3B50] text-white hover:opacity-80 transition interactive">
+                            <button id="btn-reiniciar"
+                                class="px-8 py-3 shadow-md/25 rounded-md font-medium bg-[#1B3B50] text-white hover:opacity-80 transition interactive">
                                 Reiniciar
                             </button>
-                        </div>  
+                        </div>
                     </header>
 
                     <!-- Game Board -->
                     <main class="w-full shadow-md/25  py-5 rounded-2xl">
-                        <div id="tablero" 
+                        <div id="tablero"
                             class="grid grid-cols-8 xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 gap-4 sm:gap-3 md:gap-6 place-items-center max-w-6xl mx-auto">
                         </div>
                     </main>
 
                     <!-- Footer -->
                     <footer class="text-center mt-6 text-sm" style="color: #6A7282;">
-                        <p>Mejor puntaje: <span id="mejor-puntaje" class="font-bold" style="color: #E1A05B;">0</span></p>
+                        <p>Mejor puntaje: <span id="mejor-puntaje" class="font-bold" style="color: #E1A05B;">0</span>
+                        </p>
                         <div class="modal-buttons flex flex-col items-center space-y-3">
                         </div>
                     </footer>
                 </div>
 
                 <!-- Tutorial Modal -->
-                <div id="modal-tutorial" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 modal-backdrop hidden">
-                <div class="modal-content bg-white rounded-lg border-4 border-[#1B3B50] shadow-2xl max-w-3xl w-full p-14 relative space-y-10 ">
-                        <button id="close-tutorial" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-                            <svg class="w-5 h-5" style="color: #6A7282;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                <div id="modal-tutorial"
+                    class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 modal-backdrop hidden">
+                    <div
+                        class="modal-content bg-white rounded-lg border-4 border-[#1B3B50] shadow-2xl max-w-3xl w-full p-14 relative space-y-10 ">
+                        <button id="close-tutorial"
+                            class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                            <svg class="w-5 h-5" style="color: #6A7282;" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
 
@@ -247,17 +294,25 @@
                             <h2 class="text-3xl font-bold mb-2" style="color: #1B3B50;">¿Cómo jugar?</h2>
                             <p class="text-sm" style="color: #6A7282;">Juego Memoria</p>
                         </div>
-                        
+
 
                         <div class="space-y-10 p-6 border-2 border-[#DFDFDF] rounded-xl">
                             <!-- Objetivo -->
                             <div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-white" style="background: #E1A05B;">1</div>
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-white"
+                                        style="background: #E1A05B;">1</div>
                                     <div>
                                         <h3 class="font-bold mb-1" style="color: #1B3B50;">Objetivo</h3>
-                                        <p style="color: #6A7282;">Formar <strong class="font-medium text-[#E1A05B]">pares</strong> de cartas, agrupando cada letra con su seña correspondiente. El jugador <strong class="font-medium text-[#E1A05B]">gana cuando revela todas las cartas,</strong> sumando puntos en el proceso.</p>
-                                        <p class="mt-2 text-md" style="color: #6A7282;">Para conseguir un puntaje <strong class="font-medium text-[#E1A05B]">más alto,</strong> intenta ganar en el menor tiempo posible y con la menor cantidad de movimientos.</p>
+                                        <p style="color: #6A7282;">Formar <strong
+                                                class="font-medium text-[#E1A05B]">pares</strong> de cartas, agrupando
+                                            cada letra con su seña correspondiente. El jugador <strong
+                                                class="font-medium text-[#E1A05B]">gana cuando revela todas las
+                                                cartas,</strong> sumando puntos en el proceso.</p>
+                                        <p class="mt-2 text-md" style="color: #6A7282;">Para conseguir un puntaje
+                                            <strong class="font-medium text-[#E1A05B]">más alto,</strong> intenta ganar
+                                            en el menor tiempo posible y con la menor cantidad de movimientos.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -275,27 +330,41 @@
                             <!-- Condiciones -->
                             <div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-white" style="background: #E1A05B;">2</div>
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-white"
+                                        style="background: #E1A05B;">2</div>
                                     <div>
                                         <h3 class="font-bold mb-1" style="color: #1B3B50;">Mecánicas de juego</h3>
                                         <ul class="space-y-1" style="color: #6A7282;">
-                                            <li>• Al comenzar el juego, se generan un total de <strong class="font-medium text-[#E1A05B]">12 señas aleatorias</strong>, haciendo que cada partida sea <strong class="font-medium text-[#E1A05B]">única</strong>. Es importante conocer todas las señas, ya que nunca se sabe cuáles pueden aparecer.</li>
-                                            <li>• Solo se pueden dar vuelta <strong class="font-medium text-[#E1A05B]">2</strong> cartas por turno, sumándose <strong class="font-medium text-[#E1A05B]">1</strong> movimiento en el proceso.</li>
-                                            <li>• No hay forma de perder, pero se guarda el <strong class="font-medium  text-[#E1A05B]">récord personal</strong>, ¡así que intenta superarte en cada partida!</li>
+                                            <li>• Al comenzar el juego, se generan un total de <strong
+                                                    class="font-medium text-[#E1A05B]">12 señas aleatorias</strong>,
+                                                haciendo que cada partida sea <strong
+                                                    class="font-medium text-[#E1A05B]">única</strong>. Es importante
+                                                conocer todas las señas, ya que nunca se sabe cuáles pueden aparecer.
+                                            </li>
+                                            <li>• Solo se pueden dar vuelta <strong
+                                                    class="font-medium text-[#E1A05B]">2</strong> cartas por turno,
+                                                sumándose <strong class="font-medium text-[#E1A05B]">1</strong>
+                                                movimiento en el proceso.</li>
+                                            <li>• No hay forma de perder, pero se guarda el <strong
+                                                    class="font-medium  text-[#E1A05B]">récord personal</strong>, ¡así
+                                                que intenta superarte en cada partida!</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <button id="btn-jugar" class="orange-button w-full py-3 rounded-lg font-bold text-lg transition-all hover:opacity-90">Jugar</button>
+                        <button id="btn-jugar"
+                            class="orange-button w-full py-3 rounded-lg font-bold text-lg transition-all hover:opacity-90">Jugar</button>
                     </div>
                 </div>
 
                 <!-- End Game Modal -->
-                <div id="modal-endgame" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+                <div id="modal-endgame"
+                    class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
                     <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
-                        <div id="endgame-icon" class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-4xl"></div>
+                        <div id="endgame-icon"
+                            class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-4xl"></div>
                         <h2 id="endgame-title" class="text-3xl font-bold mb-2" style="color: #1B3B50;"></h2>
                         <p id="endgame-message" class="text-lg mb-6" style="color: #6A7282;"></p>
 
@@ -315,8 +384,9 @@
                 </div>
 
                 <script src="app.js"></script>
-                </div>
             </div>
         </div>
+    </div>
 </body>
+
 </html>

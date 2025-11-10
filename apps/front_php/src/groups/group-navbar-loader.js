@@ -39,10 +39,10 @@ class GroupNavbarLoader {
             switch (page) {
                 case 'home':
                     home.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20';
-                break;
+                    break;
                 case 'tasks':
                     tasks.className = 'font no-underline interactive text-[#1B3B50] text-xl hover:text-[#E1A05B] transition duration-100 border-2 border-[#E1A05B] pl-2 pr-6 py-2 rounded-lg shadow-md/20';
-                break;
+                    break;
             }
 
             // Dispatch event for other scripts that might need to know navbar is loaded

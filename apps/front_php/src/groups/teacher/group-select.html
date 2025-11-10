@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,27 +17,31 @@
         (async () => {
             // Allow access even if not logged in
             await authManager.ensureValidToken();
-            
+
             if (authManager.getAccessToken()) {
                 authManager.startTokenMonitoring();
             }
-            
+
             await initializeNavbar('#navbar-container');
 
             document.documentElement.style.display = '';
         })();
     </script>
 </head>
+
 <body>
     <div id="navbar-container"></div>
-    <div class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div
+        class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
         <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
             <!-- FONDO BLANCO -->
             <div class="w-full h-full bg-white rounded-t-sm flex flex-col items-center justify-center">
                 <!-- Return Arrow -->
-                <div class="group" onclick="window.location='/home/index.php'">
-                    <img src="../../../../images/ReturnArrow.svg" alt="" class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
-                    <img src="../../../../images/ReturnArrowOrange.svg" alt="" class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+                <div class="group" onclick="window.history.back()">
+                    <img src="../../../../images/ReturnArrow.svg" alt=""
+                        class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+                    <img src="../../../../images/ReturnArrowOrange.svg" alt=""
+                        class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
                 </div>
 
                 <!-- MAIN CONTENT -->
@@ -50,19 +55,20 @@
                     <div id="groups-container" class="grid grid-cols-3 gap-10"></div>
                 </div>
 
-            </div>    
+            </div>
         </div>
     </div>
-<script>
-    (async () => {
-        const userRole = getUserRole();
-        
-        if (userRole !== 'teacher') {
-            console.warn('Unauthorized access attempt to teacher home');
-            window.location.href = '../../error-pages/403.html';
-            return;
-        }
-    })();
-</script>
+    <script>
+        (async () => {
+            const userRole = getUserRole();
+
+            if (userRole !== 'teacher') {
+                console.warn('Unauthorized access attempt to teacher home');
+                window.location.href = '../../error-pages/403.html';
+                return;
+            }
+        })();
+    </script>
 </body>
+
 </html>

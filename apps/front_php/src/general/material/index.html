@@ -12,10 +12,10 @@
   <script src="material-script.js"></script>
   <script>
     document.documentElement.style.display = 'none';
-    
+
     (async () => {
       await requireAuth();
-      
+
       if (authManager.getAccessToken()) {
         authManager.startTokenMonitoring();
       }
@@ -34,6 +34,14 @@
     <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
       <!-- FONDO BLANCO -->
       <div class="w-full h-full bg-white rounded-sm flex flex-col items-center overflow-y-auto justify-center">
+
+        <!-- Return Arrow -->
+        <div class="group" onclick="window.history.back()">
+          <img src="../../../../images/ReturnArrow.svg" alt=""
+            class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+          <img src="../../../../images/ReturnArrowOrange.svg" alt=""
+            class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+        </div>
 
         <!-- CONTENT CONTAINER -->
         <div class="w-8/12 h-11/12 flex flex-col space-y-20 py-10">
@@ -146,7 +154,8 @@
             </div>
 
             <!-- Materials Table -->
-            <div id="materials-table"class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto"></div>
+            <div id="materials-table"
+              class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto"></div>
 
           </div>
 
