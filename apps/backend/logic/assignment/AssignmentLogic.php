@@ -321,6 +321,68 @@ class AssignmentLogic implements IAssignmentLogic {
         return $assignmentPersistence->createAssignmentFile($assignmentId, $storageName, $originalName, $mime, $extention, $size, $userId);
     }
 
+    public function turnInAssignment(int $assignmentId, string $text, ?array $fileData = null) : array {
+        AuthMiddleware::authorize(['student']);
+        $studentId = AuthMiddleware::authenticate()['user_id'];
+        
+        if ($assignmentId === null) {
+            return ['ok' => false, 'error' => 'No se recibió el identificador de la tarea'];
+        }
+
+        if (empty($text)) {
+            return ['ok' => false, 'error' => 'El texto no puede estar vacío'];
+        }
+
+        $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
+
+        if ($fileData !== null) {
+            
+            $file = $fileData;
+
+            if (!AssignmentLogic::checkFileToUpload($file)['ok']) {
+                http_response_code(400);
+                return AssignmentLogic::checkFileToUpload($file);
+            }
+
+            $year = date('Y');
+            $month = date('m');
+            $uploadDirBase = AssignmentLogic::FILE_PATH;
+            $targetDir = sprintf("%s/%s/%s", $uploadDirBase, $year, $month);
+
+            if (!is_dir($targetDir)) {
+                mkdir($targetDir, 0750, true);
+            }
+
+            $size = $file['size'];
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->file($file['tmp_name']);
+            $origName = $file['name'];
+            $extention = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+
+            // Random name + extension
+            $storageName = bin2hex(random_bytes(16)) . '.' . $extention;
+            $targetPath = $targetDir . '/' . $storageName;
+
+            $response = $assignmentPersistence->turnInAssignmentWithFile($assignmentId, $studentId, $text, $storageName, $origName, $mime, $extention, $size);
+            
+            if ($fileData !== null) {
+                if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+                    return ['ok' => false, 'error' => 'Fallo al mover el archivo'];
+                }
+            }
+        } else {
+            $response = $assignmentPersistence->turnInAssignment($assignmentId, $studentId, $text);
+        }
+
+        if (!$response) {
+            return ['ok' => false,'error' => 'Hubo un error al entregar la tarea'];
+        }
+
+
+        return ['ok' => true, 'message' => 'La tarea fué entregada con éxito'];
+
+    }
+
 }
 
 ?>

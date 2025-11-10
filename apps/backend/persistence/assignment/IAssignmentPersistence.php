@@ -10,6 +10,8 @@ interface IAssignmentPersistence {
     public function deleteAssignmentFileAssociation(int $fileId) : bool;
     public function createAssignmentFile(int $assignmentId, string $storageName, string $originalName, string $mime, string $extention, int $size, int $userId): bool;
     public function getSpecificAssignment(int $assignmentId): array;
+    public function turnInAssignment(int $assignmentId, int $studentId, string $text) : bool;
+    public function turnInAssignmentWithFile(int $assignmentId, int $studentId, string $text, string $storageName, string $origName, string $mime, string $extention, int $size) : bool;
 }
 
 ?>

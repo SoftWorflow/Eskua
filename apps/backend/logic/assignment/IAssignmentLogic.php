@@ -7,6 +7,7 @@ interface IAssignmentLogic {
     public function modifyAssignment(int $assignmentId, GroupAssignment $assignment,bool $hasChangedFile, ?array $file = null, ?string $filePath = ''): array;
     public function createAssignmentFile(string $assignmentId, string $storageName, string $originalName,  string $mime, string $extention, int $size, int $userId): bool;
     public function getSpecificAssignment(int $assignmentId): array;
+    public function turnInAssignment(int $assignmentId, string $text, ?array $fileData = null) : array;
 }
 
 ?>

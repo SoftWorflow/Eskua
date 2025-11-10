@@ -82,64 +82,12 @@
                                             </svg>
                                         </button>
                                     </div>
-
-                                    <div class="flex space-x-2">
-
-                                        <!-- Pendientes -->
-                                        <label class="relative cursor-pointer">
-                                            <input type="radio" name="materialType" class="peer hidden" />
-                                            <div
-                                                class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-sm transition-all duration-200 ease-in-out hover:bg-[#f5f5f5] hover:shadow-md peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B] peer-checked:hover:bg-[#fff8f0]">
-                                                <p class="text-sm">Pendientes</p>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2.5" stroke="currentColor"
-                                                    class="w-4 h-4 transition-colors duration-200 peer-hover:stroke-[#E1A05B] peer-checked:stroke-[#E1A05B] peer-checked:hover:stroke-[#E54B4B]">
-                                                    <path class="plus-icon" stroke-linecap="round"
-                                                        stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                                                    <path class="x-icon hidden" stroke-linecap="round"
-                                                        stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </div>
-                                        </label>
-
-                                        <!-- Vencidas -->
-                                        <label class="relative cursor-pointer">
-                                            <input type="radio" name="materialType" class="peer hidden" />
-                                            <div
-                                                class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-sm transition-all duration-200 ease-in-out hover:bg-[#f5f5f5] hover:shadow-md peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B] peer-checked:hover:bg-[#fff8f0]">
-                                                <p class="text-sm">Vencidas</p>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2.5" stroke="currentColor"
-                                                    class="w-4 h-4 transition-colors duration-200 peer-hover:stroke-[#E1A05B] peer-checked:stroke-[#E1A05B] peer-checked:hover:stroke-[#E54B4B]">
-                                                    <path class="plus-icon" stroke-linecap="round"
-                                                        stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                                                    <path class="x-icon hidden" stroke-linecap="round"
-                                                        stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </div>
-                                        </label>
-
-                                        <!-- Entregadas -->
-                                        <label class="relative cursor-pointer">
-                                            <input type="radio" name="materialType" class="peer hidden" />
-                                            <div
-                                                class="rounded-full border-2 border-[#A3A3A3] text-[#A3A3A3] w-32 px-3 py-1.5 flex items-center justify-between shadow-sm transition-all duration-200 ease-in-out hover:bg-[#f5f5f5] hover:shadow-md peer-checked:border-[#E1A05B] peer-checked:text-[#E1A05B] peer-checked:hover:bg-[#fff8f0]">
-                                                <p class="text-sm">Entregadas</p>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2.5" stroke="currentColor"
-                                                    class="w-4 h-4 transition-colors duration-200 peer-hover:stroke-[#E1A05B] peer-checked:stroke-[#E1A05B] peer-checked:hover:stroke-[#E54B4B]">
-                                                    <path class="plus-icon" stroke-linecap="round"
-                                                        stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                                                    <path class="x-icon hidden" stroke-linecap="round"
-                                                        stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </div>
-                                        </label>
-                                    </div>
                                 </div>
 
                                 <!-- ASSIGNMENTS TABLE -->
-                                <div id="assignments-table" class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto"></div>
+                                <div id="assignments-table"
+                                    class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto">
+                                </div>
                                 <!-- <p class="text-sm text-[#6A7282]">Mostrando 4 de 52</p> -->
                             </div>
                         </div>

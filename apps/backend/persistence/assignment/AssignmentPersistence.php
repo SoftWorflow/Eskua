@@ -215,6 +215,46 @@ class AssignmentPersistence implements IAssignmentPersistence {
         return [];
     }
 
+    public function turnInAssignment(int $assignmentId, int $studentId, string $text) : bool {
+        if ($assignmentId === null || empty($assignmentId)) {
+            return false;
+        }
+
+        $sql = "call turnInAssignment(?, ?, ?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId, $studentId, $text]);
+            $stmt->closeCursor();
+
+            return true;
+        } catch (PDOException $e) {
+            print "Error when turning in an assignment". $e->getMessage();
+        }
+
+        return false;
+    }
+
+    public function turnInAssignmentWithFile(int $assignmentId, int $studentId, string $text, string $storageName, string $origName, string $mime, string $extention, int $size) : bool {
+        if ($assignmentId === null || $studentId === null || $studentId === null || empty($text) || empty($storageName) || empty($origName) || empty($mime) || empty($extention) || $size === null) {
+            return false;
+        }
+
+        $sql = "call turnInAssignmentWithFile(?, ?, ?, ?, ?, ?, ?, ?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId, $studentId, $text, $storageName, $origName, $mime, $extention, $size]);
+            $stmt->closeCursor();
+
+            return true;
+        } catch (PDOException $e) {
+            print "Error when trying to turn in an assignment with file: ". $e->getMessage();
+        }
+
+        return false;
+    }
+
 }
 
 ?>
