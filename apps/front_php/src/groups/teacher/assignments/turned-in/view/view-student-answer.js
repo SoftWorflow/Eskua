@@ -87,6 +87,12 @@ async function loadStudentAnswer() {
                 `;
 
                 fileContainer.append(file);
+            } else {
+                const text = document.createElement('p');
+                text.innerText = 'No hay archivos adjuntos';
+                text.className = 'text-center mt-4';
+
+                fileContainer.append(text);
             }
 
             spinner.stop();
