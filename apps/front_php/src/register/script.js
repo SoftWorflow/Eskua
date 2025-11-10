@@ -152,6 +152,11 @@ function HidingAndShowingHandler(password, eyeIcon) {
     }
 }
 
+function hideStudentPopup() {
+    const popupContainer = document.getElementById('popup-container');
+    popupContainer.classList.add('hidden');
+}
+
 function SendRegisterData(e) {
     e.preventDefault();
 

@@ -187,6 +187,18 @@ class UserLogic implements IUserLogic {
             http_response_code(400);
             $errorResponse['ok'] = false;
             $errorResponse['email'] = ['error' => 'Este campo es obligatorio'];
+        } else {
+            if (strlen($email) > 255) {
+                http_response_code(400);
+                $errorResponse['ok'] = false;
+                $errorResponse['email'] = ['error' => 'Este campo es muy largo'];
+            } else {
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    http_response_code(400);
+                    $errorResponse['ok'] = false;
+                    $errorResponse['email'] = ['error' => 'El formato del correo no es válido'];
+                }
+            }
         }
 
         if (strlen($email) > 255) {
@@ -207,12 +219,36 @@ class UserLogic implements IUserLogic {
             $errorResponse['confirmPassword'] = ['error' => 'Este campo es obligatorio'];
         }
 
+        if (!empty($password) && !empty($confirmPassword) && $password !== $confirmPassword) {
+            http_response_code(409);
+            $errorResponse['ok'] = false;
+            $errorResponse['confirmPassword'] = ['error' => 'Las contraseñas no coinciden'];
+        }
+
+        if (!empty($password)) {
+            $low = preg_match('/[a-z]/', $password);
+            $up  = preg_match('/[A-Z]/', $password);
+            $dig = preg_match('/\d/', $password);
+            $sym = preg_match('/\W/', $password);
+            if (!$low || !$up || !$dig || !$sym) {
+                http_response_code(400);
+                $errorResponse['ok'] = false;
+                $errorResponse['password'] = ['error' => 'La contraseña debe contener minúsculas, mayúsculas, números y símbolos'];
+            }
+        }
+
+        $minPasswordLength = 8;
+        if (!empty($password) && strlen($password) < $minPasswordLength) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['password'] = ['error' => "La contraseña debe tener al menos {$minPasswordLength} caracteres"];
+        }
+
         if (empty($userRole)) {
             http_response_code(400);
             $errorResponse['ok'] = false;
             $errorResponse['userRole'] = ['error' => 'Hay un error con el tipo de usuario'];
         }
-
         
         if (empty($groupCode)) {
             if ($userRole === "student") {
@@ -252,12 +288,6 @@ class UserLogic implements IUserLogic {
             http_response_code(409);
             $errorResponse['ok'] = false;
             $errorResponse['email'] = ['error' => 'El correo electrónico ya está en uso'];
-        }
-
-        if ($password !== $confirmPassword) {
-            http_response_code(409);
-            $errorResponse['ok'] = false;
-            $errorResponse['confirmPassword'] = ['error' => 'Las contraseñas no coinciden'];   
         }
 
         if ($errorResponse !== null) {

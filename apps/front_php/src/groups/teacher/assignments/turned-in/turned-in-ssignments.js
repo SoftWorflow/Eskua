@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadStudentAnswers() {
     const urlParams = new URLSearchParams(window.location.search);
     const taskId = urlParams.get('taskId');
+    const groupId = urlParams.get('groupId');
 
     const infoContainer = document.getElementById('info-container');
     const studentAnswersTable = document.getElementById('student-answers-table');
@@ -62,10 +63,12 @@ async function loadStudentAnswers() {
             return;
         }
 
+        
         data.answers.forEach(answer => {
             const card = document.createElement('a');
             card.className = 'no-underline interactive';
-            card.href = '#';
+            card.href = `/groups/teacher/assignments/turned-in/view/?answerId=${answer.id}&groupId=${groupId}`;
+
             card.innerHTML = `
                 <div
                   class="w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0">
@@ -75,13 +78,13 @@ async function loadStudentAnswers() {
                         class="w-20 h-20 shadow-md/25 rounded-md object-cover">
                       <div class="flex flex-col justify-center w-full">
                         <!-- STUDENT NAME -->
-                        <p class="text-xl font-medium text-[#1B3B50]">Nombre Alumno</p>
+                        <p class="text-xl font-medium text-[#1B3B50]">${answer.displayName}</p>
                         <!-- NUMBER OF FILES UPLOADED -->
-                        <p class="text-lg text-[#6A7282]">1 Archivo Adjunto</p>
+                        <p class="text-lg text-[#6A7282]">${answer.filesCount > 0 ? answer.filesCount + ' Archivo Adjunto' : 'Sin archivos adjuntos'}</p>
                       </div>
                     </div>
                     <!-- TIME OF TURNED IN -->
-                    <p class="text-lg text-[#6A7282]">Hoy a las 12:32 </p>
+                    <p class="text-lg text-[#6A7282]">${formatSubmittedDate(answer.submittedDate)}</p>
                   </div>
                 </div>
             `;
@@ -93,4 +96,27 @@ async function loadStudentAnswers() {
 
         infoContainer.classList.remove('hidden');
     }).catch(err => console.error("Error: ", err));
+}
+
+function formatSubmittedDate(submittedDateStr) {
+  if (!submittedDateStr) return '';
+
+  const iso = submittedDateStr.replace(' ', 'T');
+  const d = new Date(iso);
+  if (isNaN(d)) return submittedDateStr;
+
+  const pad = n => String(n).padStart(2, '0');
+  const hora = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+  const now = new Date();
+  const sameDay =
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate();
+
+  if (sameDay) {
+    return `Hoy a las ${hora}`;
+  } else {
+    return `${pad(d.getDate())}/${pad(d.getMonth() + 1)} ${hora}`;
+  }
 }

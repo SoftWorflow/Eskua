@@ -276,6 +276,27 @@ class AssignmentPersistence implements IAssignmentPersistence {
         return [];
     }
 
+    public function getSpecificStudenAnswerById(int $studentAnswerId) : array {
+        if ($studentAnswerId === null || empty($studentAnswerId)) {
+            return [];
+        }
+
+        $sql = "call getStudentAnswerByTurnedInAssginment(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$studentAnswerId]);
+            $answer = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+
+            return $answer ? $answer : [];
+        } catch (PDOException $e) {
+            print "Error when getting the student's answer: ". $e->getMessage();
+        }
+
+        return [];
+    }
+
 }
 
 ?>

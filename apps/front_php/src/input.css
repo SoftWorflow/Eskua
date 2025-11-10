@@ -120,7 +120,7 @@
   }
 
   .orange-button-disabled {
-    @apply border-2 border-[#db8d3a] text-white rounded-2xl text-xl drop-shadow-md/25 bg-[#db8d3a] opacity-75 hover:cursor-not-allowed;
+    @apply border-2 border-[#db8d3a] text-white rounded-2xl text-xl drop-shadow-md/25 bg-[#db8d3a] opacity-50 hover:cursor-not-allowed;
     font-family: 'Lexend', sans-serif;
     font-weight: 400;
   }

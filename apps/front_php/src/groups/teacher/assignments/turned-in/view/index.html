@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Info Tarea Alumno - Eskua</title>
+  <link rel="stylesheet" href="/output.css">
+  <link rel="icon" href="/images/EskuaLogo2.png">
+  <script src="/auth.js"></script>
+  <script src="/navbar-loader.js"></script>
+  <script src="view-student-answer.js"></script>
+  <script src="/groups/group-navbar-loader.js"></script>
+  <!-- Notyf CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <!-- Notyf JS -->
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <!-- LOADING CIRCLE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
+  <script>
+    document.documentElement.style.display = 'none';
+    requireRole('teacher');
+
+    (async () => {
+      // Allow access even if not logged in
+      await authManager.ensureValidToken();
+
+      if (authManager.getAccessToken()) {
+        authManager.startTokenMonitoring();
+      }
+
+      await initializeNavbar('#navbar-container');
+      await initializeGroupNavbar('tasks');
+
+      document.documentElement.style.display = '';
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="navbar-container"></div>
+  <div
+    class="min-h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+      <!-- FONDO BLANCO -->
+      <div class="w-full h-full bg-white rounded-t-sm flex flex-col items-center justify-center">
+        <!-- MAIN CONTENT -->
+        <div class="flex w-full h-full">
+          <!-- SIDE MENU -->
+          <div id="group-navbar-container"></div>
+
+          <!-- RIGHT CONENT -->
+          <div class="w-full flex flex-col items-center justify-center space-y-5">
+
+            <div id="spinner-container"></div>
+
+            <div id="info-container" class="hidden w-full flex flex-col items-center justify-center space-y-5">
+              <!-- CONTENT CONTAINER -->
+              <div class="w-3/4 h-11/12 flex flex-col space-y-20 pt-10">
+
+                <!-- TITLE -->
+                <div class="flex flex-col items-center space-y-2">
+                  <h1 class="text-6xl font-semibold text-[#1B3B50] mb-4 max-w-[45vw] overflow-ellipsis truncate" id="assignment-name">Nombre Tarea</h1>
+                  <!-- STUDENT NAME -->
+                  <p class="text-lg text-[#6A7282]" id="student-name">Nombre alumno</p>
+                </div>
+
+                <div class="flex flex-col h-fit items-center space-y-8">
+                  <!-- ASSIGNMENT INFO TABLE -->
+                  <div class="h-full w-3/4 flex flex-col shadow-md/25 bg-[#FBFBFB] rounded-xl">
+                    <div class="flex px-5 py-3 border-b-2 border-[#DFDFDF] items-center justify-between">
+                      <p class="text-2xl font-semibold text-[#1B3B50]">Información Tarea</p>
+                      <p class="text-[#6A7282]" id="submitted-date">Entregada el 7/10/25 a las 16:09 </p>
+                    </div>
+
+                    <div class="flex flex-col px-5 py-6 border-b-2 border-[#DFDFDF] space-y-1.5">
+                      <p class="text-2xl font-semibold text-[#1B3B50]">Mensaje:</p>
+                      <!-- STUDENT MESSAGE -->
+                      <p class="text-[#6A7282] w-10/12 leading-6 max-h-[15vh] overflow-y-auto pr-2 break-all"
+                        id="student-text">
+                        Hola profe, soy (nombre), te envio (nombre de la tarea).
+                        Me quedaron dudas con el ejercicio 3 pero despues pude completar el trabajo sin problemas.
+                      </p>
+                    </div>
+
+                    <div class="flex flex-col justify-center space-y-4 p-5">
+                      <p class="text-2xl font-semibold text-[#1B3B50]">Archivos Adjuntos</p>
+                      <div id="file-container"
+                        class="flex flex-col h-[13.16vh] rounded-md shadow-md/25 overflow-y-scroll border-2 border-b-0 border-[#DFDFDF]">
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- BUTTONS CONTAINER -->
+                  <div class="flex justify-center w-full">
+                      <button class="h-15 w-1/4 orange-button-disabled cursor-not-allowed">Corregir Tarea</button>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

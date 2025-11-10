@@ -397,6 +397,35 @@ class AssignmentLogic implements IAssignmentLogic {
         return ['ok' => true, 'answers' => $turnedInAssignments];
     }
 
+    public function getSpecificStudenAnswerById(int $studentAnswerId) : array {
+        if (empty($studentAnswerId) || $studentAnswerId === null) {
+            return ['ok' => false, 'error' => 'No se recibió el identificador de la entrega'];
+        }
+
+        $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
+
+        $studentAnswer = $assignmentPersistence->getSpecificStudenAnswerById($studentAnswerId);
+
+        if (empty($studentAnswer)) {
+            return ['ok' => false, 'error' => 'No se encontró la entrega'];
+        }
+
+        // Checks if the student's answer has a file
+        if ($studentAnswer['fileOriginalName'] !== null) {
+            $storageName = $studentAnswer['fileStorageName'];
+            $createdDate = new DateTime($studentAnswer['createdAt']);
+
+            $year = $createdDate->format('Y');
+            $month = $createdDate->format('m');
+
+            $filePath = 'uploads/'.$year.'/'.$month.'/'.$storageName;
+
+            $studentAnswer['filePath'] = $filePath;
+        }
+
+        return ['ok' => true, 'answer' => $studentAnswer];
+    }
+
 }
 
 ?>

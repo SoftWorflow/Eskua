@@ -2443,7 +2443,7 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
     color: var(--color-white);
-    opacity: 75%;
+    opacity: 50%;
     --tw-drop-shadow-alpha: 25%;
     --tw-drop-shadow-size: drop-shadow(0 3px 3px var(--tw-drop-shadow-color, oklab(from rgb(0 0 0 / 0.12) l a b / 25%)));
     --tw-drop-shadow: var(--tw-drop-shadow-size);

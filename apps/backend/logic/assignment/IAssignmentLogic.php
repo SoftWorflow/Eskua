@@ -9,6 +9,7 @@ interface IAssignmentLogic {
     public function getSpecificAssignment(int $assignmentId): array;
     public function turnInAssignment(int $assignmentId, string $text, ?array $fileData = null) : array;
     public function getTurnedInAssignmentsFromAssignment(int $assignmentId): array;
+    public function getSpecificStudenAnswerById(int $studentAnswerId) : array;
 }
 
 ?>

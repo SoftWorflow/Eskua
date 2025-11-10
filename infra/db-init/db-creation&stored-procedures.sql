@@ -924,7 +924,7 @@ CREATE PROCEDURE getTurnedInAssignmentsFromAssignment(
 BEGIN
     SELECT 
         tia.`id`,
-        u.`username` AS `username`,
+        u.`display_name` AS `displayName`,
         tia.`was_corrected` AS `isCorrected`,
         tia.`submitted_date` AS `submittedDate`,
         COUNT(f.`id`) AS `filesCount`
@@ -935,5 +935,29 @@ BEGIN
     LEFT JOIN `files` AS f ON saf.`file` = f.`id`
     WHERE tia.`assigned_assignment` = p_assignment_id
     GROUP BY tia.`id`, sa.`id`, tia.`was_corrected`, tia.`submitted_date`;
+END //
+
+CREATE PROCEDURE getStudentAnswerByTurnedInAssginment(
+    IN p_turned_in_assignment_id INT
+)
+BEGIN
+    SELECT
+        tia.`submitted_date` AS `submittedDate`,
+        tia.`was_corrected` AS `isCorrected`,
+        a.`name` AS `assignmentName`,
+        sa.`text_content` AS `studentTextResponse`,
+        u.`display_name` AS `studentDisplayName`,
+        f.`original_name` AS `fileOriginalName`,
+        f.`storage_name` AS `fileStorageName`,
+        f.`uploaded_at` AS `createdAt`,
+        f.`size` AS `fileSize`
+    FROM `turned_in_assignments` AS tia
+    JOIN `assigned_assignments` AS aa ON tia.`assigned_assignment` = aa.`id`
+    JOIN `assignments` AS a ON aa.`assignment` = a.`id`
+    JOIN `student_answers` AS sa ON tia.`id` = sa.`turned_in_assignment`
+    JOIN `users` AS u ON sa.`student` = u.`id`
+    LEFT JOIN `students_answers_files` AS saf ON sa.`id` = saf.`student_answer`
+    LEFT JOIN `files` AS f ON saf.`file` = f.`id`
+    WHERE tia.`id` = p_turned_in_assignment_id;
 END //
 DELIMITER ;
