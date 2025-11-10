@@ -845,25 +845,24 @@ BEGIN
     DECLARE assigned_assignment_id INT;
     DECLARE turned_in_assignment_id INT;
 
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        SELECT 'Error: Transaction rolled back' AS message;
-    END;
+    -- DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    -- BEGIN
+    --     ROLLBACK;
+    --     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al entregar la tarea';
+    -- END;
 
-    START TRANSACTION;
+    -- START TRANSACTION;
 
-    SELECT aa.id INTO assigned_assignment_id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1;
+    SET assigned_assignment_id = (SELECT aa.id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1);
 
     INSERT INTO `turned_in_assignments` (assigned_assignment, student)
     VALUES (assigned_assignment_id, p_student_id);
     SET turned_in_assignment_id = LAST_INSERT_ID();
 
-
     INSERT INTO `student_answers` (turned_in_assignment, student, text_content)
     VALUES (turned_in_assignment_id, p_student_id, p_student_text);
 
-    COMMIT;
+    -- COMMIT;
 END //
 
 CREATE PROCEDURE turnInAssignmentWithFile(
@@ -885,12 +884,12 @@ BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
-        SELECT 'Error: Transaction rolled back' AS message;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al entregar la tarea';
     END;
 
     START TRANSACTION;
 
-    SELECT aa.id INTO assigned_assignment_id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1;
+    SELECT aa.`id` INTO assigned_assignment_id FROM `assigned_assignments` AS aa WHERE aa.`assignment` = p_assignment_id LIMIT 1;
 
     INSERT INTO `turned_in_assignments` (`assigned_assignment`, `student`)
     VALUES (assigned_assignment_id, p_student_id);

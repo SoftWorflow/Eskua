@@ -33,7 +33,7 @@ async function loadTasks() {
                     data[0].forEach(task => {
                         const newTask = document.createElement('a');
                         newTask.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline';
-                        newTask.href = `/groups/student/assignments/info/?taskId=${task.id}`;
+                        newTask.href = `/groups/student/assignments/info/?taskId=${task.id}&groupId=${groupId}`;
 
                         newTask.innerHTML = `
                             <div class="flex w-full justify-between pr-10">

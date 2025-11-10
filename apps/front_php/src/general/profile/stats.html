@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estadísticas - Eskua</title>
-    <link rel="stylesheet" href="../../output.css">
-    <script src="../../auth.js"></script>
-    <script src="../../../navbar-loader.js"></script>
-    <script src="../../home/content-loader.js"></script>
+    <link rel="stylesheet" href="/output.css">
+    <script src="/auth.js"></script>
+    <script src="/navbar-loader.js"></script>
+    <script src="/home/content-loader.js"></script>
     <script>
         document.documentElement.style.display = 'none';
+        requireAuth();
+
         (async () => {
             await authManager.ensureValidToken();
             
@@ -168,15 +170,4 @@
         </div>
     </div>
 </body>
-<script>
-    (async () => {
-        const userRole = getUserRole();
-        
-        if (userRole !== 'student') {
-            console.warn('Unauthorized access attempt to student statistics');
-            window.location.href = '../../error-pages/403.html';
-            return;
-        }
-    })();
-</script>
 </html>

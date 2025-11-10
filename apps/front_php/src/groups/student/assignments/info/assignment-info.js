@@ -174,6 +174,7 @@ async function TurnInAssignment(e) {
     e.preventDefault();
 
     const urlParams = new URLSearchParams(window.location.search);
+    const groupId = urlParams.get('groupId');
     const taskId = urlParams.get('taskId');
     
     const textInput = document.getElementById('text-message');
@@ -196,7 +197,31 @@ async function TurnInAssignment(e) {
             return;
         }
 
-        console.log(data);
-        notifyAlert('success', data.message);
+        showSuccess(data.message, () => {
+            // window.location = `/groups/student/assignments/?groupId=${groupId}`;
+        });
     }).catch(err => console.error("Error: ", err));
+}
+
+function showSuccess(message, onDismiss) {
+    const duration = 750;
+    const notyf = new Notyf({
+        duration,
+        position: { x: 'right', y: 'top' }
+    });
+
+    const n = notyf.success(message);
+
+    // If the users close's the notification
+    if (n && typeof n.on === 'function') {
+        n.on('dismiss', () => {
+            if (onDismiss) onDismiss();
+        });
+    }
+
+    if (onDismiss) {
+        setTimeout(() => {
+            onDismiss();
+        }, duration);
+    }
 }

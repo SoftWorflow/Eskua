@@ -229,10 +229,10 @@ class AssignmentPersistence implements IAssignmentPersistence {
 
             return true;
         } catch (PDOException $e) {
-            print "Error when turning in an assignment". $e->getMessage();
+            error_log("PDO Exception: " . $e->getMessage());
+            error_log("errorInfo: " . json_encode($e->errorInfo)); // [SQLSTATE, driver code, driver message]
+            return false;
         }
-
-        return false;
     }
 
     public function turnInAssignmentWithFile(int $assignmentId, int $studentId, string $text, string $storageName, string $origName, string $mime, string $extention, int $size) : bool {
