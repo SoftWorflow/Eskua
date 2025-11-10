@@ -55,15 +55,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    (async () => {
-        const userRole = getUserRole();
-        
-        if (userRole !== 'teacher') {
-            console.warn('Unauthorized access attempt to teacher home');
-            window.location.href = '../../error-pages/403.html';
-            return;
-        }
-    })();
-</script>

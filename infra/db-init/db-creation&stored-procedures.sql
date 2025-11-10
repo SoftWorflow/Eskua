@@ -728,7 +728,7 @@ CREATE PROCEDURE getAssignmentsFromGroup(
     IN p_group_id INT
 )
 BEGIN
-    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate, aa.`is_deleted` AS 'isActive' FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.`assignment` WHERE aa.`group` = p_group_id;
+    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate, aa.`is_deleted` AS 'isNotActive' FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.`assignment` WHERE aa.`group` = p_group_id;
 END //
 
 CREATE PROCEDURE getAssignmentById(
@@ -832,6 +832,80 @@ BEGIN
 
     INSERT INTO `assigned_assignments_files` (assigned_assignment, `file`)
     VALUES (p_assignment_id, file_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE turnInAssignment(
+    IN p_assignment_id INT,
+    IN p_student_id INT,
+    IN p_student_text TEXT
+)
+BEGIN
+    DECLARE assigned_assignment_id INT;
+    DECLARE turned_in_assignment_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    SELECT aa.id INTO assigned_assignment_id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1;
+
+    INSERT INTO `turned_in_assignments` (assigned_assignment, student)
+    VALUES (assigned_assignment_id, p_student_id);
+    SET turned_in_assignment_id = LAST_INSERT_ID();
+
+
+    INSERT INTO `student_answers` (turned_in_assignment, student, text_content)
+    VALUES (turned_in_assignment_id, p_student_id, p_student_text);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE turnInAssignmentWithFile(
+    IN p_assignment_id INT,
+    IN p_student_id INT,
+    IN p_student_text TEXT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT
+)
+BEGIN
+    DECLARE file_id INT;
+    DECLARE assigned_assignment_id INT;
+    DECLARE turned_in_assignment_id INT;
+    DECLARE student_answer_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    SELECT aa.id INTO assigned_assignment_id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1;
+
+    INSERT INTO `turned_in_assignments` (`assigned_assignment`, `student`)
+    VALUES (assigned_assignment_id, p_student_id);
+    SET turned_in_assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `student_answers` (`turned_in_assignment`, `student`, `text_content`)
+    VALUES (turned_in_assignment_id, p_student_id, p_student_text);
+    SET student_answer_id = LAST_INSERT_ID();
+
+    INSERT INTO `files` (`storage_name`, `original_name`, `mime`, `extension`, `size`, `uploader_id`)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_student_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO `students_answers_files` (student_answer, turned_in_assignment, `file`)
+    VALUES (student_answer_id, turned_in_assignment_id, file_id);
 
     COMMIT;
 END //

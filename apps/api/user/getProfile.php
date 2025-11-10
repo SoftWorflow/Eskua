@@ -7,6 +7,11 @@ header('Content-Type: application/json');
 $userLogic = UserLogicFacade::getInstance()->getIUserLogic();
 $userData = $userLogic->getUserById(null);
 
+if ($userData === null) {
+    echo json_encode(['ok' => false, 'error' => 'Usuario no encontrado']);
+    exit;
+}
+
 $user = $userData[1];
 
 $response = [

@@ -114,7 +114,7 @@
   }
 
   .orange-button {
-    @apply border-2 border-[#E1A05B] text-[#E1A05B] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#E1A05B] hover:text-white transition duration-1000 hover:cursor-pointer;
+    @apply border-2 border-[#E1A05B] text-[#E1A05B] rounded-2xl text-xl drop-shadow-md/25 bg-white hover:bg-[#E1A05B] hover:text-white transition duration-150 hover:cursor-pointer;
     font-family: 'Lexend', sans-serif;
     font-weight: 400;
   }

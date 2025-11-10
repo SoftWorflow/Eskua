@@ -137,6 +137,8 @@ class UserLogic implements IUserLogic {
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
         $result = $userPersistence->getUserById($userId);
 
+        if ($result === null) return null;
+
         $user = $result[1];
         return [$userId, $user];
     }
@@ -527,10 +529,11 @@ class UserLogic implements IUserLogic {
         if (AuthMiddleware::authenticate()['role'] === 'student') {
             $responseAssignments = [];
             if ($assignments !== null) {
-                $currentDate = new DateTime('now');
+                $tz = new DateTimeZone(date_default_timezone_get());
+                $currentDate = new DateTime('now', $tz);
                 foreach ($assignments as $assignment) {
-                    $dueDate = new DateTime($assignment['dueDate']);
-                    if ($dueDate > $currentDate && $assignment['isActive']) {
+                    $dueDate = new DateTime($assignment['dueDate'], $tz);
+                    if ($dueDate > $currentDate) {
                         $responseAssignments[] = $assignment;
                     }
                 }
