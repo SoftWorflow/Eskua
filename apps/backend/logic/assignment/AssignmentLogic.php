@@ -364,7 +364,7 @@ class AssignmentLogic implements IAssignmentLogic {
             $targetPath = $targetDir . '/' . $storageName;
 
             $response = $assignmentPersistence->turnInAssignmentWithFile($assignmentId, $studentId, $text, $storageName, $origName, $mime, $extention, $size);
-            
+
             if ($fileData !== null) {
                 if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
                     return ['ok' => false, 'error' => 'Fallo al mover el archivo'];
@@ -381,6 +381,20 @@ class AssignmentLogic implements IAssignmentLogic {
 
         return ['ok' => true, 'message' => 'La tarea fué entregada con éxito'];
 
+    }
+
+    public function getTurnedInAssignmentsFromAssignment(int $assignmentId): array {
+        AuthMiddleware::authorize(['teacher']);
+
+        $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
+
+        $turnedInAssignments = $assignmentPersistence->getTurnedInAssignmentsFromAssignment($assignmentId);
+        
+        if (empty($turnedInAssignments)) {
+            return ['ok' => false, 'error' => 'Aún no hay entregas para esta tarea'];
+        } 
+
+        return ['ok' => true, 'answers' => $turnedInAssignments];
     }
 
 }

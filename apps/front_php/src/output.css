@@ -7,7 +7,6 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-green-100: oklch(96.2% 0.044 156.743);
@@ -1922,13 +1921,6 @@
       }
     }
   }
-  .hover\:stroke-red-500 {
-    &:hover {
-      @media (hover: hover) {
-        stroke: var(--color-red-500);
-      }
-    }
-  }
   .hover\:text-\[\#E1A05B\] {
     &:hover {
       @media (hover: hover) {
@@ -2442,6 +2434,28 @@
     font-family: 'Lexend', sans-serif;
     font-weight: 400;
   }
+  .orange-button-disabled {
+    border-radius: var(--radius-2xl);
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    border-color: #db8d3a;
+    background-color: #db8d3a;
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+    color: var(--color-white);
+    opacity: 75%;
+    --tw-drop-shadow-alpha: 25%;
+    --tw-drop-shadow-size: drop-shadow(0 3px 3px var(--tw-drop-shadow-color, oklab(from rgb(0 0 0 / 0.12) l a b / 25%)));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+    &:hover {
+      @media (hover: hover) {
+        cursor: not-allowed;
+      }
+    }
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
   .orange-button2 {
     border-radius: var(--radius-2xl);
     border-style: var(--tw-border-style);
@@ -2603,6 +2617,28 @@
     &:hover {
       @media (hover: hover) {
         color: #1B3B50;
+      }
+    }
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+  }
+  .turned-in-button {
+    border-radius: var(--radius-2xl);
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    border-color: #28C98E;
+    background-color: #28C98E;
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+    color: var(--color-white);
+    opacity: 75%;
+    --tw-drop-shadow-alpha: 25%;
+    --tw-drop-shadow-size: drop-shadow(0 3px 3px var(--tw-drop-shadow-color, oklab(from rgb(0 0 0 / 0.12) l a b / 25%)));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+    &:hover {
+      @media (hover: hover) {
+        cursor: not-allowed;
       }
     }
     font-family: 'Lexend', sans-serif;

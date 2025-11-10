@@ -31,6 +31,17 @@ async function loadTasks() {
               assignmentsTable.innerHTML = '';
 
               data[0].forEach(task => {
+                const dueDateAsDate = new Date(task.dueDate);
+                const now = new Date();
+
+                let dueDate = '';
+
+                if (now > dueDateAsDate) {
+                  dueDate = 'Vencida';
+                } else {
+                  dueDate = 'Vence el ' + task.dueDate;
+                }
+
                 const newTask = document.createElement('a');
                 newTask.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline';
                 newTask.href = `assignment-info.html?taskId=${task.id}&groupId=${groupId}`;
@@ -46,7 +57,7 @@ async function loadTasks() {
                      </div>
                      <div class="flex flex-col items-end space-y-10">
                       <p class="text-[#6A7282]">${task.maxScore}</p>
-                      <p class="text-[#CC4033]">${task.isActive > 0 ? 'Desactivada' : 'Vence el ' + task.dueDate}</p>
+                      <p class="text-[#CC4033]">${task.isActive > 0 ? 'Desactivada' : dueDate}</p>
                      </div>
                   </div>
                 `;

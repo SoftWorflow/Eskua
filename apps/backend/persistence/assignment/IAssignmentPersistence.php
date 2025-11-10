@@ -12,6 +12,7 @@ interface IAssignmentPersistence {
     public function getSpecificAssignment(int $assignmentId): array;
     public function turnInAssignment(int $assignmentId, int $studentId, string $text) : bool;
     public function turnInAssignmentWithFile(int $assignmentId, int $studentId, string $text, string $storageName, string $origName, string $mime, string $extention, int $size) : bool;
+    public function getTurnedInAssignmentsFromAssignment(int $assignmentId): array;
 }
 
 ?>

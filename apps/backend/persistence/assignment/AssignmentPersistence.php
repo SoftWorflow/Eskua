@@ -255,6 +255,27 @@ class AssignmentPersistence implements IAssignmentPersistence {
         return false;
     }
 
+    public function getTurnedInAssignmentsFromAssignment(int $assignmentId): array {
+        if ($assignmentId === null || empty($assignmentId)) {
+            return [];
+        }
+        
+        $sql = "call getTurnedInAssignmentsFromAssignment(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$assignmentId]);
+            $turnedInAssignments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+
+            return $turnedInAssignments ? $turnedInAssignments : [];
+        } catch (PDOException $e) {
+            print "Error while trying to get turned in assignments from assignment: " . $e->getMessage();
+        }
+
+        return [];
+    }
+
 }
 
 ?>

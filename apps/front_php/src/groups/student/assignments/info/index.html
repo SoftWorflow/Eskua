@@ -71,8 +71,7 @@
               <!-- Upload + File Download Container -->
               <div class="flex space-x-5 w-full">
                 <!-- Upload Button -->
-                <label
-                  id="file-input-label" for="file-input"
+                <label id="file-input-label" for="file-input"
                   class="flex flex-col space-y-1 border-2 border-dotted border-[#A3A3A3] py-4 px-12 rounded-2xl items-center shadow-md/30 hover:bg-[#fafafa] w-1/2 interactive">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#3550BA"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mx-auto">
@@ -84,15 +83,15 @@
                   <!-- File types -->
                   <p class="font-light text-[12px] text-[#A3A3A3] select-none">PDF, MP4, PNG, JPG, WEBP</p>
                 </label>
-                
+
                 <input id="file-input" type="file" accept=".pdf,.mp4,.png,.jpg,.jpeg,.webp" class="hidden"
-                  onchange="addNewFile(event)"/>
+                  onchange="addNewFile(event)" />
                 <div id="files-to-upload" class="w-1/2"></div>
               </div>
             </div>
           </div>
           <div class="w-full h-1/6 flex items-center justify-center">
-            <button type="submit" class="orange-button h-full px-14">Confirmar</button>
+            <button id="submit-turn-in-assignment" type="submit" class="orange-button h-full px-14">Confirmar</button>
           </div>
         </form>
       </div>
@@ -181,7 +180,8 @@
 
                   <!-- BUTTONS CONTAINER -->
                   <div class="flex w-full justify-center">
-                    <button onclick="showTurnInAssignmentPopup()" class="orange-button h-15 w-1/4">Entregar</button>
+                    <button id="show-popup-button" onclick="showTurnInAssignmentPopup()"
+                      class="orange-button h-15 w-1/4">Entregar</button>
                   </div>
 
                 </div>

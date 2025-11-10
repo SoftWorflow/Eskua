@@ -57,6 +57,19 @@ async function loadTask() {
     }).then(res => res.json())
         .then(data => {
             if (!data.ok) {
+                let turnedInAssignments = localStorage.getItem('turnedInAssignments');
+
+                if (turnedInAssignments !== null) {
+                    try {
+                        turnedInAssignments = JSON.parse(turnedInAssignments);
+                        turnedInAssignments = turnedInAssignments.filter(id => id !== taskId);
+                        localStorage.setItem('turnedInAssignments', JSON.stringify(turnedInAssignments));
+                    } catch (err) {
+                        // Si el parse falla, limpiamos la clave para no dejar basura
+                        localStorage.removeItem('turnedInAssignments');
+                    }
+                }
+
                 notifyAlert('error', data.error);
                 return;
             }
@@ -89,10 +102,33 @@ async function loadTask() {
                 fileContainer.append(text);
             }
 
-            spinner.stop();
+            let turnedInAssignments = localStorage.getItem('turnedInAssignments');
+
+            if (turnedInAssignments !== null) {
+                try {
+                    turnedInAssignments = JSON.parse(turnedInAssignments);
+                } catch (err) {
+                    turnedInAssignments = [];
+                    localStorage.removeItem('turnedInAssignments');
+                }
+
+                if (Array.isArray(turnedInAssignments) && turnedInAssignments.includes(taskId)) {
+                    const showPopupButton = document.getElementById('show-popup-button');
+                    showPopupButton.onclick = '';
+
+                    showPopupButton.disabled = true;
+                    showPopupButton.innerText = 'Entregada';
+                    showPopupButton.className = 'turned-in-button h-15 w-1/4';
+                }
+            }
+
+            if (spinner && typeof spinner.stop === 'function') spinner.stop();
 
             infoContainer.classList.remove('hidden');
-        }).catch(err => console.error("Error: ", err));
+        }).catch(err => {
+            console.error("Error: ", err);
+            if (spinner && typeof spinner.stop === 'function') spinner.stop();
+        });
 }
 
 function showTurnInAssignmentPopup() {
@@ -173,6 +209,10 @@ function formatFileSize(bytes) {
 async function TurnInAssignment(e) {
     e.preventDefault();
 
+    const submitTurnInAssignment = document.getElementById('submit-turn-in-assignment');
+    submitTurnInAssignment.disabled = true;
+    submitTurnInAssignment.className = 'orange-button-disabled h-full px-14';
+
     const urlParams = new URLSearchParams(window.location.search);
     const groupId = urlParams.get('groupId');
     const taskId = urlParams.get('taskId');
@@ -183,9 +223,21 @@ async function TurnInAssignment(e) {
     const file = fileInput.files.length > 0 ? fileInput.files[0] : null;
 
     const formData = new FormData();
-    formData.append('text', textInput.value);
     formData.append('file', file);
+    formData.append('text', textInput.value);
     formData.append('taskId', taskId);
+
+    let turnedInAssignments = localStorage.getItem('turnedInAssignments');
+    if (turnedInAssignments === null) {
+        turnedInAssignments = [];
+    } else {
+        try {
+            turnedInAssignments = JSON.parse(turnedInAssignments);
+            if (!Array.isArray(turnedInAssignments)) turnedInAssignments = [];
+        } catch (err) {
+            turnedInAssignments = [];
+        }
+    }
 
     authenticatedFetch('/api/student/turnInAssignment.php', {
         method: 'POST',
@@ -194,14 +246,25 @@ async function TurnInAssignment(e) {
     .then(data => {
         if (!data.ok) {
             notifyAlert('error', data.error);
+            submitTurnInAssignment.disabled = false;
+            submitTurnInAssignment.className = 'orange-button h-full px-14';
             return;
         }
 
+        turnedInAssignments.push(taskId);
+        localStorage.setItem('turnedInAssignments', JSON.stringify(turnedInAssignments));
+
         showSuccess(data.message, () => {
-            // window.location = `/groups/student/assignments/?groupId=${groupId}`;
+            window.location = `/groups/student/assignments/?groupId=${groupId}`;
         });
-    }).catch(err => console.error("Error: ", err));
+    }).catch(err => {
+        console.error("Error: ", err);
+        notifyAlert('error', 'Error de red al intentar entregar. Intenta nuevamente.');
+        submitTurnInAssignment.disabled = false;
+        submitTurnInAssignment.className = 'orange-button h-full px-14';
+    });
 }
+
 
 function showSuccess(message, onDismiss) {
     const duration = 750;

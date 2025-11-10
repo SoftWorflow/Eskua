@@ -13,6 +13,8 @@
     <script src="assignments-script.js"></script>
     <script>
         document.documentElement.style.display = 'none';
+        requireRole('student');
+        
         (async () => {
             // Allow access even if not logged in
             await authManager.ensureValidToken();

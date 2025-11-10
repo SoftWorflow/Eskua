@@ -113,22 +113,24 @@ create table assigned_assignments(
     foreign key (`group`) references `groups`(id) on delete cascade
 );
 
-create table turned_in_assignments(
-	assigned_assignment int not null,
-    student int not null,
-    submited_date datetime not null default current_timestamp,
-    was_corrected bool not null default false,
-    foreign key (student) references users(id) on delete cascade,
-    primary key (assigned_assignment, student)
+CREATE TABLE turned_in_assignments (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    assigned_assignment INT NOT NULL,
+    student INT NOT NULL,
+    submitted_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    was_corrected BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (student) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (assigned_assignment) REFERENCES assigned_assignments(id) ON DELETE CASCADE,
+    UNIQUE KEY ux_assigned_student (assigned_assignment, student)
 );
 
-create table student_answers(
-	id int not null auto_increment,
-    turned_in_assignment int not null,
-    student int not null,
-    text_content text,
-    foreign key (turned_in_assignment, student) references turned_in_assignments(assigned_assignment, student) on delete cascade,
-    primary key (id, turned_in_assignment)
+CREATE TABLE student_answers (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    turned_in_assignment INT NOT NULL,
+    student INT NOT NULL,
+    text_content TEXT,
+    FOREIGN KEY (turned_in_assignment) REFERENCES turned_in_assignments(id) ON DELETE CASCADE,
+    FOREIGN KEY (student) REFERENCES users(id) ON DELETE CASCADE
 );
 
 create table assignments_returns(
@@ -162,13 +164,12 @@ create table public_materials(
 );
 
 -- FILE REFERENCES TABLES
-create table students_answers_files(
-    student_answer int not null,
-    turned_in_assignment int not null,
-    `file` int not null,
-    foreign key (student_answer, turned_in_assignment) references student_answers(id, turned_in_assignment) on delete cascade,
-    foreign key (`file`) references files(id) on delete cascade,
-    primary key (`file`, student_answer, turned_in_assignment)
+CREATE TABLE students_answers_files (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    student_answer INT NOT NULL,
+    `file` INT NOT NULL,
+    FOREIGN KEY (student_answer) REFERENCES student_answers(id) ON DELETE CASCADE,
+    FOREIGN KEY (`file`) REFERENCES files(id) ON DELETE CASCADE
 );
 
 create table public_materials_files(
@@ -845,24 +846,29 @@ BEGIN
     DECLARE assigned_assignment_id INT;
     DECLARE turned_in_assignment_id INT;
 
-    -- DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    -- BEGIN
-    --     ROLLBACK;
-    --     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al entregar la tarea';
-    -- END;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al entregar la tarea';
+    END;
 
-    -- START TRANSACTION;
+    START TRANSACTION;
 
-    SET assigned_assignment_id = (SELECT aa.id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1);
+    SELECT aa.id INTO assigned_assignment_id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1;
 
-    INSERT INTO `turned_in_assignments` (assigned_assignment, student)
+    IF assigned_assignment_id IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Assigned assignment no encontrado';
+    END IF;
+
+    INSERT INTO turned_in_assignments (assigned_assignment, student)
     VALUES (assigned_assignment_id, p_student_id);
+
     SET turned_in_assignment_id = LAST_INSERT_ID();
 
-    INSERT INTO `student_answers` (turned_in_assignment, student, text_content)
+    INSERT INTO student_answers (turned_in_assignment, student, text_content)
     VALUES (turned_in_assignment_id, p_student_id, p_student_text);
 
-    -- COMMIT;
+    COMMIT;
 END //
 
 CREATE PROCEDURE turnInAssignmentWithFile(
@@ -889,23 +895,45 @@ BEGIN
 
     START TRANSACTION;
 
-    SELECT aa.`id` INTO assigned_assignment_id FROM `assigned_assignments` AS aa WHERE aa.`assignment` = p_assignment_id LIMIT 1;
+    SELECT aa.id INTO assigned_assignment_id
+    FROM assigned_assignments AS aa
+    WHERE aa.assignment = p_assignment_id
+    LIMIT 1;
 
-    INSERT INTO `turned_in_assignments` (`assigned_assignment`, `student`)
+    INSERT INTO turned_in_assignments (assigned_assignment, student)
     VALUES (assigned_assignment_id, p_student_id);
     SET turned_in_assignment_id = LAST_INSERT_ID();
 
-    INSERT INTO `student_answers` (`turned_in_assignment`, `student`, `text_content`)
+    INSERT INTO student_answers (turned_in_assignment, student, text_content)
     VALUES (turned_in_assignment_id, p_student_id, p_student_text);
     SET student_answer_id = LAST_INSERT_ID();
 
-    INSERT INTO `files` (`storage_name`, `original_name`, `mime`, `extension`, `size`, `uploader_id`)
+    INSERT INTO files (storage_name, original_name, mime, extension, size, uploader_id)
     VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_student_id);
     SET file_id = LAST_INSERT_ID();
 
-    INSERT INTO `students_answers_files` (student_answer, turned_in_assignment, `file`)
-    VALUES (student_answer_id, turned_in_assignment_id, file_id);
+    INSERT INTO students_answers_files (student_answer, `file`)
+    VALUES (student_answer_id, file_id);
 
     COMMIT;
+END //
+
+CREATE PROCEDURE getTurnedInAssignmentsFromAssignment(
+    IN p_assignment_id INT
+)
+BEGIN
+    SELECT 
+        tia.`id`,
+        u.`username` AS `username`,
+        tia.`was_corrected` AS `isCorrected`,
+        tia.`submitted_date` AS `submittedDate`,
+        COUNT(f.`id`) AS `filesCount`
+    FROM `turned_in_assignments` AS tia
+    JOIN `student_answers` AS sa ON tia.`id` = sa.`turned_in_assignment`
+    JOIN `users` AS u ON sa.`student` = u.`id`
+    LEFT JOIN `students_answers_files` AS saf ON sa.`id` = saf.`student_answer`
+    LEFT JOIN `files` AS f ON saf.`file` = f.`id`
+    WHERE tia.`assigned_assignment` = p_assignment_id
+    GROUP BY tia.`id`, sa.`id`, tia.`was_corrected`, tia.`submitted_date`;
 END //
 DELIMITER ;

@@ -8,6 +8,7 @@ interface IAssignmentLogic {
     public function createAssignmentFile(string $assignmentId, string $storageName, string $originalName,  string $mime, string $extention, int $size, int $userId): bool;
     public function getSpecificAssignment(int $assignmentId): array;
     public function turnInAssignment(int $assignmentId, string $text, ?array $fileData = null) : array;
+    public function getTurnedInAssignmentsFromAssignment(int $assignmentId): array;
 }
 
 ?>

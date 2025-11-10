@@ -152,3 +152,11 @@ function modifyAssignment() {
 
     window.location = `/groups/teacher/assignments/modify-assignment.html?taskId=${taskId}&groupId=${groupId}`;
 }
+
+function seeTurnedInAssignment() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('taskId');
+    const groupId = urlParams.get('groupId');
+
+    window.location = `/groups/teacher/assignments/turned-in/?taskId=${taskId}&groupId=${groupId}`;
+}
