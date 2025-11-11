@@ -1,8 +1,13 @@
 <?php
 
+require_once(__DIR__ . "/../../middleware/auth.php");
+
 require_once("IUserLogic.php");
+require_once(__DIR__ . "/../../DTO/GroupAssignment.php");
 require_once(__DIR__ . "/../../DTO/Users/User.php");
 require_once(__DIR__ . "/../../persistence/user/UserPersistenceFacade.php");
+require_once(__DIR__ . "/../../persistence/group/GroupPersistenceFacade.php");
+require_once(__DIR__ . "/../../logic/group/GroupLogicFacade.php");
 require(__DIR__ . '/../../vendor/autoload.php');
 
 use Firebase\JWT\JWT;
@@ -10,7 +15,8 @@ use Firebase\JWT\Key;
 
 class UserLogic implements IUserLogic {
 
-    private int $ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES = 15;
+    private const ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES = 15;
+    private const DEFAULT_USER_PROFILE_PICTURE_URL = "/images/DefaultUserProfilePicture.webp";
 
     // CREATE USER
     public function createUser(User $user) : bool {
@@ -69,18 +75,18 @@ class UserLogic implements IUserLogic {
         return $result;
     }
 
-    /*
-     *  DELETE USER
-    */
-    public function deleteUserById(int $id) : bool {
-        $res = false;
-
-        if ($id == null) return $res;
-        if ($id <= 0) return $res;
+    public function deleteUserById(int $userId) : array {
+        if (empty($userId) || $userId === null) {
+            return ['ok' => false, 'error' => 'No se recibio el identificador del usuario'];
+        }
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
-        $res = $userPersistence->deleteUser($id);
-        return $res;
+
+        if ($userPersistence->deleteUser($userId)) {
+            return ['ok' => true, 'message' => 'Usuario borrado con exito!'];
+        } else {
+            return ['ok' => false, 'message' => 'Hubo un error al eliminar el usuario!'];
+        }
     }
 
     public function deleteUserByUsername(string $username) : bool {
@@ -121,30 +127,263 @@ class UserLogic implements IUserLogic {
     /*
      *  GET USER
     */
-    public function getUserById(int $id) : ?array {
-        if ($id === null) return null;
+    public function getUserById(?int $userId = null) : ?array {
+
+        if ($userId === null) {
+            $userId = AuthMiddleware::authenticate()['user_id'];
+            if ($userId === null) return null;
+        }
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
-        $result = $userPersistence->getUserById($id);
+        $result = $userPersistence->getUserById($userId);
+
+        if ($result === null) return null;
 
         $user = $result[1];
-        return [$id, $user];
+        return [$userId, $user];
     }
 
     public function getUserByUsername(string $username) : ?array {
-        if (empty($username)) return null;
+        if (empty($username)) return ['ok' => false, 'error' => 'No se recibio el nombre de usuario'];
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
         $result = $userPersistence->getUserByUsername($username);
 
-        if ($result === null) {
-            return null;
+        if (empty($result)) {
+            return ['ok' => false, 'error' => 'Usuario no encontrado'];
         }
 
-        $id = $result[0];
-        $user = $result[1];
+        return ['ok' => true, 'user' => $result];
+    }
 
-        return [$id, $user];
+    public function register(string $username, string $email, string $displayName, string $password, string $confirmPassword, string $userRole, ?string $groupCode = null) : array {
+
+        $errorResponse = null;
+        if (empty($username)) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['username'] = ['error' => 'Este campo es olbigatorio'];
+        }
+
+        if (strlen($username) > 30) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['username'] = ['error' => 'Este campo es muy largo'];
+        }
+
+        if (empty($displayName)) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['displayName'] = ['error' => 'Este campo es olbigatorio'];
+        }
+
+        if (strlen($displayName) > 30) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['displayName'] = ['error' => 'Este campo es muy largo'];
+        }
+
+        if (empty($email)) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['email'] = ['error' => 'Este campo es obligatorio'];
+        } else {
+            if (strlen($email) > 255) {
+                http_response_code(400);
+                $errorResponse['ok'] = false;
+                $errorResponse['email'] = ['error' => 'Este campo es muy largo'];
+            } else {
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    http_response_code(400);
+                    $errorResponse['ok'] = false;
+                    $errorResponse['email'] = ['error' => 'El formato del correo no es válido'];
+                }
+            }
+        }
+
+        if (strlen($email) > 255) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['email'] = ['error' => 'Este campo es muy largo'];
+        }
+
+        if (empty($password)) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['password'] = ['error' => 'Este campo es olbigatorio'];
+        }
+
+        if (empty($confirmPassword)) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['confirmPassword'] = ['error' => 'Este campo es obligatorio'];
+        }
+
+        if (!empty($password) && !empty($confirmPassword) && $password !== $confirmPassword) {
+            http_response_code(409);
+            $errorResponse['ok'] = false;
+            $errorResponse['confirmPassword'] = ['error' => 'Las contraseñas no coinciden'];
+        }
+
+        if (!empty($password)) {
+            $low = preg_match('/[a-z]/', $password);
+            $up  = preg_match('/[A-Z]/', $password);
+            $dig = preg_match('/\d/', $password);
+            $sym = preg_match('/\W/', $password);
+            if (!$low || !$up || !$dig || !$sym) {
+                http_response_code(400);
+                $errorResponse['ok'] = false;
+                $errorResponse['password'] = ['error' => 'La contraseña debe contener minúsculas, mayúsculas, números y símbolos'];
+            }
+        }
+
+        $minPasswordLength = 8;
+        if (!empty($password) && strlen($password) < $minPasswordLength) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['password'] = ['error' => "La contraseña debe tener al menos {$minPasswordLength} caracteres"];
+        }
+
+        if (empty($userRole)) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['userRole'] = ['error' => 'Hay un error con el tipo de usuario'];
+        }
+        
+        if (empty($groupCode)) {
+            if ($userRole === "student") {
+                http_response_code(400);
+                $errorResponse['ok'] = false;
+                $errorResponse['groupCode'] = ['error' => 'Tienes que ingresar el codigo del grupo'];
+            }
+        } else {
+            $groupLogic = GroupLogicFacade::getInstance()->getIGroupLogic();
+            $group = $groupLogic->getGroupByCode($groupCode);
+            if ($group === null) {
+                http_response_code(400);
+                $errorResponse['ok'] = false;
+                $errorResponse['groupCode'] = ['error' => 'El codigo ingresado no es válido'];
+            }
+        }
+
+        if (!UserRole::isValid($userRole) || $userRole === 'admin') {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['userType'] = ['error' => 'No tienes permiso para crear un usuario con este rol'];
+        }
+
+        // Verify that the username is not taken
+        $dbUser = $this->getUserByUsername($username)['ok'];
+
+        if ($dbUser) {
+            http_response_code(400);
+            $errorResponse['ok'] = false;
+            $errorResponse['username'] = ['error' => 'El nombre de usuario ya está en uso'];
+        }
+
+        // Verify that the email is not taken
+        $dbUserByEmail = $this->getUserByEmail($email)['ok'];
+
+        if ($dbUserByEmail) {
+            http_response_code(409);
+            $errorResponse['ok'] = false;
+            $errorResponse['email'] = ['error' => 'El correo electrónico ya está en uso'];
+        }
+
+        if ($errorResponse !== null) {
+            return $errorResponse;
+        }
+
+        $user = new User($username, $email, $displayName, UserLogic::DEFAULT_USER_PROFILE_PICTURE_URL, $password, $userRole);
+
+        if ($userRole !== "student") {
+            if (!$this->createUser($user)) {
+                http_response_code(500);
+                return ['ok' => false, 'error' => 'Hubo un error al crear el usuario'];
+            }
+
+            http_response_code(201);
+            return ['ok' => true, 'message' => 'Usuario creado con exito'];
+        } else {
+            $groupLogic = GroupLogicFacade::getInstance()->getIGroupLogic();
+            $studentGroup = $groupLogic->getGroupByCode($groupCode);
+
+            if ($studentGroup === null) {
+                http_response_code(400);
+                return ['ok' => false, 'error' => 'El codigo de grupo no es válido'];
+            }
+
+            $groupId = $studentGroup[0];
+
+            if (!$this->createStudent($user, $groupId)) {
+                http_response_code(500);
+                return ['ok' => false, 'error' => 'Hubo un error al crear el estudiante'];
+            }
+
+            http_response_code(201);
+            return ['ok' => true, 'message' => 'Estudiante creado con exito'];
+        }
+
+    }
+
+    public function login(string $username, string $password) : array {
+        $user = $this->getUserByUsername($username);
+
+        if (!$user['ok']) {
+            return ['ok' => false, 'error' => 'Usuario o contraseña incorrectos'];
+        }
+
+        $userData = $user['user'][1];
+
+        if (!password_verify($password, $userData->getPassword())) {
+            return ['ok' => false, 'error' => 'Usuario o contraseña incorrectos'];
+        }
+
+        $token = $this->generateToken($userData);
+        
+        if ($token === null) {
+            http_response_code(500);
+            return ['ok' => false, 'error' => 'Error generando el token'];
+        }
+        
+        $token['ok'] = true;
+        return $token;
+    }
+
+    public function logout() : array {
+        if (!isset($_COOKIE['refresh_token'])) {
+            error_log("Logout: No refresh token cookie found");
+            return ['ok' => true, 'message' => 'No active session'];
+        }
+
+        $refreshToken = $_COOKIE['refresh_token'];
+
+        // Revoke token on the DB
+        $revoked = $this->revokeRefreshToken($refreshToken);
+
+        if (!$revoked) {
+            error_log("Logout: Failed to revoke token in database");
+        }
+
+        $cookieDeleted = setcookie('refresh_token', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
+
+        if (!$cookieDeleted) {
+            error_log("Logout: Failed to delete cookie");
+        }
+
+        error_log("Logout: Token revoked=" . ($revoked ? 'yes' : 'no') . ", Cookie deleted=" . ($cookieDeleted ? 'yes' : 'no'));
+    
+        return [
+            'ok' => true, 
+            'token_revoked' => $revoked,
+            'cookie_deleted' => $cookieDeleted
+        ];
     }
 
     public function getUserByEmail(string $email) : ?array {
@@ -153,14 +392,11 @@ class UserLogic implements IUserLogic {
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
         $result = $userPersistence->getUserByEmail($email);
 
-        if ($result === null || !is_array($result) || count($result) < 2) {
-            return null;
+        if (empty($result)) {
+            return ['ok' => false, 'error' => 'Usuario no encontrado'];
         }
 
-        $id = $result[0];
-        $user = $result[1];
-
-        return [$id, $user];
+        return ['ok' => true, 'user' => $result];
     }
 
     // TOKENS
@@ -169,13 +405,13 @@ class UserLogic implements IUserLogic {
         
         $secretKey = getenv('CLIENT_TOKEN_SECRET');
         $issuedAt = time();
-        $accessExpire = $issuedAt + ($this->ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES * 60);
+        $accessExpire = $issuedAt + (UserLogic::ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES * 60);
 
         $username = $user->getUsername();
         $dbUser = $this->getUserByUsername($username);
 
         if (!$dbUser) return null;
-        $userId = $dbUser[0];
+        $userId = $dbUser['user'][0];
 
         // Payload of the access token
         $payload = [
@@ -203,7 +439,7 @@ class UserLogic implements IUserLogic {
             [
                 'expires' => $refreshExpireTimestamp,
                 'path' => '/',
-                'secure' => false,
+                'secure' => true,
                 'httponly' => true,
                 'samesite' => 'Strict'
             ]
@@ -245,7 +481,7 @@ class UserLogic implements IUserLogic {
 
         $secretKey = getenv('CLIENT_TOKEN_SECRET');
         $issuedAt = time();
-        $accessExpire = $issuedAt + ($this->ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES * 60);
+        $accessExpire = $issuedAt + (UserLogic::ACCESS_TOKEN_EXPIRE_TIME_IN_MINUTES * 60);
 
         // Random refresh token
         $payload = [
@@ -279,6 +515,125 @@ class UserLogic implements IUserLogic {
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
         return $userPersistence->revokeRefreshToken($refreshToken);
+    }
+
+    public function getStudentGroup() : ?array {
+        AuthMiddleware::authorize(['student']);
+
+        $userId = AuthMiddleware::authenticate()['user_id'];
+        
+        if ($userId == null) return null;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        return $userPersistence->getStudentGroup($userId);
+    }
+
+    public function getSpecificUserData(int $userId) : array {
+        AuthMiddleware::authorize(['admin']);
+
+        if (empty($userId)) {
+            return ['ok' => false, 'error' => 'Nose riecibio el identificador del usuario'];
+        }
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $user = $userPersistence->getSpecificUserData($userId);
+
+        if (empty($user)) {
+            return ['ok' => false, 'error' => 'Hubo un error al buscar al usuario'];
+        }
+
+        return ['ok' => true, $user];
+    }
+
+    public function getAssignmentsFromGroup(int $groupId) : ?array {
+        if ($groupId == null) return null;
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $assignments = $userPersistence->getAssignmentsFromGroup($groupId);
+
+        if ($assignments === null) return null;
+
+        if (AuthMiddleware::authenticate()['role'] === 'student') {
+            $responseAssignments = [];
+            if ($assignments !== null) {
+                $tz = new DateTimeZone(date_default_timezone_get());
+                $currentDate = new DateTime('now', $tz);
+                foreach ($assignments as $assignment) {
+                    $dueDate = new DateTime($assignment['dueDate'], $tz);
+                    if ($dueDate > $currentDate) {
+                        $responseAssignments[] = $assignment;
+                    }
+                }
+            }
+            $assignments = $responseAssignments;
+        }
+
+        $assignments = array_values($assignments);
+
+        return $assignments;
+    }
+
+    public function getTeacherGroups(int $userId) : array {
+        AuthMiddleware::authorize(['teacher']);
+        
+        if ($userId === null) {
+            return ['ok' => false, 'error' => 'No se recibio el identificador del usuario'];
+        }
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $groups = $userPersistence->getTeacherGroups($userId);
+
+        if (empty($groups)) {
+            return ['ok' => false, 'error' => 'Hubo un error al obtener los grupos'];
+        }
+
+        return ['ok' => true, 'groups' => $groups];
+    }
+
+    public function getAllUsersAdmin(): array {
+        AuthMiddleware::authorize(['admin']);
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $users = $userPersistence->getAllUsersAdmin();
+
+        if (empty($users)) {
+            return ['ok' => false, 'error' => 'Hubo un error al encontrar los usuarios'];
+        }
+
+        return $users;
+    }
+
+    public function searchUsers(string $username) : array {
+        AuthMiddleware::authorize(['admin']);
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $users = $userPersistence->searchUsers($username);
+
+        if (empty($users)) {
+            return ['ok' => false, 'message' => 'No se encontraron resultados'];
+        }
+
+        return ['ok' => true, $users];
+    }
+
+    public function getAllUsersCountAdmin() : array {
+        AuthMiddleware::authorize(['admin']);
+
+        $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
+
+        $usersCount = $userPersistence->getAllUsersCountAdmin();
+
+        if (empty($usersCount)) {
+            return ['ok' => false, 'error' => 'Hubo un error al contar los usuarios'];
+        }
+
+        return $usersCount;
     }
 
 }

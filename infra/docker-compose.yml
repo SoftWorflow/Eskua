@@ -6,6 +6,7 @@ services:
     environment:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
+      - TZ=America/Montevideo
     volumes:
       - db_data:/var/lib/mysql
       - ../infra/db-init:/docker-entrypoint-initdb.d:ro
@@ -24,19 +25,22 @@ services:
     environment:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
+      - TZ=America/Montevideo
     build:
       context: ../apps
       dockerfile: Dockerfile
     volumes:
       - ../infra/php/php.ini:/usr/local/etc/php/php.ini
-      # Sacar del docker-compose en produccion y dejarlo todo en el Dockerfile (menos las imagenes)
       - ../apps/front_php/src:/var/www/html/
       - ../apps/api:/var/www/html/api/
       - ../apps/backend:/var/www/backend/
       - ../apps/images:/var/www/html/images/
       - ../infra/apache/httpd.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+      - ../infra/certs/domain.crt:/etc/ssl/certs/domain.crt:ro
+      - ../infra/certs/domain.key:/etc/ssl/private/domain.key:ro
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     depends_on:
       db:
         condition: service_healthy

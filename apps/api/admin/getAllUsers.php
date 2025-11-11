@@ -1,20 +1,11 @@
 <?php
 
-require_once(__DIR__ . "/../middleware/auth.php");
-require_once(__DIR__ . "/../../../backend/db_connect.php");
+require_once(__DIR__ . "/../../../backend/logic/user/UserLogicFacade.php");
 header('Content-Type: application/json');
 
-$auth = new AuthMiddleware();
-$auth->authorize(['admin']);
+$userLogic = UserLogicFacade::getInstance()->getIUserLogic();
 
-$dbConnection = new db_connect();
-$conn = $dbConnection->connect();
-
-$stmt = $conn->prepare("select id, username, role from `users`;");
-$stmt->execute();
-$usersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$stmt->closeCursor();
+$usersData = $userLogic->getAllUsersAdmin();
 
 echo json_encode($usersData);
 

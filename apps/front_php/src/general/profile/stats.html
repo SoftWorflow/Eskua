@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - Eskua</title>
+    <link rel="stylesheet" href="/output.css">
+    <script src="/auth.js"></script>
+    <script src="/navbar-loader.js"></script>
+    <script src="/home/content-loader.js"></script>
+    <script>
+        document.documentElement.style.display = 'none';
+        requireAuth();
+
+        (async () => {
+            await authManager.ensureValidToken();
+
+            if (authManager.getAccessToken()) {
+                authManager.startTokenMonitoring();
+            }
+
+            await initializeNavbar('#navbar-container');
+            await initializeContent('#content-container');
+
+            document.documentElement.style.display = '';
+        })();
+    </script>
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+    <div
+        class="h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+        <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+            <!-- FONDO BLANCO -->
+            <div class="w-full h-full bg-white rounded-sm flex flex-col items-center overflow-y-auto">
+
+                <!-- Return Arrow -->
+                <div class="group" onclick="window.history.back()">
+                    <img src="../../../../images/ReturnArrow.svg" alt=""
+                        class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+                    <img src="../../../../images/ReturnArrowOrange.svg" alt=""
+                        class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+                </div>
+
+                <!-- MAIN CONTENT -->
+                <div class="w-full h-full max-w-7xl flex flex-col space-y-12 items-center justify-center py-16 px-8">
+
+                    <!-- Título -->
+                    <div class="flex flex-col items-center space-y-2">
+                        <h2 class="text-5xl font-bold text-[#1B3B50]">Estadísticas</h2>
+                        <p class="text-base text-gray-600">Visualiza tus estadísticas de juegos y tareas.</p>
+                    </div>
+
+                    <!-- Contenedor de dos columnas -->
+                    <div class="w-11/12 h-[55vh] grid grid-cols-2 space-x-5">
+                        <!-- Juegos -->
+                        <div class="border-2 border-[#DFDFDF] rounded-2xl flex-col shadow-md/25">
+                            <div class="w-full h-1/5 p-5 flex justify-center items-center border-b border-[#DFDFDF]">
+                                <p class="text-3xl font-semibold text-[#1B3B50]">Juegos</p>
+                            </div>
+                            <!-- Puntajes Juegos -->
+                            <div class="h-4/5 flex flex-col justify-center space-y-5 px-5">
+                                <!-- Memoria -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50]">Memoria</p>
+                                    </div>
+                                    <div
+                                        class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div
+                                            class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Puntación más alta</p>
+                                            <p class="font-semibold text-[#1B3B50]">8002</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Ultima vez jugado</p>
+                                            <p class="font-semibold text-[#1B3B50]">12-5-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Verdadero Falso -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Verdadero o Falso
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div
+                                            class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Puntación más alta</p>
+                                            <p class="font-semibold text-[#1B3B50]">8002</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Ultima vez jugado</p>
+                                            <p class="font-semibold text-[#1B3B50]">12-5-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Multiple Opcion -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Mútliple Opción</p>
+                                    </div>
+                                    <div
+                                        class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div
+                                            class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Puntación más alta</p>
+                                            <p class="font-semibold text-[#1B3B50]">8002</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Ultima vez jugado</p>
+                                            <p class="font-semibold text-[#1B3B50]">12-5-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tareas -->
+                        <div class="border-2 border-[#DFDFDF] rounded-2xl flex-col shadow-md/25">
+                            <div class="w-full h-1/5 p-5 flex justify-center items-center border-b border-[#DFDFDF]">
+                                <p class="text-3xl font-semibold text-[#1B3B50]">Tareas</p>
+                            </div>
+                            <!-- Puntajes Tareas -->
+                            <div class="h-4/5 flex flex-col justify-center space-y-5 p-5">
+                                <!-- Tarea 1 -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Nombre Tarea</p>
+                                    </div>
+                                    <div
+                                        class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div
+                                            class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Grupo</p>
+                                            <p class="font-semibold text-[#1B3B50]">Intermedio IEP</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Creada</p>
+                                            <p class="font-semibold text-[#1B3B50]">17:34 | 02-4-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tarea 2 -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Nombre Tarea</p>
+                                    </div>
+                                    <div
+                                        class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div
+                                            class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Grupo</p>
+                                            <p class="font-semibold text-[#1B3B50]">Intermedio IEP</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Creada</p>
+                                            <p class="font-semibold text-[#1B3B50]">17:34 | 02-4-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tarea 3 -->
+                                <div class="flex w-full rounded-xl shadow-md/15">
+                                    <div class="w-1/4 flex bg-[#85D2E2] rounded-l-xl px-5 justify-center items-center">
+                                        <p class="text-lg font-semibold text-[#1B3B50] text-center">Nombre Tarea</p>
+                                    </div>
+                                    <div
+                                        class="w-3/4 border-y-2 border-r-2 border-[#DFDFDF] flex flex-col rounded-r-xl">
+                                        <div
+                                            class="w-full h-1/2 border-b border-[#DFDFDF] flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Grupo</p>
+                                            <p class="font-semibold text-[#1B3B50]">Intermedio IEP</p>
+                                        </div>
+                                        <div class="w-full h-1/2 flex items-center justify-between p-3.5">
+                                            <p class="text-[#1B3B50]">Creada</p>
+                                            <p class="font-semibold text-[#1B3B50]">17:34 | 02-4-2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

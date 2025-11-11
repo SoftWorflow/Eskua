@@ -107,29 +107,30 @@ create table assigned_assignments(
     `group` int not null,
     start_date datetime not null default current_timestamp,
     end_date datetime not null,
-    check (start_date < end_date),
     is_deleted bool not null default false,
     foreign key (teacher) references users(id) on delete cascade,
     foreign key (assignment) references assignments(id) on delete cascade,
     foreign key (`group`) references `groups`(id) on delete cascade
 );
 
-create table turned_in_assignments(
-	assigned_assignment int not null,
-    student int not null,
-    submited_date datetime not null default current_timestamp,
-    was_corrected bool not null default false,
-    foreign key (student) references users(id) on delete cascade,
-    primary key (assigned_assignment, student)
+CREATE TABLE turned_in_assignments (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    assigned_assignment INT NOT NULL,
+    student INT NOT NULL,
+    submitted_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    was_corrected BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (student) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (assigned_assignment) REFERENCES assigned_assignments(id) ON DELETE CASCADE,
+    UNIQUE KEY ux_assigned_student (assigned_assignment, student)
 );
 
-create table student_answers(
-	id int not null auto_increment,
-    turned_in_assignment int not null,
-    student int not null,
-    text_content text,
-    foreign key (turned_in_assignment, student) references turned_in_assignments(assigned_assignment, student) on delete cascade,
-    primary key (id, turned_in_assignment)
+CREATE TABLE student_answers (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    turned_in_assignment INT NOT NULL,
+    student INT NOT NULL,
+    text_content TEXT,
+    FOREIGN KEY (turned_in_assignment) REFERENCES turned_in_assignments(id) ON DELETE CASCADE,
+    FOREIGN KEY (student) REFERENCES users(id) ON DELETE CASCADE
 );
 
 create table assignments_returns(
@@ -163,13 +164,12 @@ create table public_materials(
 );
 
 -- FILE REFERENCES TABLES
-create table students_answers_files(
-    student_answer int not null,
-    turned_in_assignment int not null,
-    `file` int not null,
-    foreign key (student_answer, turned_in_assignment) references student_answers(id, turned_in_assignment) on delete cascade,
-    foreign key (`file`) references files(id) on delete cascade,
-    primary key (`file`, student_answer, turned_in_assignment)
+CREATE TABLE students_answers_files (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    student_answer INT NOT NULL,
+    `file` INT NOT NULL,
+    FOREIGN KEY (student_answer) REFERENCES student_answers(id) ON DELETE CASCADE,
+    FOREIGN KEY (`file`) REFERENCES files(id) ON DELETE CASCADE
 );
 
 create table public_materials_files(
@@ -178,6 +178,14 @@ create table public_materials_files(
     foreign key (public_material) references public_materials(id) on delete cascade,
     foreign key (`file`) references files(id) on delete cascade,
     primary key (public_material, `file`)
+);
+
+create table assigned_assignments_files(
+    assigned_assignment int not null,
+    `file` int not null,
+    foreign key (assigned_assignment) references assigned_assignments(id) on delete cascade,
+    foreign key (`file`) references files(id) on delete cascade,
+    primary key (`file`, assigned_assignment)
 );
 
 create table assignments_returns_files(
@@ -401,20 +409,33 @@ END //
 
 -- CREATE ASSIGNMENT
 CREATE PROCEDURE createAssignment(
-   IN create_name varchar(50),
-   IN create_description TEXT,
-   IN teacher_id int,
-   IN max_score int
+    IN p_teacher_id INT,
+    IN p_group_id INT,
+    IN p_name VARCHAR(50),
+    IN p_description TEXT,
+    IN p_max_score INT,
+    IN p_end_date DATETIME
 )
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    DECLARE assignment_id INT;
+
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
     END;
- START TRANSACTION;
-    
-    INSERT INTO assignments (`name`,`description`,is_deleted)
-    VALUES (create_name, create_description ,FALSE);
+
+    START TRANSACTION;
+
+    INSERT INTO `assignments` (`teacher`, `name`, `description`, `max_score`)
+    VALUES (p_teacher_id, p_name, p_description, p_max_score);
+
+    SET assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments` (`teacher`, `assignment`, `group`, `end_date`)
+    VALUES (p_teacher_id, assignment_id, p_group_id, p_end_date);
+
+    COMMIT;
 END //
 
 -- CREATE REFRESH TOKEN
@@ -535,7 +556,7 @@ BEGIN
     VALUES (p_title, p_description);
     SET material_id = LAST_INSERT_ID();
 
-    INSERT INTO files (storage_name, original_name, mime, extension, size, uploader_id)
+    INSERT INTO `files` (storage_name, original_name, mime, extension, size, uploader_id)
     VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
     SET file_id = LAST_INSERT_ID();
 
@@ -543,5 +564,400 @@ BEGIN
     VALUES (material_id, file_id);
 
     COMMIT;
+END //
+
+CREATE PROCEDURE createFullAssignment(
+    IN p_teacher_id INT,
+    IN p_group_id INT,
+    IN p_name VARCHAR(50),
+    IN p_description TEXT,
+    IN p_max_score INT,
+    IN p_end_date DATETIME,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(50),
+    IN p_size BIGINT
+)
+BEGIN
+    DECLARE assignment_id INT;
+    DECLARE assigned_assignment_id INT;
+    DECLARE file_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO `assignments` (`teacher`, `name`, `description`, `max_score`)
+    VALUES (p_teacher_id, p_name, p_description, p_max_score);
+
+    SET assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments` (`teacher`, `assignment`, `group`, `end_date`)
+    VALUES (p_teacher_id, assignment_id, p_group_id, p_end_date);
+
+    SET assigned_assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO `files` (`storage_name`, `original_name`, `mime`, `extension`, `size`, `uploader_id`)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_teacher_id);
+
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments_files` (`assigned_assignment`, `file`)
+    VALUES (assigned_assignment_id, file_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE fDeleteMaterial(
+    IN p_material_id INT
+)
+BEGIN
+    DECLARE file_id INT;
+    
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    DELETE f
+    FROM `files` f
+    INNER JOIN public_materials_files pmf ON f.id = pmf.`file`
+    WHERE pmf.public_material = p_material_id;
+
+    DELETE FROM public_materials_files WHERE public_material = p_material_id;
+
+    DELETE FROM `public_materials` WHERE id = p_material_id;
+
+    COMMIT;
+
+    SELECT 'Material and associated file deleted successfully' AS message;
+END //
+
+CREATE PROCEDURE createMaterialFile(
+    IN p_material_id INT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT,
+    IN p_uploader_id INT
+)
+BEGIN
+    DECLARE file_id INT;
+
+    INSERT INTO `files` (storage_name, original_name, mime, extension, size, uploader_id)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO public_materials_files (public_material, file)
+    VALUES (p_material_id, file_id);
+END //
+
+CREATE PROCEDURE fDeleteFile(
+    IN p_file_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    DELETE FROM public_materials_files WHERE `file` = p_file_id;
+
+    DELETE FROM `files` WHERE id = p_file_id;
+
+    COMMIT;
+
+    SELECT 'File deleted successfully' AS message;
+END //
+
+CREATE PROCEDURE modifyMaterial(
+    IN p_material_id INT,
+    IN p_title VARCHAR(128),
+    IN p_description TEXT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    UPDATE `public_materials`
+    SET title = p_title,
+        `description` = p_description
+    WHERE id = p_material_id;
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE getGroupsOfTeacher(
+    IN p_user_id INT
+)
+BEGIN
+    SELECT g.*, (SELECT COUNT(*) FROM `students` AS s2 WHERE s2.`group` = g.`id`) AS totalStudents FROM `groups` AS g WHERE g.`teacher` = p_user_id;
+END //
+
+CREATE PROCEDURE getGroupMembers(
+    IN p_group_id INT
+)
+BEGIN
+    SELECT u.id, u.display_name AS displayName, u.profile_picture_url AS profilePicture FROM `users` AS u JOIN `students` AS s ON u.id = s.`user` JOIN `groups` As g ON s.`group` = g.id WHERE g.id = p_group_id;
+END //
+
+CREATE PROCEDURE getStudentGroup(
+    IN p_user_id INT
+)
+BEGIN
+    SELECT * FROM `groups` AS g JOIN `students` AS s ON g.id = s.`group` WHERE s.`user` = p_user_id;
+END //
+
+CREATE PROCEDURE getAssignmentsFromGroup(
+    IN p_group_id INT
+)
+BEGIN
+    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate, aa.`is_deleted` AS 'isNotActive' FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.`assignment` WHERE aa.`group` = p_group_id;
+END //
+
+CREATE PROCEDURE getAssignmentById(
+    IN p_assignment_id INT
+)
+BEGIN
+    SELECT 
+        a.id        AS id,
+        a.name      AS name,
+        a.description AS description,
+        a.max_score AS maxScore,
+        f.original_name AS originalName,
+        f.storage_name  AS storageName,
+        f.size          AS size,
+        aa.end_date     AS dueDate,
+        f.uploaded_at   AS createdAt
+    FROM assignments AS a
+    JOIN assigned_assignments AS aa ON a.id = aa.assignment
+    LEFT JOIN assigned_assignments_files AS aaf ON aa.id = aaf.assigned_assignment
+    LEFT JOIN files AS f ON aaf.file = f.id
+    WHERE a.id = p_assignment_id
+      AND (f.is_active = TRUE OR f.id IS NULL);
+END //
+
+CREATE PROCEDURE getGroup(
+    IN p_group_id INT
+)
+BEGIN
+    SELECT * FROM `groups` WHERE id = p_group_id;
+END //
+
+CREATE PROCEDURE getAllPublicMaterials()
+BEGIN
+    SELECT pm.`id` AS `id`, pm.`title` AS `name`, pm.`description` AS `description`, pm.`uploaded_date` AS `createdDate`, f.`extension` AS `type`
+    FROM `public_materials` AS pm JOIN `public_materials_files` AS pmf ON pm.id = pmf.`public_material`
+    JOIN `files` AS f ON pmf.`file` = f.id;
+END //
+
+CREATE PROCEDURE getMaterialById(
+    IN p_material_id INT
+)
+BEGIN
+    SELECT pm.`title` AS `name`, pm.`description` AS `description`, pm.`uploaded_date` AS `createdDate`, f.`original_name` AS `originalName`, f.`extension` AS `type`, f.`storage_name` AS `storageName`
+    FROM `public_materials` AS pm JOIN `public_materials_files` AS pmf ON pm.id = pmf.`public_material`
+    JOIN `files` AS f ON pmf.`file` = f.id WHERE pm.`id` = p_material_id;
+END //
+
+CREATE PROCEDURE lDeactivateAssignment(
+    IN p_assignment_id INT
+)
+BEGIN
+    UPDATE `assigned_assignments` SET `is_deleted` = true WHERE `assignment` = p_assignment_id;
+END //
+
+CREATE PROCEDURE modifyAssignment(
+    IN p_assignment_id INT,
+    IN p_name VARCHAR(50),
+    IN p_description TEXT,
+    IN p_max_score INT,
+    IN p_end_date DATETIME
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    UPDATE `assignments` AS a SET a.`name` = p_name, a.`description` = p_description, a.`max_score` = p_max_score WHERE a.`id` = p_assignment_id;
+
+    UPDATE `assigned_assignments` AS aa SET aa.`end_date` = p_end_date WHERE aa.`assignment` = p_assignment_id;
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE createAssignmentFile(
+    IN p_assignment_id INT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT,
+    IN p_uploader_id INT
+)
+BEGIN
+    DECLARE file_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Error: Transaction rolled back' AS message;
+    END;
+
+    START TRANSACTION;
+
+    INSERT INTO `files` (`storage_name`, `original_name`, `mime`, `extension`, `size`, `uploader_id`)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_uploader_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO `assigned_assignments_files` (assigned_assignment, `file`)
+    VALUES (p_assignment_id, file_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE turnInAssignment(
+    IN p_assignment_id INT,
+    IN p_student_id INT,
+    IN p_student_text TEXT
+)
+BEGIN
+    DECLARE assigned_assignment_id INT;
+    DECLARE turned_in_assignment_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al entregar la tarea';
+    END;
+
+    START TRANSACTION;
+
+    SELECT aa.id INTO assigned_assignment_id FROM assigned_assignments AS aa WHERE aa.assignment = p_assignment_id LIMIT 1;
+
+    IF assigned_assignment_id IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Assigned assignment no encontrado';
+    END IF;
+
+    INSERT INTO turned_in_assignments (assigned_assignment, student)
+    VALUES (assigned_assignment_id, p_student_id);
+
+    SET turned_in_assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO student_answers (turned_in_assignment, student, text_content)
+    VALUES (turned_in_assignment_id, p_student_id, p_student_text);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE turnInAssignmentWithFile(
+    IN p_assignment_id INT,
+    IN p_student_id INT,
+    IN p_student_text TEXT,
+    IN p_storage_name VARCHAR(255),
+    IN p_original_name VARCHAR(255),
+    IN p_mime VARCHAR(100),
+    IN p_extension VARCHAR(20),
+    IN p_size BIGINT
+)
+BEGIN
+    DECLARE file_id INT;
+    DECLARE assigned_assignment_id INT;
+    DECLARE turned_in_assignment_id INT;
+    DECLARE student_answer_id INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al entregar la tarea';
+    END;
+
+    START TRANSACTION;
+
+    SELECT aa.id INTO assigned_assignment_id
+    FROM assigned_assignments AS aa
+    WHERE aa.assignment = p_assignment_id
+    LIMIT 1;
+
+    INSERT INTO turned_in_assignments (assigned_assignment, student)
+    VALUES (assigned_assignment_id, p_student_id);
+    SET turned_in_assignment_id = LAST_INSERT_ID();
+
+    INSERT INTO student_answers (turned_in_assignment, student, text_content)
+    VALUES (turned_in_assignment_id, p_student_id, p_student_text);
+    SET student_answer_id = LAST_INSERT_ID();
+
+    INSERT INTO files (storage_name, original_name, mime, extension, size, uploader_id)
+    VALUES (p_storage_name, p_original_name, p_mime, p_extension, p_size, p_student_id);
+    SET file_id = LAST_INSERT_ID();
+
+    INSERT INTO students_answers_files (student_answer, `file`)
+    VALUES (student_answer_id, file_id);
+
+    COMMIT;
+END //
+
+CREATE PROCEDURE getTurnedInAssignmentsFromAssignment(
+    IN p_assignment_id INT
+)
+BEGIN
+    SELECT 
+        tia.`id`,
+        u.`display_name` AS `displayName`,
+        tia.`was_corrected` AS `isCorrected`,
+        tia.`submitted_date` AS `submittedDate`,
+        COUNT(f.`id`) AS `filesCount`
+    FROM `turned_in_assignments` AS tia
+    JOIN `student_answers` AS sa ON tia.`id` = sa.`turned_in_assignment`
+    JOIN `users` AS u ON sa.`student` = u.`id`
+    LEFT JOIN `students_answers_files` AS saf ON sa.`id` = saf.`student_answer`
+    LEFT JOIN `files` AS f ON saf.`file` = f.`id`
+    WHERE tia.`assigned_assignment` = p_assignment_id
+    GROUP BY tia.`id`, sa.`id`, tia.`was_corrected`, tia.`submitted_date`;
+END //
+
+CREATE PROCEDURE getStudentAnswerByTurnedInAssginment(
+    IN p_turned_in_assignment_id INT
+)
+BEGIN
+    SELECT
+        tia.`submitted_date` AS `submittedDate`,
+        tia.`was_corrected` AS `isCorrected`,
+        a.`name` AS `assignmentName`,
+        sa.`text_content` AS `studentTextResponse`,
+        u.`display_name` AS `studentDisplayName`,
+        f.`original_name` AS `fileOriginalName`,
+        f.`storage_name` AS `fileStorageName`,
+        f.`uploaded_at` AS `createdAt`,
+        f.`size` AS `fileSize`
+    FROM `turned_in_assignments` AS tia
+    JOIN `assigned_assignments` AS aa ON tia.`assigned_assignment` = aa.`id`
+    JOIN `assignments` AS a ON aa.`assignment` = a.`id`
+    JOIN `student_answers` AS sa ON tia.`id` = sa.`turned_in_assignment`
+    JOIN `users` AS u ON sa.`student` = u.`id`
+    LEFT JOIN `students_answers_files` AS saf ON sa.`id` = saf.`student_answer`
+    LEFT JOIN `files` AS f ON saf.`file` = f.`id`
+    WHERE tia.`id` = p_turned_in_assignment_id;
 END //
 DELIMITER ;

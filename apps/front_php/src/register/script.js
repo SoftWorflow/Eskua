@@ -47,7 +47,6 @@ function SendCode(e) {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
         },
-        credentials: 'include',
         body: JSON.stringify(userData)
     }).then(res => res.json())
     .then(res => {
@@ -153,8 +152,19 @@ function HidingAndShowingHandler(password, eyeIcon) {
     }
 }
 
+function hideStudentPopup() {
+    const popupContainer = document.getElementById('popup-container');
+    popupContainer.classList.add('hidden');
+}
+
 function SendRegisterData(e) {
     e.preventDefault();
+
+    const notyf = new Notyf({
+        duration: 2000,
+        position: { x: 'right', y: 'top' },
+        dismissible: true
+    });
     
     const usernameInput = document.getElementById('username-input');
     const displayNameInput = document.getElementById('display-name');
@@ -185,13 +195,16 @@ function SendRegisterData(e) {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
         },
-        credentials: 'include',
         body: JSON.stringify(userData)
     }).then(res => res.json())
     .then(res => {
         if (res.ok) {
             FinalLogin();
         } else {
+            if (res.userType) {
+                notyf.error(res.userType['error']);
+            }
+
             if (res.username) {
                 const usernameError = res.username['error'];
                 const usernameErrorElement = document.getElementById('username-error-message');
@@ -285,7 +298,7 @@ function FinalLogin() {
         if (res.ok) {
             authManager.saveAuth(res);
             
-            window.location.replace(window.location.origin + '/home/index.php');
+            window.location.replace(window.location.origin + '/');
         } else {
             console.error(res.error);
             

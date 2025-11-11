@@ -116,7 +116,10 @@ function searchUser(e) {
 
                 usersTableContentInnerDiv.classList.remove('hidden');
             } else {
-                usersTableContentInnerDiv.innerHTML = `<p>${data.message}</p>`;
+                const text = document.createElement('p');
+                text.innerText = data.message;
+                text.className = 'text-center mt-6';
+                usersTableContentInnerDiv.append(text);
 
                 spinner.stop();
                 document.getElementById('spinner-container').innerHTML = '';
@@ -251,17 +254,20 @@ function showUserDetail(userId) {
         .then(res => res.json())
         .then(userData => {
             spinner.stop();
+
+            user = userData[0];
+
             rightContent.innerHTML = `
                 <div class="bg-white w-full h-full rounded-t-xl flex flex-col space-y-12 items-center py-12">
                     <div class="flex flex-col w-full h-full items-center space-y-18 justify-center">
                         <div class="flex flex-col items-center space-y-5">
                             <div class="rounded-full bg-[#173345] w-36 h-36 drop-shadow-lg/45 p-1 flex">
-                                <img src="${userData.profile_pic}" 
+                                <img src="${user.profile_pic}" 
                                     alt="" class="h-full w-full rounded-full aspect-square object-cover">
                             </div>
                             <div class="flex flex-col items-center space-y-1.5">
-                                <h1 class="text-3xl">${userData.display_name || userData.username}</h1>
-                                <p class="font-light text-lg">Tipo de usuario: ${userData.role}</p>
+                                <h1 class="text-3xl">${user.display_name || user.username}</h1>
+                                <p class="font-light text-lg">Tipo de usuario: ${user.role}</p>
                             </div>
                         </div>
                         
@@ -272,36 +278,36 @@ function showUserDetail(userId) {
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Id:</p>
-                                <p class="col-span-2">#${userData.id}</p>
+                                <p class="col-span-2">#${user.id}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Username:</p>
-                                <p class="col-span-2">${userData.username}</p>
+                                <p class="col-span-2">${user.username}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Display Name:</p>
-                                <p class="col-span-2">${userData.display_name || 'N/A'}</p>
+                                <p class="col-span-2">${user.display_name || 'N/A'}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Email:</p>
-                                <p class="col-span-2">${userData.email || 'N/A'}</p>
+                                <p class="col-span-2">${user.email || 'N/A'}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] border-b border-b-[#DFDFDF] grid grid-cols-3 px-6 py-4">
                                 <p class="font-light col-span-1">Rol:</p>
-                                <p class="col-span-2">${userData.role}</p>
+                                <p class="col-span-2">${user.role}</p>
                             </div>
                             
                             <div class="bg-[#FBFBFB] grid grid-cols-3 px-6 py-4 rounded-b-2xl">
                                 <p class="font-light col-span-1">Grupo:</p>
-                                <p class="col-span-2">${userData.group || 'N/A'}</p>
+                                <p class="col-span-2">${user.group || 'N/A'}</p>
                             </div>
                         </div>
                         
-                        <button onclick="deleteUser(${userData.id})" class="red-button interactive w-52 h-18">
+                        <button onclick="deleteUser(${user.id})" class="red-button interactive w-52 h-18">
                             Eliminar Usuario
                         </button>
                     </div>

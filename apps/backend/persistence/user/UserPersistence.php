@@ -68,22 +68,22 @@ class UserPersistence implements IUserPersistence {
         }
     }
 
-    public function deleteUser(int $id) : bool {
-        if ($this->conn == null || $id == null) return false;
-
+    public function deleteUser(int $userId) : bool {
+        
         $sql = "call fDeleteUser(?);";
 
         try {
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$id]);
+            $stmt->execute([$userId]);
+            $affectedRows = $stmt->rowCount();
             $stmt->closeCursor();
-            $res = true;
+            
+            return $affectedRows > 0;
         } catch (PDOException $e) {
             print "Error while trying to eliminate a admin: " . $e->getMessage();
-            $res = false;
         }
 
-        return $res;
+        return false;
     }
 
     public function modifyUser(int $id, User $user) : bool {
@@ -143,7 +143,7 @@ class UserPersistence implements IUserPersistence {
     }
 
     public function getUserByUsername(string $username) : ?array {
-        if ($this->conn == null || empty($username)) return null;
+        if ($this->conn == null || empty($username)) return [];
 
         $sql = "call getUserByUsername(?);";
 
@@ -168,14 +168,16 @@ class UserPersistence implements IUserPersistence {
                 return [$id, $user];
             }
 
-            return null;
+            return [];
         } catch (PDOException $e) {
-            return null;
+            echo "Error when trying to get user by username: " . $e->getMessage();
         }
+
+        return [];
     }
 
     public function getUserByEmail(string $email) : ?array {
-        if ($this->conn == null || empty($email)) return null;
+        if ($this->conn == null || empty($email)) return [];
 
         $sql = "call getUserByEmail(?);";
 
@@ -200,10 +202,11 @@ class UserPersistence implements IUserPersistence {
                 return [$id, $user];
             }
 
-            return null;
+            return [];
         } catch (PDOException $e) {
-            return null;
+            echo "Error when trying to get user by email: " . $e->getMessage();
         }
+        return [];
     }
 
     // TOKENS
@@ -264,6 +267,192 @@ class UserPersistence implements IUserPersistence {
             return false;
         }
     }
+
+    public function getStudentGroup($userId) : ?array {
+        if ($userId === null) return null;
+
+        $sql = "call getStudentGroup(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$userId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$result) return null;
+
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error getting student group: ". $e->getMessage());
+        }
+
+        return null;
+    }
+
+    public function getAssignmentsFromGroup(int $groupId) : ?array {
+        if ($groupId == null) return null;
+
+        $sql = "call getAssignmentsFromGroup(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$groupId]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!$result) return null;
+
+            return $result;
+        } catch (PDOException  $e) {
+            error_log("Error getting assignments from group: " . $e->getMessage());
+        }
+
+        return null;
+    }
+
+    public function getTeacherGroups(int $userId) : array {
+        if ($userId === null) return [];
+
+        $sql = "call getGroupsOfTeacher(?);";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$userId]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error getting teacher groups: ". $e->getMessage());
+        }
+
+        return [];
+    }
+
+    public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool {
+        if ($assignment === null) return false;
+
+        $sql = "call createAssignment(?, ?, ?, ?, ?, ?);";
+
+        $groupId = $assignment->getGroupId();
+        $name = $assignment->getName();
+        $description = $assignment->getDescription();
+        $maxScore = $assignment->getMaxScore();
+        $dueDate = $assignment->getDueDate()->format('Y-m-d H:i:s');
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$teacherId, $groupId, $name, $description, $maxScore, $dueDate]);
+            $stmt->closeCursor();
+
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error creating an assignment: ". $e->getMessage());
+        }
+
+        return false;
+    }
+
+    public function getAllUsersAdmin(): array {
+
+        $sql = "select id, username, role from `users`;";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $users;
+        } catch (PDOException $e) {
+            print "Error when trying to get all users: " . $e->getMessage();
+        }
+
+        return [];
+
+    }
+
+    public function getSpecificUserData(int $userId) : array {
+
+        $sql = "select profile_picture_url as profile_pic, id, username, display_name, email, role from `users` where id = ?;";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$userId]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+
+            return $user;
+        } catch (PDOException $e) {
+            print "Error when getting specific user data: " . $e->getMessage();
+        }
+
+        return [];
+
+    }
+
+    public function searchUsers(string $username) : array {
+
+        $sql = "select id, username, role from `users` where username like ?;";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(["%" . $username . "%"]);
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $users;
+        } catch (PDOException $e) {
+            print "Error when searching users: " . $e->getMessage();
+        }
+
+        return [];
+        
+    }
+
+    public function getAllUsersCountAdmin() : array {
+
+        $allUsersSql = "select count(*) as total from `users`;";
+        $guestsSql = "select count(*) as total from `guests`;";
+        $studentsSql = "select count(*) as total from `students`";
+        $teacherSql = "select count(*) as total from `teachers`;";
+        $adminSql = "select count(*) as total from `admins`;";
+
+        try {
+            $stmt = $this->conn->prepare($allUsersSql);
+            $stmt->execute();
+            $totalUserCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $stmt->closeCursor();
+
+            $stmt = $this->conn->prepare($guestsSql);
+            $stmt->execute();
+            $guestCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $stmt->closeCursor();
+
+            $stmt = $this->conn->prepare($studentsSql);
+            $stmt->execute();
+            $studentCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $stmt->closeCursor();
+
+            $stmt = $this->conn->prepare($teacherSql);
+            $stmt->execute();
+            $teacherCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $stmt->closeCursor();
+
+            $stmt = $this->conn->prepare($adminSql);
+            $stmt->execute();
+            $adminCount = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+            return [
+                'totalUsers' => $totalUserCount,
+                'totalGuests' => $guestCount,
+                'totalStudents' => $studentCount,
+                'totalTeachers' => $teacherCount,
+                'totalAdmins' => $adminCount
+            ];
+        } catch (PDOException $e) {
+            print "Error getting all users count: " . $e->getMessage();
+        }
+
+        return [];
+
+    }
+
 }
 
 ?>

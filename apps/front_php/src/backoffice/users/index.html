@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios - Backoffice</title>
+  <link rel="stylesheet" href="../../output.css">
+  <link rel="icon" href="/images/EskuaLogo2.png">
+  <script src="../../auth.js"></script>
+  <script src="/navbar-loader.js"></script>
+  <script src="/backoffice/backoffice-navbar-manager.js"></script>
+  <!-- SWEETALERT 2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Notyf CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <!-- Notyf JS -->
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <!-- LOADING CIRCLE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
+  <script>
+    requireRole('admin');
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await initializeNavbar();
+    });
+
+    document.addEventListener('navbarLoaded', async () => {
+        updateSelectedPage('users');
+    });
+  </script>
+  <script src="users.js" defer></script>
+</head>
+<body>
+<div class="flex px-10 pt-10 h-screen space-x-7">
+
+    <!-- PANEL LATERAL -->
+    <aside id="navbar-container" class="bg-[#1B3B50] w-1/6 rounded-t-2xl text-white py-12 flex flex-col justify-between shadow-lg"></aside>
+
+    <!-- Right Panel -->
+    <div id="right-content" class="bg-[#1B3B50] rounded-t-2xl w-5/6 items-center px-12 pt-12">
+        <div class="bg-white rounded-t-xl w-full h-full flex items-center space-y-10 p-10">
+            
+        <!-- Main Content -->
+        <div class="w-full h-fit flex flex-col px-12 space-y-12">
+            <!-- Title -->
+            <div class="flex flex-col space-y-4">
+                <h1 class="text-5xl font-semibold text-[#1B3B50]">Usuarios</h1>
+                <p class="text-sm text-[#6A7282]">Gestiona a todos los usuarios registrados en el sistema.</p>
+            </div>
+
+            <!-- Top Content -->
+            <div class="flex w-full h-14 space-x-8 ">
+
+           <!-- Search Bar -->
+                <div class="relative w-full">
+                    <!-- Magnifying glass Icon -->
+                    <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                        </svg>
+                    </span>
+                    <!-- Input -->
+                    <input
+                        id = 'search-bar'
+                        type="text"
+                        placeholder="Buscar Usuario..."
+                        class="w-full py-3 pl-12 pr-12 rounded-2xl border-0 shadow-sm focus:ring-2 focus:ring-[#E1A05B] transition duration-150"
+                    />
+                    <!-- Filter Icon -->
+                    <button class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#E1A05B] transition interactive">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 018 17V13.414L3.293 6.707A1 1 0 013 6V4z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="w-full h-fit h-min-[50vh] shadow-lg/25 flex flex-col rounded-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-[#F4F4F4] w-full border-b border-b-[#DFDFDF] px-8 py-4 rounded-t-2xl grid grid-cols-3">
+                <p class="text-lg">ID</p>
+                <p class="text-lg">Username</p>
+                <p class="text-lg">Rol</p>
+            </div>
+
+            <!-- Users -->
+            <div id="users-table-content" class="h-[50vh] overflow-y-scroll font-light">
+                <div id="spinner-container"></div>
+                <div class="hidden" id="users-table-content-inner-div"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -103,7 +103,7 @@ class AuthManager {
         }
 
         this.clearAuth();
-        window.location.href = '/home/index.php';
+        window.location.href = '/';
     }
 
 
@@ -139,7 +139,7 @@ async function requireAuth() {
     
     if (!isValid) {
         // Redirects to login if couldnt authenticate
-        window.location.href = '/login';
+        window.location.href = '/';
         return false;
     }
 

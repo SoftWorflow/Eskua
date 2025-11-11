@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tareas - Eskua</title>
+  <link rel="stylesheet" href="/output.css">
+  <link rel="icon" href="/images/EskuaLogo2.png">
+  <script src="/auth.js"></script>
+  <script src="/navbar-loader.js"></script>
+  <script src="material-info-script.js"></script>
+  <!-- LOADING CIRCLE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
+  <script>
+    document.documentElement.style.display = 'none';
+    (async () => {
+      // Allow access even if not logged in
+      await authManager.ensureValidToken();
+
+      if (authManager.getAccessToken()) {
+        authManager.startTokenMonitoring();
+      }
+
+      await initializeNavbar('#navbar-container');
+
+      document.documentElement.style.display = '';
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="navbar-container"></div>
+  <div
+    class="h-screen w-full flex flex-col items-center justify-end px-10 bg-[url(../images/Background3.png)] bg-fixed">
+    <div class="w-full h-[86vh] bg-[#1B3B50] rounded-t-xl flex px-2 pt-2">
+      <!-- FONDO BLANCO -->
+      <div class="w-full h-full bg-white rounded-sm flex flex-col items-center overflow-y-auto justify-center border">
+
+        <!-- Return Arrow -->
+        <div class="group" onclick="window.history.back()">
+          <img src="../../../../images/ReturnArrow.svg" alt=""
+            class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 block group-hover:hidden">
+          <img src="../../../../images/ReturnArrowOrange.svg" alt=""
+            class="absolute left-[6.25vw] top-[20.37vh] w-8 h-8 interactive scale105 hidden group-hover:block">
+        </div>
+
+        <!-- CONTENT CONTAINER -->
+        <div class="w-8/12 h-11/12 flex flex-col py-10 justify-center">
+
+          <div id="spinner-container"></div>
+
+          <div id="material-info-container" class="hidden space-y-20">
+            <!-- TITLE -->
+            <div class="flex flex-col items-center space-y-1.5 mb-6">
+              <!-- MATERIAL NAME -->
+              <h1 class="text-6xl font-semibold text-[#1B3B50] mb-2 max-w-[1000px] h-18 truncate" id="name">Nombre
+                Material</h1>
+              <div class="flex space-x-2">
+                <!-- MATERIAL TYPE -->
+                <p class="text-lg text-[#6A7282]" id="type">Tipo de Material</p>
+              </div>
+            </div>
+
+            <div class="flex flex-col h-fit items-center space-y-8">
+              <!-- ASSIGNMENT INFO TABLE -->
+              <div class="h-full w-3/4 flex flex-col shadow-md/25 bg-[#FBFBFB] rounded-xl">
+                <div class="flex px-5 py-3 border-b-2 border-[#DFDFDF] items-center justify-between">
+                  <p class="text-2xl font-semibold text-[#1B3B50]">Información Tarea</p>
+                  <!-- DATE OF CREATION -->
+                  <p class="text-[#6A7282]" id="creation-date">Creado el 10/10/25</p>
+                </div>
+
+                <div class="flex flex-col px-5 py-6 border-b-2 border-[#DFDFDF] space-y-1.5">
+                  <p class="text-2xl font-semibold text-[#1B3B50]">Descripción</p>
+                  <!-- DESCRIPTION -->
+                  <p id="description"
+                    class="text-[#6A7282] w-10/12 max-w-full leading-6 max-h-[15vh] overflow-y-auto overflow-x-hidden pr-2 whitespace-normal break-words">
+                    Leer el archivo adjunto donde habla sobre un teorico basico sobre lenguaje de señas como una
+                    introduccion al tema,
+                    al final del archivo se encuentran preguntas sobre cada texto leido, enviar todas las preguntas en
+                    un
+                    archivo aparte.
+                  </p>
+                </div>
+
+                <div class="flex flex-col justify-center space-y-4 p-5">
+                  <p class="text-2xl font-semibold text-[#1B3B50]">Material de Referencia</p>
+                  <div id="file-container"
+                    class="flex flex-col h-[13.16vh] rounded-md shadow-md/25 overflow-y-scroll border-2 border-b-0 border-[#DFDFDF]">
+
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- BUTTONS CONTAINER -->
+              <div class="flex w-full justify-center">
+                <a id="download-button"
+                  class="text-[#E1A05B] group-hover:text-white h-15 w-1/4 orange-button interactive flex items-center justify-center no-underline">Descargar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>
