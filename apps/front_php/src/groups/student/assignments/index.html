@@ -11,10 +11,14 @@
     <script src="/navbar-loader.js"></script>
     <script src="/groups/group-navbar-loader.js"></script>
     <script src="assignments-script.js"></script>
+    <!-- Notyf CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <!-- Notyf JS -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script>
         document.documentElement.style.display = 'none';
         requireRole('student');
-        
+
         (async () => {
             // Allow access even if not logged in
             await authManager.ensureValidToken();

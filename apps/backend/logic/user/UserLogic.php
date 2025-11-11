@@ -557,18 +557,18 @@ class UserLogic implements IUserLogic {
         if ($assignments === null) return null;
 
         if (AuthMiddleware::authenticate()['role'] === 'student') {
-            $responseAssignments = [];
             if ($assignments !== null) {
                 $tz = new DateTimeZone(date_default_timezone_get());
                 $currentDate = new DateTime('now', $tz);
-                foreach ($assignments as $assignment) {
+                foreach ($assignments as &$assignment) {
                     $dueDate = new DateTime($assignment['dueDate'], $tz);
                     if ($dueDate > $currentDate) {
-                        $responseAssignments[] = $assignment;
+                        $assignment['isOverdue'] = false;
+                    } else {
+                        $assignment['isOverdue'] = true;
                     }
                 }
             }
-            $assignments = $responseAssignments;
         }
 
         $assignments = array_values($assignments);

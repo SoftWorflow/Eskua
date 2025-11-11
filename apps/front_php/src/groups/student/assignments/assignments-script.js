@@ -31,9 +31,17 @@ async function loadTasks() {
                     assignmentsTable.innerHTML = '';
 
                     data[0].forEach(task => {
+                        console.log(task);
                         const newTask = document.createElement('a');
                         newTask.className = 'w-full h-[120px] border-b-2 border-[#DFDFDF] hover:bg-[#F2F2F2] flex items-center pl-10 transition duration-150 interactive shrink-0 no-underline';
-                        newTask.href = `/groups/student/assignments/info/?taskId=${task.id}&groupId=${groupId}`;
+                        if (!task.isOverdue) {
+                            newTask.href = `/groups/student/assignments/info/?taskId=${task.id}&groupId=${groupId}`;
+                        } else {
+                            newTask.href = '#';
+                            newTask.onclick = () => {
+                                notifyAlert('error', 'La tarea ya está vencida');
+                            };
+                        }
 
                         newTask.innerHTML = `
                             <div class="flex w-full justify-between pr-10">
@@ -46,7 +54,7 @@ async function loadTasks() {
                                 </div>
                                 <div class="flex flex-col items-end space-y-10">
                                 <p class="text-[#6A7282]">${task.maxScore}</p>
-                                <p class="text-[#CC4033]">Vence el ${task.dueDate}</p>
+                                ${task.isOverdue ? '<p class="text-[#CC4033]">Vencida</p>' : '<p class="text-[#CC4033]">Vence el ' + task.dueDate + '</p>'}
                                 </div>
                             </div>
                         `;
@@ -56,4 +64,18 @@ async function loadTasks() {
                 }
             }
         }).catch(err => console.error("Error: ", err));
+}
+
+function notifyAlert(type, message, duration = 1500, closeable = false, x = 'right', y = 'top') {
+    const notyf = new Notyf({
+        duration: duration,
+        position: { x: x, y: y },
+        dismissible: closeable
+    });
+
+    if (type === 'success') {
+        notyf.success(message);
+    } else {
+        notyf.error(message);
+    }
 }
