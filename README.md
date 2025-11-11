@@ -22,6 +22,7 @@ El archivo "hosts" es un archivo que mapea nombres de dominios a direcciones IP 
 ### Como modificar el archivo hosts y por que
 
 En caso de error el archivo hosts debe de ser modificado, ya que docker espera el acceso solo desde "eskua.com.uy".
+
     1- Por si acaso, ponga (dentro de infra) "docker-compose down -v", este comando baja todos los contenedores borrando la informacion persistente en ellos.
     2- Para modificar el mismo usted debe de abrir notepad (o un editor de texto) en modo administrador, y elegir la opción de abrir un archivo (File -> Open).
     3- Ahora usted debe de ir a esta dirección "C:\Windows\System32\drivers\etc", una vez ahí debe presionar en las opciones de abajo a la derecha algo que diga "Documentos de Texto" a "Todos los Archivos" y debe hacer doble click en el archivo hosts.
