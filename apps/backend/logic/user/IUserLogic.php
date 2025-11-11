@@ -14,7 +14,7 @@ interface IUserLogic {
     public function revokeRefreshToken($refreshToken) : bool;
     public function getStudentGroup() : ?array;
     public function getTeacherGroups(int $userId) : array;
-    public function getAssignmentsFromGroup(int $groupId) : ?array;
+    public function getAssignmentsFromGroup(int $groupId) : array;
     public function getAllUsersAdmin(): array;  
     public function getSpecificUserData(int $userId) : array;
     public function searchUsers(string $username) : array;

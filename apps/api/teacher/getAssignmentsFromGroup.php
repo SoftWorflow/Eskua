@@ -12,8 +12,6 @@ $groupId = $input['id'];
 
 $assignments = $userLogic->getAssignmentsFromGroup($groupId);
 
-$currentDate = new DateTime('now');
-
-echo json_encode(['ok' => true, $assignments]);
+echo json_encode($assignments);
 
 ?>

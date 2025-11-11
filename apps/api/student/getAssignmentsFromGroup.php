@@ -10,6 +10,6 @@ $userGroupId = $userLogic->getStudentGroup()['id'];
 
 $assignments = $userLogic->getAssignmentsFromGroup($userGroupId);
 
-echo json_encode(['ok' => true, $assignments]);
+echo json_encode($assignments);
 
 ?>

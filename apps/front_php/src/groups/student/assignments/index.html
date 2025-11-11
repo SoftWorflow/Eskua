@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <!-- Notyf JS -->
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <!-- LOADING CIRCLE LIBRARY -->
+    <script src="https://cdn.jsdelivr.net/gh/fgnass/spin.js@2.3.2/spin.min.js"></script>
     <script>
         document.documentElement.style.display = 'none';
         requireRole('student');
@@ -93,6 +95,8 @@
                                 <!-- ASSIGNMENTS TABLE -->
                                 <div id="assignments-table"
                                     class="w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB] flex flex-col overflow-y-auto">
+                                    <div id="spinner-container"></div>
+                                    <div id="assignments-container"></div>
                                 </div>
                                 <!-- <p class="text-sm text-[#6A7282]">Mostrando 4 de 52</p> -->
                             </div>

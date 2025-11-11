@@ -547,33 +547,50 @@ class UserLogic implements IUserLogic {
         return ['ok' => true, $user];
     }
 
-    public function getAssignmentsFromGroup(int $groupId) : ?array {
-        if ($groupId == null) return null;
+    public function getAssignmentsFromGroup(int $groupId) : array {
+        if ($groupId === null) {
+            return ['ok' => false, 'error' => 'No se recibio el identificador del grupo'];
+        }
+
+        $userId = AuthMiddleware::authenticate()['user_id'];
+        if ($userId === null) {
+            return ['ok' => false, 'error' => 'No se pudo autenticar el usuario'];
+        }
 
         $userPersistence = UserPersistenceFacade::getInstance()->getIUserPersistence();
 
-        $assignments = $userPersistence->getAssignmentsFromGroup($groupId);
+        $assignments = $userPersistence->getAssignmentsFromGroup($groupId, $userId);
 
-        if ($assignments === null) return null;
+        if (empty($assignments)) {
+            return ['ok' => false, 'error' => 'No hay tareas'];
+        }
 
         if (AuthMiddleware::authenticate()['role'] === 'student') {
             if ($assignments !== null) {
+                $responseAssignments = [];
                 $tz = new DateTimeZone(date_default_timezone_get());
                 $currentDate = new DateTime('now', $tz);
-                foreach ($assignments as &$assignment) {
+                $i = 0;
+                foreach ($assignments as $assignment) {
                     $dueDate = new DateTime($assignment['dueDate'], $tz);
                     if ($dueDate > $currentDate) {
                         $assignment['isOverdue'] = false;
                     } else {
                         $assignment['isOverdue'] = true;
                     }
+
+                    if (!$assignment['isNotActive']) {
+                        $responseAssignments[$i][] = $assignment;
+                    }
+                    $i = $i + 1;
                 }
+                $assignments = $responseAssignments;
             }
         }
 
         $assignments = array_values($assignments);
 
-        return $assignments;
+        return ['ok' => true, 'tasks' => $assignments];
     }
 
     public function getTeacherGroups(int $userId) : array {

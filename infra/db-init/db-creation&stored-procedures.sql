@@ -726,10 +726,26 @@ BEGIN
 END //
 
 CREATE PROCEDURE getAssignmentsFromGroup(
-    IN p_group_id INT
+    IN p_group_id INT,
+    IN p_user_id INT
 )
 BEGIN
-    SELECT a.`id` AS `id`, a.`name` AS `name`, a.`description` AS `description`, a.max_score AS maxScore, aa.end_date AS dueDate, aa.`is_deleted` AS 'isNotActive' FROM `assignments` AS a JOIN `assigned_assignments` AS aa ON a.id = aa.`assignment` WHERE aa.`group` = p_group_id;
+    SELECT 
+        a.`id` AS `id`, 
+        a.`name` AS `name`, 
+        a.`description` AS `description`, 
+        a.`max_score` AS `maxScore`, 
+        aa.`end_date` AS `dueDate`, 
+        aa.`is_deleted` AS 'isNotActive',
+        EXISTS (
+            SELECT 1 
+            FROM `turned_in_assignments` AS tia
+            WHERE tia.`assigned_assignment` = aa.`id`
+            AND tia.`student` = p_user_id
+        ) AS `turnedIn`
+    FROM `assignments` AS a 
+    JOIN `assigned_assignments` AS aa 
+        ON a.id = aa.`assignment` WHERE aa.`group` = p_group_id;
 END //
 
 CREATE PROCEDURE getAssignmentById(

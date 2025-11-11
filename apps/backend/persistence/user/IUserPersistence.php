@@ -14,7 +14,7 @@ interface IUserPersistence {
     public function getStudentGroup(int $userId) : ?array;
     public function getTeacherGroups(int $userId) : array;
     public function createAssignment(GroupAssignment $assignment, int $teacherId) : bool;
-    public function getAssignmentsFromGroup(int $groupId) : ?array;
+    public function getAssignmentsFromGroup(int $groupId, int $userId) : array;
     public function getAllUsersAdmin(): array;
     public function getSpecificUserData(int $userId) : array;
     public function searchUsers(string $username) : array;

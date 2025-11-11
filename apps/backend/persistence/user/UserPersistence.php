@@ -1,6 +1,7 @@
 <?php
 
 require_once('IUserPersistence.php');
+require_once(__DIR__ . '/../../DTO/GroupAssignment.php');
 require_once(__DIR__ . '/../../DTO/Users/User.php');
 require_once(__DIR__ . '/../../db_connect.php');
 
@@ -288,24 +289,22 @@ class UserPersistence implements IUserPersistence {
         return null;
     }
 
-    public function getAssignmentsFromGroup(int $groupId) : ?array {
-        if ($groupId == null) return null;
+    public function getAssignmentsFromGroup(int $groupId, int $userId) : array {
+        if ($groupId === null || $userId === null) return [];
 
-        $sql = "call getAssignmentsFromGroup(?);";
+        $sql = "call getAssignmentsFromGroup(?, ?);";
 
         try {
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$groupId]);
+            $stmt->execute([$groupId, $userId]);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if (!$result) return null;
 
             return $result;
         } catch (PDOException  $e) {
             error_log("Error getting assignments from group: " . $e->getMessage());
         }
 
-        return null;
+        return [];
     }
 
     public function getTeacherGroups(int $userId) : array {
