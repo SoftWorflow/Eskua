@@ -733,25 +733,35 @@ BEGIN
 END //
 
 CREATE PROCEDURE getAssignmentById(
-    IN p_assignment_id INT
+    IN p_assignment_id INT,
+    IN p_user_id INT
 )
 BEGIN
     SELECT 
-        a.id        AS id,
-        a.name      AS name,
-        a.description AS description,
-        a.max_score AS maxScore,
-        f.original_name AS originalName,
-        f.storage_name  AS storageName,
-        f.size          AS size,
-        aa.end_date     AS dueDate,
-        f.uploaded_at   AS createdAt
-    FROM assignments AS a
-    JOIN assigned_assignments AS aa ON a.id = aa.assignment
-    LEFT JOIN assigned_assignments_files AS aaf ON aa.id = aaf.assigned_assignment
-    LEFT JOIN files AS f ON aaf.file = f.id
-    WHERE a.id = p_assignment_id
-      AND (f.is_active = TRUE OR f.id IS NULL);
+        a.`id` AS `id`,
+        a.`name` AS `name`,
+        a.`description` AS `description`,
+        a.`max_score` AS `maxScore`,
+        f.`original_name` AS `originalName`,
+        f.`storage_name` AS `storageName`,
+        f.`size` AS `size`,
+        aa.`end_date` AS `dueDate`,
+        f.`uploaded_at` AS `createdAt`,
+        EXISTS (
+            SELECT 1 
+            FROM `turned_in_assignments` AS tia
+            WHERE tia.`assigned_assignment` = aa.`id`
+            AND tia.`student` = p_user_id
+        ) AS `turnedIn`
+    FROM `assignments` AS a
+    JOIN `assigned_assignments` AS aa 
+        ON a.id = aa.`assignment`
+    LEFT JOIN `assigned_assignments_files` AS aaf 
+        ON aa.`id` = aaf.`assigned_assignment`
+    LEFT JOIN `files` AS f 
+        ON aaf.`file` = f.`id`
+    WHERE a.`id` = p_assignment_id 
+      AND (f.`is_active` = TRUE OR f.`id` IS NULL);
 END //
 
 CREATE PROCEDURE getGroup(

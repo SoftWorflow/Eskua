@@ -285,10 +285,17 @@ class AssignmentLogic implements IAssignmentLogic {
             http_response_code(400);
             return ['ok' => false, 'error' => 'No se recibió el dientificador de la tarea'];
         }
+        
+        $userId = AuthMiddleware::authenticate()['user_id'];
+
+        if ($userId === null || empty($userId)) {
+            http_response_code(400);
+            return ['ok' => false, 'error' => 'No se recibió el dientificador del usuario'];
+        }
 
         $assignmentPersistence = AssignmentPersistenceFacade::getInstance()->getIAssignmentPersistence();
 
-        $assignment = $assignmentPersistence->getSpecificAssignment($assignmentId);
+        $assignment = $assignmentPersistence->getSpecificAssignment($assignmentId, $userId);
     
         if (empty($assignment)) {
             http_response_code(404);

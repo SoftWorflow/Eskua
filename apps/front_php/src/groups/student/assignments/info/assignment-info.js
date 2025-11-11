@@ -57,19 +57,6 @@ async function loadTask() {
     }).then(res => res.json())
         .then(data => {
             if (!data.ok) {
-                let turnedInAssignments = localStorage.getItem('turnedInAssignments');
-
-                if (turnedInAssignments !== null) {
-                    try {
-                        turnedInAssignments = JSON.parse(turnedInAssignments);
-                        turnedInAssignments = turnedInAssignments.filter(id => id !== taskId);
-                        localStorage.setItem('turnedInAssignments', JSON.stringify(turnedInAssignments));
-                    } catch (err) {
-                        // Si el parse falla, limpiamos la clave para no dejar basura
-                        localStorage.removeItem('turnedInAssignments');
-                    }
-                }
-
                 notifyAlert('error', data.error);
                 return;
             }
@@ -102,24 +89,15 @@ async function loadTask() {
                 fileContainer.append(text);
             }
 
-            let turnedInAssignments = localStorage.getItem('turnedInAssignments');
+            const turnedIn = Boolean(data.task.turnedIn);
 
-            if (turnedInAssignments !== null) {
-                try {
-                    turnedInAssignments = JSON.parse(turnedInAssignments);
-                } catch (err) {
-                    turnedInAssignments = [];
-                    localStorage.removeItem('turnedInAssignments');
-                }
+            if (turnedIn) {
+                const showPopupButton = document.getElementById('show-popup-button');
+                showPopupButton.onclick = '';
 
-                if (Array.isArray(turnedInAssignments) && turnedInAssignments.includes(taskId)) {
-                    const showPopupButton = document.getElementById('show-popup-button');
-                    showPopupButton.onclick = '';
-
-                    showPopupButton.disabled = true;
-                    showPopupButton.innerText = 'Entregada';
-                    showPopupButton.className = 'turned-in-button h-15 w-1/4';
-                }
+                showPopupButton.disabled = true;
+                showPopupButton.innerText = 'Entregada';
+                showPopupButton.className = 'turned-in-button h-15 w-1/4';
             }
 
             if (spinner && typeof spinner.stop === 'function') spinner.stop();
@@ -227,18 +205,6 @@ async function TurnInAssignment(e) {
     formData.append('text', textInput.value);
     formData.append('taskId', taskId);
 
-    let turnedInAssignments = localStorage.getItem('turnedInAssignments');
-    if (turnedInAssignments === null) {
-        turnedInAssignments = [];
-    } else {
-        try {
-            turnedInAssignments = JSON.parse(turnedInAssignments);
-            if (!Array.isArray(turnedInAssignments)) turnedInAssignments = [];
-        } catch (err) {
-            turnedInAssignments = [];
-        }
-    }
-
     authenticatedFetch('/api/student/turnInAssignment.php', {
         method: 'POST',
         body: formData
@@ -250,10 +216,6 @@ async function TurnInAssignment(e) {
             submitTurnInAssignment.className = 'orange-button h-full px-14';
             return;
         }
-
-        turnedInAssignments.push(taskId);
-        localStorage.setItem('turnedInAssignments', JSON.stringify(turnedInAssignments));
-
         showSuccess(data.message, () => {
             window.location = `/groups/student/assignments/?groupId=${groupId}`;
         });

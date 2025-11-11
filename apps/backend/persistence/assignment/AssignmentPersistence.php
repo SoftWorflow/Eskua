@@ -194,16 +194,16 @@ class AssignmentPersistence implements IAssignmentPersistence {
         return false;
     }
 
-    public function getSpecificAssignment(int $assignmentId): array {
-        if ($assignmentId === null || empty($assignmentId)) {
+    public function getSpecificAssignment(int $assignmentId, int $userId): array {
+        if ($assignmentId === null || empty($assignmentId) || $userId === null || empty($userId)) {
             return [];
         }
         
-        $sql = "call getAssignmentById(?);";
+        $sql = "call getAssignmentById(?, ?);";
 
         try {
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$assignmentId]);
+            $stmt->execute([$assignmentId, $userId]);
             $assignmentData = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 

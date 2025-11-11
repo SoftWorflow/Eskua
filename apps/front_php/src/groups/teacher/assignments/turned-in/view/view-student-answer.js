@@ -58,8 +58,6 @@ async function loadStudentAnswer() {
                 return;
             }
 
-            console.log(data);
-
             const answer = data.answer;
 
             assignmentName.innerText = answer.assignmentName;
