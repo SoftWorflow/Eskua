@@ -238,17 +238,22 @@ function crearElementoCarta(carta, index) {
   const inner = document.createElement('div');
   inner.className = 'card-inner';
 
+  // 👉 crear el dorso (back) correctamente
   const back = document.createElement('div');
-  back.className = 'card-face card-back flex items-center justify-center';
-  back.innerHTML = `
-    <img src="/general/games/memory/img/EskuaLogoWhite.webp"
-         alt="Dorso carta" class="w-16 h-16 opacity-90">
-  `;
+  back.className =
+    `card-face card-back flex items-center justify-center ` +
+    (carta.tipo === 'seña' ? 'back-sign' : 'back-letter');
 
+  back.innerHTML = `
+  <img src="/general/games/memory/img/EskuaLogoWhite.webp"
+       alt="Dorso carta" class="w-16 h-16 opacity-90">
+`;
+
+  // 👉 crear el frente (front)
   const front = document.createElement('div');
   front.className = 'card-face card-front flex items-center justify-center';
-  // ⚠️ No insertamos nada todavía
 
+  // Construcción final
   inner.appendChild(back);
   inner.appendChild(front);
   container.appendChild(inner);
