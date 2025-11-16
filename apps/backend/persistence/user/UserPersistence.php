@@ -214,7 +214,6 @@ class UserPersistence implements IUserPersistence {
     public function createRefreshToken(int $userId, string $refreshToken, string $refreshExpire) : bool {
         if ($this->conn === null || empty($userId) || empty($refreshToken) || empty($refreshExpire)) return false;
         
-        // Hacer procedimiento almacendado
         $sql = "call createRefreshToken(?, ?, ?);";
     
         try {

@@ -60,8 +60,11 @@ async function loadTasks() {
         .then(data => {
             if (!data.ok) {
                 const text = document.createElement('p');
+                assignmentsTable.className = 'w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB]';
                 text.textContent = 'No hay tareas';
                 text.className = 'text-center mt-6';
+
+                spinner.stop();
 
                 assignmentsTable.append(text);
                 return;

@@ -1,34 +1,34 @@
 let spinner;
 
 function showSpinner(spinnerColor = '#1B3B50', spinnerPosition = 'relative', spinnerTop = '70%', spinnerLeft = '60%') {
-    // Spinner config
-    const opts = {
-        lines: 12,            // Lines number
-        length: 7,            // Lenght of each line
-        width: 5,             // Widht of the line
-        radius: 10,           // Inner radius of the circle
-        scale: 1.0,           // Spinner scale
-        color: spinnerColor,        // Color
-        opacity: 0.25,        // Lines opacity
-        rotate: 0,            // Initial rotation
-        direction: 1,         // 1: clockwise, -1: anti-clockwise
-        speed: 1,             // Spins per second
-        trail: 60,            // After the trail (%)
-        fps: 20,              // fps
-        zIndex: 2e9,          // z-index
-        className: 'spinner', // Assinged CSS class
-        top: spinnerTop,           // Relative right position from the container
-        left: spinnerLeft,          // Relative left position from the container
-        shadow: false,        // Shadow
-        position: spinnerPosition  // Position CSS
-    };
+  // Spinner config
+  const opts = {
+    lines: 12,            // Lines number
+    length: 7,            // Lenght of each line
+    width: 5,             // Widht of the line
+    radius: 10,           // Inner radius of the circle
+    scale: 1.0,           // Spinner scale
+    color: spinnerColor,        // Color
+    opacity: 0.25,        // Lines opacity
+    rotate: 0,            // Initial rotation
+    direction: 1,         // 1: clockwise, -1: anti-clockwise
+    speed: 1,             // Spins per second
+    trail: 60,            // After the trail (%)
+    fps: 20,              // fps
+    zIndex: 2e9,          // z-index
+    className: 'spinner', // Assinged CSS class
+    top: spinnerTop,           // Relative right position from the container
+    left: spinnerLeft,          // Relative left position from the container
+    shadow: false,        // Shadow
+    position: spinnerPosition  // Position CSS
+  };
 
-    const spinnerContainer = document.getElementById('spinner-container');
-    spinnerContainer.innerHTML += '<div id="spinner"></div>';
+  const spinnerContainer = document.getElementById('spinner-container');
+  spinnerContainer.innerHTML += '<div id="spinner"></div>';
 
-    const target = document.getElementById('spinner');
+  const target = document.getElementById('spinner');
 
-    return new Spinner(opts).spin(target);
+  return new Spinner(opts).spin(target);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -60,8 +60,11 @@ async function loadTasks() {
     .then(data => {
       if (!data.ok) {
         const text = document.createElement('p');
+        assignmentsTable.className = 'w-full h-[45vh] shadow-md/25 rounded-xl bg-[#FBFBFB]';
         text.textContent = 'No hay tareas';
         text.className = 'text-center mt-6';
+
+        spinner.stop();
 
         assignmentsTable.append(text);
         return;
